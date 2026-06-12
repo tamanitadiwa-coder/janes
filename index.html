@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jane's Staff Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+html,body{height:100%;margin:0;padding:0;background:#000000!important;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+:root{
+  --pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;
+  --y:#FFE500;
+  --bg:#000000;--s1:#0c0c0c;--s2:#141414;--s3:#1c1c1c;
+  --bd:#2a2a2a;--bd2:#333;
+  --t:#ffffff;--ts:#999;--tm:#555;
+  --glow:rgba(233,30,140,0.15);
+  --glow2:rgba(233,30,140,0.08);
+}
+/* GLOW EFFECTS */
+.glow-box{box-shadow:0 0 0 1px var(--bd),0 0 20px var(--glow),inset 0 1px 0 rgba(255,255,255,.04)}
+.glow-btn{box-shadow:0 0 20px rgba(233,30,140,.35),0 4px 12px rgba(0,0,0,.4)}
+/* PAGES */
+.page{display:none;min-height:100vh;flex-direction:column;background:#000}
+.page.on{display:flex}
+/* ── CANVAS BACKGROUND ── */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+.z1{position:relative;z-index:1}
+
+/* LOGIN */
+#pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
+.login-wrap{width:100%;max-width:360px;text-align:center}
+.logo-ring{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 0 1px rgba(233,30,140,.3),0 0 40px rgba(233,30,140,.4),0 0 80px rgba(233,30,140,.15)}
+.logo-ring span{font-family:'Fredoka One',cursive;font-size:34px;color:#fff}
+.l-brand{font-family:'Fredoka One',cursive;font-size:26px;color:var(--t);margin-bottom:4px}
+.l-sub{font-size:12px;color:var(--ts);margin-bottom:28px;letter-spacing:.04em}
+.l-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:24px;text-align:left;box-shadow:0 0 40px var(--glow2)}
+.lbl{display:block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:7px}
+.l-card select{width:100%;padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:14px;outline:none;appearance:none;margin-bottom:18px;cursor:pointer;transition:border-color .2s,box-shadow .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.l-card select:focus{border-color:var(--pk);box-shadow:0 0 0 3px var(--glow)}
+.l-card select option{background:#1a1a1a}
+/* PIN */
+.pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.pdot{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;transition:all .15s}
+.pdot.on{background:var(--pk);border-color:var(--pk);box-shadow:0 0 12px rgba(233,30,140,.7);transform:scale(1.1)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:18px}
+.pb{padding:14px;border-radius:8px;border:1px solid var(--bd);background:var(--s2);color:var(--t);font-family:'Inter',sans-serif;font-size:17px;font-weight:600;cursor:pointer;transition:all .12s}
+.pb:hover{background:var(--s3);border-color:var(--pk);box-shadow:0 0 10px var(--glow)}
+.pb:active{transform:scale(.9);background:var(--pk);border-color:var(--pk);box-shadow:0 0 16px rgba(233,30,140,.6)}
+.pb.sm{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ts)}
+.pb.z{grid-column:2}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.02em;border:none;text-decoration:none}
+.btn.primary{background:var(--pk);color:#fff;box-shadow:0 0 20px rgba(233,30,140,.35)}
+.btn.primary:hover{background:var(--pk2);box-shadow:0 0 28px rgba(233,30,140,.5)}
+.btn.primary:active{transform:scale(.97)}
+.btn.ghost{background:transparent;border:1px solid var(--bd);color:var(--ts)}
+.btn.ghost:hover{border-color:var(--pk);color:var(--pk)}
+.btn.ghost:active{transform:scale(.97)}
+.btn.full{width:100%}
+.btn.xs{padding:7px 14px;font-size:11px;border-radius:6px}
+.err{color:#ff6666;font-size:12px;text-align:center;margin-top:10px;font-weight:600;display:none}
+/* HEADER */
+.hdr{background:rgba(0,0,0,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.hdr-brand{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.5)}
+.hdr-r{display:flex;align-items:center;gap:10px}
+/* AVATAR */
+.av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;flex-shrink:0;overflow:hidden;border:1.5px solid rgba(233,30,140,.4);box-shadow:0 0 12px rgba(233,30,140,.3);cursor:pointer;position:relative}
+.av img{width:100%;height:100%;object-fit:cover}
+.av-lg{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:28px;color:#fff;overflow:hidden;border:2px solid rgba(233,30,140,.5);box-shadow:0 0 30px rgba(233,30,140,.35);cursor:pointer;position:relative;margin:0 auto 14px;flex-shrink:0}
+.av-lg img{width:100%;height:100%;object-fit:cover}
+.av-upload{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);opacity:0;transition:opacity .2s;font-size:18px;border-radius:50%}
+.av-lg:hover .av-upload,.av:hover .av-upload{opacity:1}
+input[type=file]{display:none}
+.hdr-name{font-size:12px;font-weight:600;color:var(--ts)}
+/* BODY */
+.body{flex:1;overflow-y:auto;padding:20px;max-width:720px;width:100%;margin:0 auto;padding-bottom:60px}
+/* GREETING */
+.greet{border:1px solid var(--bd);border-radius:14px;padding:22px;margin-bottom:20px;background:var(--s1);position:relative;overflow:hidden}
+.greet::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.2),transparent 70%);top:-100px;right:-60px;pointer-events:none}
+.greet-hi{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:4px}
+.greet-hi em{color:var(--pk);font-style:normal;text-shadow:0 0 20px rgba(233,30,140,.5)}
+.greet-sub{font-size:13px;color:var(--ts)}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.stat{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center;transition:border-color .2s,box-shadow .2s}
+.stat:hover{border-color:rgba(233,30,140,.4);box-shadow:0 0 16px var(--glow2)}
+.stat-v{font-family:'Fredoka One',cursive;font-size:26px;color:var(--pk);text-shadow:0 0 14px rgba(233,30,140,.4)}
+.stat-l{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-top:3px}
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);margin-bottom:20px}
+.tab{padding:11px 18px;font-size:12px;font-weight:600;color:var(--ts);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;letter-spacing:.02em}
+.tab:hover{color:var(--t)}
+.tab.on{color:var(--pk);border-bottom-color:var(--pk)}
+.tab-content{display:none}
+.tab-content.on{display:block}
+/* WEEK NAV */
+.wk-nav{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;margin-bottom:14px}
+.wk-nav button{background:none;border:none;color:var(--ts);font-size:20px;cursor:pointer;padding:3px 10px;border-radius:5px;transition:all .15s;line-height:1}
+.wk-nav button:hover{color:var(--pk);background:var(--glow)}
+.wk-nav button:active{transform:scale(.88)}
+.wk-label{font-size:13px;font-weight:600;color:var(--t)}
+/* SHIFT ROWS */
+.shift-row{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;margin-bottom:6px;transition:all .15s;cursor:pointer}
+.shift-row:hover{border-color:var(--bd2);background:var(--s2);transform:translateY(-1px)}
+.shift-row.today{border-color:var(--pk);background:rgba(233,30,140,.04);box-shadow:0 0 20px var(--glow2)}
+.shift-row.off{opacity:.38}
+.sr-day{min-width:44px;text-align:center;flex-shrink:0}
+.sr-day-name{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)}
+.sr-day-num{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);line-height:1}
+.sr-div{width:1px;height:36px;background:var(--bd);flex-shrink:0}
+.sr-info{flex:1;min-width:0}
+.sr-role{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:2px}
+.sr-time{font-size:14px;font-weight:600;color:var(--t)}
+.sr-h{font-size:11px;color:var(--ts);margin-top:1px}
+.chip{padding:3px 10px;border-radius:100px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;flex-shrink:0;white-space:nowrap}
+.chip.open{background:rgba(255,229,0,.1);color:var(--y);border:1px solid rgba(255,229,0,.2)}
+.chip.pm{background:rgba(233,30,140,.1);color:var(--pk);border:1px solid rgba(233,30,140,.2)}
+.chip.close{background:rgba(255,100,150,.08);color:#ff90c0;border:1px solid rgba(255,100,150,.15)}
+.chip.off{background:rgba(255,255,255,.04);color:var(--ts);border:1px solid var(--bd)}
+.today-badge{font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--pk);background:rgba(233,30,140,.12);padding:3px 9px;border-radius:100px;border:1px solid rgba(233,30,140,.2);flex-shrink:0}
+/* TEAM VIEW */
+.tv-day-block{margin-bottom:22px}
+.tv-day-head{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.today-dot{width:7px;height:7px;border-radius:50%;background:var(--pk);box-shadow:0 0 8px var(--pk);flex-shrink:0}
+.tv-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:8px;margin-bottom:5px;transition:border-color .15s}
+.tv-row:hover{border-color:var(--bd2)}
+.tv-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:11px;color:#fff;flex-shrink:0;overflow:hidden}
+.tv-av img{width:100%;height:100%;object-fit:cover}
+.tv-name{font-size:13px;font-weight:600;color:var(--t);min-width:70px}
+.tv-role{font-size:11px;color:var(--ts);flex:1}
+.tv-time{font-size:12px;font-weight:600;color:var(--t)}
+.tv-off-row{font-size:11px;color:var(--tm);margin-top:6px;padding-left:2px}
+/* PROFILE TAB */
+.profile-card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:24px;text-align:center;margin-bottom:16px}
+.profile-role{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px}
+.profile-name-big{font-family:'Fredoka One',cursive;font-size:26px;color:var(--t)}
+.profile-pin-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px}
+.profile-pin-row input{background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;outline:none;width:130px;transition:border-color .2s}
+.profile-pin-row input:focus{border-color:var(--pk)}
+/* ADMIN */
+.edit-block{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:20px;margin-bottom:10px;transition:border-color .2s}
+.edit-block:hover{border-color:var(--bd2)}
+.edit-name-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.admin-badge{font-size:10px;font-weight:700;color:var(--pk);background:rgba(233,30,140,.1);padding:2px 9px;border-radius:100px;border:1px solid rgba(233,30,140,.2)}
+.day-row{display:grid;grid-template-columns:44px 1fr 1fr 1fr 90px;gap:6px;align-items:center;margin-bottom:8px}
+.day-row label{font-size:11px;font-weight:600;color:var(--ts)}
+.day-row input,.day-row select{background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--t);font-family:'Inter',sans-serif;font-size:12px;padding:8px 10px;width:100%;outline:none;transition:border-color .2s}
+.day-row input:focus,.day-row select:focus{border-color:var(--pk)}
+.day-row input:disabled,.day-row select:disabled{opacity:.25;cursor:not-allowed}
+.day-row select option{background:#1a1a1a}
+.off-toggle{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ts);cursor:pointer;user-select:none;justify-content:center}
+.off-toggle input{accent-color:var(--pk);cursor:pointer}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-bg.on{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:24px;width:100%;max-width:380px;box-shadow:0 0 60px var(--glow2)}
+.modal h3{font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:12px}
+.modal p{font-size:14px;color:var(--ts);line-height:1.75;margin-bottom:18px}
+.modal-btns{display:flex;gap:8px}
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--pk);color:#fff;padding:10px 22px;border-radius:100px;font-size:12px;font-weight:700;opacity:0;transition:all .25s;z-index:999;white-space:nowrap;pointer-events:none;box-shadow:0 0 20px rgba(233,30,140,.5)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* SECTION LABEL */
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px}
+/* DIVIDER */
+.divider{height:1px;background:var(--bd);margin:16px 0}
+@keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.shake{animation:sk .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .4s ease both}
+</style>
+</head>
+<body style="background:#000!important">
+
+<!-- ANIMATED CANVAS -->
+<canvas id="bg-canvas"></canvas>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)closeMod()">
+  <div class="modal">
+    <h3 id="mod-title"></h3>
+    <p id="mod-body"></p>
+    <div class="modal-btns">
+      <button class="btn ghost full" onclick="closeMod()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ LOGIN ════════ -->
+<div class="page on z1" id="pg-login">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div class="login-wrap fade-in">
+      <div class="logo-ring"><span>J</span></div>
+      <div class="l-brand">Jane's</div>
+      <p class="l-sub">Staff Portal · Salt River, Cape Town</p>
+      <div class="l-card">
+        <label class="lbl">Your name</label>
+        <select id="sel-nm">
+          <option value="">— Select —</option>
+          <option>Panashe</option><option>Kate</option><option>Jamal</option>
+          <option>JP</option><option>Josh</option><option>Eva</option><option>Charlet</option>
+        </select>
+        <label class="lbl">PIN</label>
+        <div class="pin-dots">
+          <div class="pdot" id="p0"></div><div class="pdot" id="p1"></div>
+          <div class="pdot" id="p2"></div><div class="pdot" id="p3"></div>
+        </div>
+        <div class="pin-grid">
+          <button class="pb" onclick="pp('1')">1</button>
+          <button class="pb" onclick="pp('2')">2</button>
+          <button class="pb" onclick="pp('3')">3</button>
+          <button class="pb" onclick="pp('4')">4</button>
+          <button class="pb" onclick="pp('5')">5</button>
+          <button class="pb" onclick="pp('6')">6</button>
+          <button class="pb" onclick="pp('7')">7</button>
+          <button class="pb" onclick="pp('8')">8</button>
+          <button class="pb" onclick="pp('9')">9</button>
+          <button class="pb sm" onclick="pc()">Clear</button>
+          <button class="pb z" onclick="pp('0')">0</button>
+          <button class="pb" onclick="pbk()">⌫</button>
+        </div>
+        <button class="btn primary full" onclick="doLogin()">Sign In</button>
+        <div class="err" id="err">Incorrect name or PIN.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ DASHBOARD ════════ -->
+<div class="page z1" id="pg-dash">
+  <div class="hdr">
+    <div class="hdr-brand">Jane's</div>
+    <div class="hdr-r">
+      <div class="av" id="hdr-av" onclick="switchTab(3)" title="View profile">
+        <div class="av-upload">📷</div>
+      </div>
+      <div class="hdr-name" id="hdr-nm">–</div>
+      <button class="btn ghost xs" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+  <div class="body">
+    <div class="greet">
+      <div class="greet-hi" id="greet-hi">Hey <em id="greet-nm">there</em>!</div>
+      <div class="greet-sub" id="greet-sub">Your schedule is ready.</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-v" id="st-s">–</div><div class="stat-l">Shifts</div></div>
+      <div class="stat"><div class="stat-v" id="st-h">–</div><div class="stat-l">Hours</div></div>
+      <div class="stat"><div class="stat-v" id="st-n">–</div><div class="stat-l">Next Shift</div></div>
+    </div>
+    <div class="tabs" id="tab-bar">
+      <div class="tab on" onclick="switchTab(0)">My Schedule</div>
+      <div class="tab" onclick="switchTab(1)">Team Schedule</div>
+      <div class="tab" onclick="switchTab(3)">Profile</div>
+      <div class="tab admin-tab" onclick="switchTab(2)" style="display:none">Edit Schedules</div>
+    </div>
+    <!-- MY SCHEDULE -->
+    <div class="tab-content on" id="tc-0">
+      <div class="wk-nav">
+        <button onclick="wk(-1)">&#8249;</button>
+        <span class="wk-label" id="my-wk">–</span>
+        <button onclick="wk(1)">&#8250;</button>
+      </div>
+      <div id="my-shifts"></div>
+    </div>
+    <!-- TEAM SCHEDULE -->
+    <div class="tab-content" id="tc-1">
+      <div class="wk-nav">
+        <button onclick="wkT(-1)">&#8249;</button>
+        <span class="wk-label" id="team-wk">–</span>
+        <button onclick="wkT(1)">&#8250;</button>
+      </div>
+      <div id="team-view"></div>
+    </div>
+    <!-- ADMIN -->
+    <div class="tab-content" id="tc-2"><div id="admin-panel"></div></div>
+    <!-- PROFILE -->
+    <div class="tab-content" id="tc-3">
+      <div class="profile-card">
+        <div class="av-lg" id="prof-av" onclick="triggerUpload()">
+          <div class="av-upload">📷</div>
+        </div>
+        <input type="file" id="pic-input" accept="image/*" onchange="handlePic(event)">
+        <div class="profile-role" id="prof-role">–</div>
+        <div class="profile-name-big" id="prof-name">–</div>
+        <div style="font-size:12px;color:var(--ts);margin-top:6px" id="prof-meta">–</div>
+        <div class="divider"></div>
+        <div class="sec-lbl" style="text-align:left">Change PIN</div>
+        <div class="profile-pin-row">
+          <input type="password" id="new-pin" placeholder="New 4-digit PIN" maxlength="4">
+          <button class="btn primary xs" onclick="changePin()">Update PIN</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// STAFF DATABASE
+// ════════════════════════════════════════
+const STAFF = {
+  Panashe:{pin:'1111',admin:false,pic:null,sched:[
+    {s:'08:00',e:'16:00',role:'Budtender',tag:'open'},
+    {s:'08:00',e:'16:00',role:'Budtender',tag:'open'},
+    null,
+    {s:'12:00',e:'20:00',role:'Budtender',tag:'close'},
+    {s:'12:00',e:'20:00',role:'Budtender',tag:'close'},
+    {s:'10:00',e:'18:00',role:'Budtender',tag:'pm'},
+    null
+  ]},
+  Kate:{pin:'2222',admin:false,pic:null,sched:[
+    null,
+    {s:'09:00',e:'17:00',role:'Budtender',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Budtender',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Budtender',tag:'open'},
+    null,
+    {s:'14:00',e:'20:00',role:'Budtender',tag:'close'},
+    {s:'14:00',e:'20:00',role:'Budtender',tag:'close'}
+  ]},
+  Jamal:{pin:'1111',admin:true,pic:null,sched:[
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    null,
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    null,null
+  ]},
+  JP:{pin:'4444',admin:false,pic:null,sched:[
+    {s:'14:00',e:'20:00',role:'Budtender',tag:'close'},
+    null,
+    {s:'09:00',e:'17:00',role:'Budtender',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Budtender',tag:'open'},
+    {s:'14:00',e:'20:00',role:'Budtender',tag:'close'},
+    null,
+    {s:'10:00',e:'18:00',role:'Budtender',tag:'pm'}
+  ]},
+  Josh:{pin:'5555',admin:true,pic:null,sched:[
+    {s:'08:00',e:'16:00',role:'Kitchen',tag:'open'},
+    {s:'08:00',e:'16:00',role:'Kitchen',tag:'open'},
+    {s:'08:00',e:'16:00',role:'Kitchen',tag:'open'},
+    null,
+    {s:'08:00',e:'16:00',role:'Kitchen',tag:'open'},
+    {s:'08:00',e:'14:00',role:'Kitchen',tag:'open'},
+    null
+  ]},
+  Eva:{pin:'6666',admin:true,pic:null,sched:[
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    null,null,null
+  ]},
+  Charlet:{pin:'7777',admin:true,pic:null,sched:[
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    {s:'09:00',e:'17:00',role:'Manager',tag:'open'},
+    null,
+    {s:'12:00',e:'20:00',role:'Manager',tag:'close'},
+    {s:'12:00',e:'20:00',role:'Manager',tag:'close'},
+    {s:'10:00',e:'18:00',role:'Manager',tag:'pm'},
+    null
+  ]}
+};
+
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+let me=null,pinVal='',myWk=0,teamWk=0;
+
+// ── PIN ──
+function pp(d){if(pinVal.length>=4)return;pinVal+=d;dots();if(pinVal.length===4)setTimeout(doLogin,260)}
+function pbk(){pinVal=pinVal.slice(0,-1);dots()}
+function pc(){pinVal='';dots()}
+function dots(){for(let i=0;i<4;i++)document.getElementById('p'+i).classList.toggle('on',i<pinVal.length)}
+
+// ── LOGIN ──
+function doLogin(){
+  const nm=document.getElementById('sel-nm').value;
+  const err=document.getElementById('err');
+  err.style.display='none';
+  if(!nm){showErr('Please select your name.');return}
+  if(pinVal.length<4){showErr('Please enter your 4-digit PIN.');return}
+  const s=STAFF[nm];
+  if(!s||s.pin!==pinVal){
+    showErr('Incorrect PIN. Try again.');
+    pinVal='';dots();
+    const c=document.querySelector('.l-card');
+    c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');
+    return;
+  }
+  me=nm;buildDash();
+}
+function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block'}
+function logout(){me=null;pinVal='';myWk=0;teamWk=0;dots();document.getElementById('sel-nm').value='';document.getElementById('err').style.display='none';showPage('pg-login')}
+
+// ── DASHBOARD ──
+function buildDash(){
+  const h=new Date().getHours();
+  const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('greet-hi').innerHTML=`${g}, <em>${me}</em>!`;
+  document.getElementById('greet-sub').textContent=STAFF[me].admin?`${STAFF[me].sched.filter(s=>s).length} shifts this week · Admin access enabled`:`Here's your schedule for the week.`;
+  document.querySelector('.admin-tab').style.display=STAFF[me].admin?'block':'none';
+  setAv('hdr-av',me);
+  switchTab(0);
+  showPage('pg-dash');
+  toast(`Welcome back, ${me}! 💕`);
+}
+
+// ── AVATAR ──
+function setAv(elId,nm){
+  const el=document.getElementById(elId);
+  if(!el)return;
+  if(STAFF[nm]&&STAFF[nm].pic){
+    el.innerHTML=`<img src="${STAFF[nm].pic}" alt="${nm}"><div class="av-upload">📷</div>`;
+  } else {
+    el.innerHTML=`${nm[0]}<div class="av-upload">📷</div>`;
+  }
+}
+function triggerUpload(){document.getElementById('pic-input').click()}
+function handlePic(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    STAFF[me].pic=ev.target.result;
+    setAv('hdr-av',me);setAv('prof-av',me);
+    // update team view avatars
+    document.querySelectorAll(`.tv-av[data-nm="${me}"]`).forEach(el=>{
+      el.innerHTML=`<img src="${STAFF[me].pic}" alt="${me}">`;
+    });
+    toast('Profile photo updated ✓');
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── TABS ──
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===n));
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('on',i===n));
+  if(n===0)renderMyShifts();
+  if(n===1)renderTeam();
+  if(n===2&&STAFF[me].admin)renderAdmin();
+  if(n===3)renderProfile();
+}
+
+// ── WEEK HELPERS ──
+function getMon(off){
+  const t=new Date(),dow=t.getDay(),mo=dow===0?-6:1-dow,m=new Date(t);
+  m.setDate(t.getDate()+mo+(off*7));return m;
+}
+function fmtWk(off){
+  const m=getMon(off),s=new Date(m);s.setDate(m.getDate()+6);
+  return `${m.getDate()} ${MO[m.getMonth()]} – ${s.getDate()} ${MO[s.getMonth()]}`;
+}
+function hDiff(s,e){
+  const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);
+  return Math.round(((eh*60+em)-(sh*60+sm))/60*10)/10;
+}
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):''}
+
+// ── MY SHIFTS ──
+function renderMyShifts(){
+  const today=new Date(),mon=getMon(myWk);
+  document.getElementById('my-wk').textContent=fmtWk(myWk);
+  const sc=STAFF[me].sched;
+  let shifts=0,hours=0,nxt=null;
+  const rows=sc.map((s,i)=>{
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const isT=d.toDateString()===today.toDateString();
+    const isFut=d>today&&!isT;
+    if(s){shifts++;const h=hDiff(s.s,s.e);hours+=h;if(isFut&&nxt===null)nxt=Math.ceil((d-today)/86400000)}
+    const tc=s?`chip ${s.tag}`:'chip off';
+    const tl=s?cap(s.tag):'Off';
+    return `<div class="shift-row${isT?' today':''}${!s?' off':''}" onclick="${s?`openMod('${DAYS[i]}, ${d.getDate()} ${MO[d.getMonth()]}','${s.role}','${s.s} – ${s.e}',${hDiff(s.s,s.e)})`:''}">
+      <div class="sr-day"><div class="sr-day-name">${DAYS[i]}</div><div class="sr-day-num">${d.getDate()}</div></div>
+      <div class="sr-div"></div>
+      <div class="sr-info">
+        <div class="sr-role">${s?s.role:'Day Off'}</div>
+        <div class="sr-time">${s?`${s.s} – ${s.e}`:'Rest up 😴'}</div>
+        ${s?`<div class="sr-h">${hDiff(s.s,s.e)}h</div>`:''}
+      </div>
+      <span class="${tc}">${tl}</span>
+      ${isT?'<span class="today-badge">TODAY</span>':''}
+    </div>`;
+  }).join('');
+  document.getElementById('my-shifts').innerHTML=rows;
+  document.getElementById('st-s').textContent=shifts;
+  document.getElementById('st-h').textContent=hours+'h';
+  document.getElementById('st-n').textContent=nxt===null?'–':nxt===0?'Now':nxt===1?'Tmrw':nxt+'d';
+}
+function wk(d){myWk+=d;renderMyShifts()}
+
+// ── TEAM VIEW ──
+function renderTeam(){
+  const today=new Date(),mon=getMon(teamWk);
+  document.getElementById('team-wk').textContent=fmtWk(teamWk);
+  let html='';
+  for(let i=0;i<7;i++){
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const isT=d.toDateString()===today.toDateString();
+    const working=Object.entries(STAFF).filter(([,v])=>v.sched[i]);
+    const off=Object.entries(STAFF).filter(([,v])=>!v.sched[i]);
+    html+=`<div class="tv-day-block">
+      <div class="tv-day-head">${isT?'<div class="today-dot"></div>':''}<span>${DAYS[i]} ${d.getDate()} ${MO[d.getMonth()]}${isT?' · Today':''}</span></div>`;
+    if(!working.length){
+      html+=`<div class="tv-row"><span style="font-size:13px;color:var(--ts)">No staff scheduled</span></div>`;
+    } else {
+      working.forEach(([nm,v])=>{
+        const s=v.sched[i];
+        const picHtml=v.pic?`<img src="${v.pic}" alt="${nm}">`:`${nm[0]}`;
+        html+=`<div class="tv-row">
+          <div class="tv-av" data-nm="${nm}">${picHtml}</div>
+          <div class="tv-name">${nm}</div>
+          <div class="tv-role">${s.role}</div>
+          <div class="tv-time">${s.s} – ${s.e}</div>
+          <span class="chip ${s.tag}">${cap(s.tag)}</span>
+        </div>`;
+      });
+    }
+    if(off.length)html+=`<div class="tv-off-row">Off: ${off.map(([n])=>n).join(', ')}</div>`;
+    html+=`</div>`;
+  }
+  document.getElementById('team-view').innerHTML=html;
+}
+function wkT(d){teamWk+=d;renderTeam()}
+
+// ── PROFILE ──
+function renderProfile(){
+  const s=STAFF[me];
+  const sc=s.sched.filter(x=>x).length;
+  const hrs=s.sched.reduce((a,x)=>a+(x?hDiff(x.s,x.e):0),0);
+  document.getElementById('prof-role').textContent=s.admin?'Manager / Admin':'Staff Member';
+  document.getElementById('prof-name').textContent=me;
+  document.getElementById('prof-meta').textContent=`${sc} shifts this week · ${hrs}h total`;
+  setAv('prof-av',me);
+  document.getElementById('hdr-nm').textContent=me;
+}
+function changePin(){
+  const v=document.getElementById('new-pin').value.trim();
+  if(!/^\d{4}$/.test(v)){toast('PIN must be exactly 4 digits');return}
+  STAFF[me].pin=v;
+  document.getElementById('new-pin').value='';
+  toast('PIN updated successfully ✓');
+}
+
+// ── ADMIN ──
+function renderAdmin(){
+  if(!STAFF[me].admin)return;
+  let html=`<p style="font-size:13px;color:var(--ts);margin-bottom:20px">Edit weekly schedules for all staff. Changes apply immediately.</p>
+  <div style="display:grid;grid-template-columns:44px 1fr 1fr 1fr 90px;gap:6px;margin-bottom:8px;padding:0 2px">
+    <span style="font-size:9px;font-weight:700;color:var(--tm);letter-spacing:.1em;text-transform:uppercase">Day</span>
+    <span style="font-size:9px;font-weight:700;color:var(--tm);letter-spacing:.1em;text-transform:uppercase">Start</span>
+    <span style="font-size:9px;font-weight:700;color:var(--tm);letter-spacing:.1em;text-transform:uppercase">End</span>
+    <span style="font-size:9px;font-weight:700;color:var(--tm);letter-spacing:.1em;text-transform:uppercase">Type</span>
+    <span style="font-size:9px;font-weight:700;color:var(--tm);letter-spacing:.1em;text-transform:uppercase">Off</span>
+  </div>`;
+  Object.entries(STAFF).forEach(([nm,v])=>{
+    html+=`<div class="edit-block">
+      <div class="edit-name-row">
+        <div class="av" style="width:28px;height:28px;font-size:12px;cursor:default">${nm[0]}</div>
+        <span style="font-size:14px;font-weight:700;color:var(--t)">${nm}</span>
+        ${v.admin?'<span class="admin-badge">Admin</span>':''}
+      </div>`;
+    v.sched.forEach((s,i)=>{
+      const off=s===null;
+      html+=`<div class="day-row">
+        <label>${DAYS[i]}</label>
+        <input type="time" id="s-${nm}-${i}" value="${s?s.s:'09:00'}" ${off?'disabled':''} onchange="es('${nm}',${i})">
+        <input type="time" id="e-${nm}-${i}" value="${s?s.e:'17:00'}" ${off?'disabled':''} onchange="es('${nm}',${i})">
+        <select id="t-${nm}-${i}" ${off?'disabled':''} onchange="es('${nm}',${i})">
+          <option value="open" ${s&&s.tag==='open'?'selected':''}>Opening</option>
+          <option value="pm" ${s&&s.tag==='pm'?'selected':''}>Afternoon</option>
+          <option value="close" ${s&&s.tag==='close'?'selected':''}>Closing</option>
+        </select>
+        <label class="off-toggle">
+          <input type="checkbox" id="o-${nm}-${i}" ${off?'checked':''} onchange="toggleOff('${nm}',${i})"> Off
+        </label>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('admin-panel').innerHTML=html;
+}
+function es(nm,i){
+  const s=document.getElementById(`s-${nm}-${i}`).value;
+  const e=document.getElementById(`e-${nm}-${i}`).value;
+  const t=document.getElementById(`t-${nm}-${i}`).value;
+  STAFF[nm].sched[i]={s,e,role:STAFF[nm].admin?'Manager':'Budtender',tag:t};
+  if(me===nm)renderMyShifts();
+  renderTeam();
+  toast(`${nm} ${DAYS[i]} updated ✓`);
+}
+function toggleOff(nm,i){
+  const chk=document.getElementById(`o-${nm}-${i}`);
+  ['s-','e-','t-'].forEach(pre=>{
+    const el=document.getElementById(`${pre}${nm}-${i}`);
+    if(el)el.disabled=chk.checked;
+  });
+  if(chk.checked){STAFF[nm].sched[i]=null;}
+  else{
+    const sv=document.getElementById(`s-${nm}-${i}`).value||'09:00';
+    const ev=document.getElementById(`e-${nm}-${i}`).value||'17:00';
+    STAFF[nm].sched[i]={s:sv,e:ev,role:STAFF[nm].admin?'Manager':'Budtender',tag:'open'};
+  }
+  if(me===nm)renderMyShifts();
+  renderTeam();
+  toast(`${nm} ${DAYS[i]} ${chk.checked?'set to off':'scheduled'} ✓`);
+}
+
+// ── MODAL ──
+function openMod(title,role,time,hrs){
+  document.getElementById('mod-title').textContent=title;
+  document.getElementById('mod-body').innerHTML=`<strong style="color:var(--pk)">${role}</strong><br><br>🕐 <strong>Time:</strong> ${time}<br>⏱ <strong>Duration:</strong> ${hrs}h`;
+  document.getElementById('modal').classList.add('on');
+}
+function closeMod(){document.getElementById('modal').classList.remove('on')}
+
+// ── UTILS ──
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400)}
+
+// ── ANIMATED BACKGROUND ──
+(function(){
+  const c=document.getElementById('bg-canvas');
+  const ctx=c.getContext('2d');
+  let W,H,particles=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  resize();window.addEventListener('resize',resize);
+  class P{
+    constructor(){this.reset()}
+    reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.5+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.3+.1;this.op=Math.random()*.4+.1;this.fx=Math.random()*W;this.fy=Math.random()*H}
+    draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}
+    update(){
+      this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;
+      this.a+=.008;
+      if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset();
+    }
+  }
+  for(let i=0;i<60;i++)particles.push(new P());
+  // glow orbs
+  const orbs=[
+    {x:.8,y:.15,r:280,c:'rgba(233,30,140,0.07)'},
+    {x:.1,y:.8,r:220,c:'rgba(136,14,79,0.06)'},
+    {x:.5,y:.5,r:180,c:'rgba(233,30,140,0.04)'},
+  ];
+  function frame(){
+    ctx.clearRect(0,0,W,H);
+    orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,o.r);g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});
+    particles.forEach(p=>{p.update();p.draw()});
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+</body>
+</html>
