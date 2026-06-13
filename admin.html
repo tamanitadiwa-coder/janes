@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Jane's Admin Portal</title>
+<title>Jane's Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
@@ -213,67 +213,91 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .adm-hdr-left{display:flex;align-items:center;gap:10px}
 .adm-logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;box-shadow:0 0 16px rgba(233,30,140,.4);display:flex;align-items:center;justify-content:center}
 .adm-logo img{width:90%;height:90%;object-fit:contain}
-.adm-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}
-.adm-title em{color:var(--pk);font-style:normal}
-.adm-body{flex:1;overflow-y:auto;padding:20px;max-width:860px;width:100%;margin:0 auto;padding-bottom:60px}
-/* ADMIN LOGIN */
+.adm-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)}
+.adm-title em{color:var(--t);font-style:normal}
+.adm-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;max-width:860px;width:100%;margin:0 auto;padding-bottom:80px}
 #adm-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
-/* PEOPLE ROW */
+/* PEOPLE BUTTONS */
 .person-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .15s;width:100%;margin-bottom:8px;text-align:left}
 .person-btn:hover{border-color:var(--pk);background:var(--s2);transform:translateY(-1px)}
-.person-btn.active{border-color:var(--pk);background:rgba(233,30,140,.06)}
-.person-btn-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3)}
+.person-btn.active{border-color:var(--pk);background:rgba(233,30,140,.06);box-shadow:0 0 20px var(--glow2)}
+.person-btn-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3)}
 .person-btn-av img{width:100%;height:100%;object-fit:cover}
 .person-btn-info{flex:1}
 .person-btn-name{font-size:15px;font-weight:700;color:var(--t)}
-.person-btn-role{font-size:11px;color:var(--ts);margin-top:2px}
-.person-btn-meta{font-size:11px;color:var(--ts)}
-/* MONTH CALENDAR */
-.adm-cal-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.adm-cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.adm-cal-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 14px;border-radius:7px;transition:all .15s;line-height:1}
-.adm-cal-nav button:hover{color:var(--pk);border-color:var(--pk)}
-.adm-cal-label{font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)}
-.adm-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.adm-cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
-.adm-cal-day{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:60px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
-.adm-cal-day:hover{border-color:var(--pk);background:var(--s3)}
-.adm-cal-day.today{border-color:rgba(233,30,140,.5);background:rgba(233,30,140,.06)}
-.adm-cal-day.has-shift{border-color:rgba(0,230,118,.35)}
-.adm-cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
-.adm-cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1);box-shadow:0 0 16px var(--glow2)}
-.adm-day-num{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);line-height:1}
-.adm-day-info{font-size:8px;color:var(--ts);text-align:center;line-height:1.3}
-.adm-day-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
-.adm-day-dot{width:5px;height:5px;border-radius:50%}
-.adm-day-dot.open{background:var(--y)}.adm-day-dot.close{background:#c084fc}
-.adm-day-dot.cafe{background:var(--cafe)}.adm-day-dot.bakery{background:var(--bakery)}
-/* SHIFT EDITOR */
-.shift-editor{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;animation:fadeUp .3s ease}
-.shift-editor-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--t);margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.shift-toggle-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.shift-type-btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);flex:1;min-width:80px;text-align:center}
-.shift-type-btn:hover{border-color:var(--pk);color:var(--t)}
-.shift-type-btn.active{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(233,30,140,.4)}
-.shift-type-btn.active-off{background:rgba(255,255,255,.06);border-color:var(--bd2);color:var(--ts)}
-.shift-detail-box{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
-.shift-detail-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
-.shift-detail-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.shift-detail-label{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
-.shift-detail-val{font-size:14px;font-weight:700;color:var(--t)}
-/* WEEK TYPE */
-.wt-toggle{display:flex;gap:6px;margin-bottom:16px}
-.wt-btn{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);text-align:center}
-.wt-btn.active{background:linear-gradient(135deg,#0055cc,#0077ff);color:#fff;border-color:transparent}
-/* BULK / OVERVIEW */
-.overview-row{display:grid;grid-template-columns:120px repeat(7,1fr);gap:4px;margin-bottom:3px;align-items:center}
-.ov-name{font-size:12px;font-weight:700;color:var(--t);padding:8px 0}
-.ov-cell{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 2px;text-align:center;font-size:9px;font-weight:700;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:border-color .15s}
+.person-btn-sub{font-size:11px;color:var(--ts);margin-top:2px}
+.person-btn-meta{font-size:11px;color:var(--ts);white-space:nowrap}
+/* TABS */
+.adm-tabs{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:20px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.adm-tabs::-webkit-scrollbar{display:none}
+.adm-tab{padding:9px 14px;font-size:12px;font-weight:600;color:var(--ts);cursor:pointer;border-radius:9px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.adm-tab:hover{color:var(--t);background:rgba(255,255,255,.04)}.adm-tab.on{color:#fff;background:linear-gradient(135deg,var(--pk),var(--pk2));box-shadow:0 2px 12px rgba(233,30,140,.4)}
+.adm-tc{display:none}.adm-tc.on{display:block}
+/* WEEK SELECTOR */
+.week-nav{display:flex;align-items:center;justify-content:space-between;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.week-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 12px;border-radius:7px;transition:all .15s;line-height:1}
+.week-nav button:hover{color:var(--pk);border-color:var(--pk)}.week-nav button:active{transform:scale(.88)}
+.week-nav-label{font-size:13px;font-weight:700;color:var(--t);text-align:center}
+.week-nav-sub{font-size:10px;color:var(--ts);text-align:center;margin-top:2px}
+/* WEEK TYPE STRIP */
+.wt-strip{display:flex;gap:8px;margin-bottom:14px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.wt-strip-label{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-right:4px;align-self:center;white-space:nowrap}
+.wt-btn{flex:1;padding:10px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);text-align:center}
+.wt-btn:hover{border-color:var(--pk);color:var(--t)}
+.wt-btn.active-5{background:linear-gradient(135deg,#007a55,#00b377);color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(0,180,120,.3)}
+.wt-btn.active-6{background:linear-gradient(135deg,#6600cc,#9933ff);color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(150,50,255,.3)}
+/* SHIFT EDITOR PANEL */
+.shift-panel{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.shift-panel-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--t);margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.shift-panel-title span{font-size:11px;color:var(--pk);font-family:'Inter',sans-serif;font-weight:700}
+/* DAY GRID - 7 day buttons */
+.day-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.day-cell{border-radius:10px;border:1px solid var(--bd);background:var(--s2);padding:10px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:70px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.day-cell:hover{border-color:var(--pk);background:var(--s3)}
+.day-cell.selected{border-color:var(--pk);background:rgba(233,30,140,.08);box-shadow:0 0 16px var(--glow2)}
+.day-cell.is-today{border-color:rgba(233,30,140,.5)}
+.day-cell.is-off{opacity:.4}
+.day-cell-name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ts)}
+.day-cell-num{font-family:'Fredoka One',cursive;font-size:18px;color:var(--t);line-height:1}
+.day-cell-info{font-size:8px;color:var(--ts);line-height:1.3;text-align:center}
+.day-cell-dots{display:flex;gap:2px;justify-content:center}
+.day-cell-dot{width:5px;height:5px;border-radius:50%}
+.day-cell-dot.open{background:var(--y)}.day-cell-dot.close{background:#c084fc}
+.day-cell-dot.cafe{background:var(--cafe)}.day-cell-dot.bakery{background:var(--bakery)}
+/* EDIT FORM - stays open, save button */
+.edit-form{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:12px}
+.edit-form-title{font-size:13px;font-weight:700;color:var(--t);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.edit-form-title .date-lbl{font-size:12px;color:var(--pk);font-weight:800}
+.shift-type-row{display:flex;gap:6px;margin-bottom:14px}
+.stype-btn{flex:1;padding:12px 6px;border-radius:10px;border:1px solid var(--bd);background:var(--s1);color:var(--ts);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.stype-btn:hover{border-color:var(--pk);color:var(--t)}
+.stype-btn.sel-open{background:rgba(255,229,0,.1);border-color:var(--y);color:var(--y)}
+.stype-btn.sel-close{background:rgba(150,80,255,.1);border-color:#c084fc;color:#c084fc}
+.stype-btn.sel-off{background:rgba(255,255,255,.06);border-color:var(--bd2);color:var(--ts)}
+.station-row{display:flex;gap:6px;margin-bottom:14px}
+.station-btn{flex:1;padding:12px 6px;border-radius:10px;border:1px solid var(--bd);background:var(--s1);color:var(--ts);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.station-btn:hover{border-color:var(--pk);color:var(--t)}
+.station-btn.sel-cafe{background:rgba(126,212,255,.1);border-color:var(--cafe);color:var(--cafe)}
+.station-btn.sel-bakery{background:rgba(255,179,71,.1);border-color:var(--bakery);color:var(--bakery)}
+.time-preview{background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:12px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.time-preview-label{font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
+.time-preview-val{font-size:15px;font-weight:800;color:var(--t)}
+.save-bar{display:flex;gap:8px;padding-top:4px}
+/* OVERVIEW TABLE */
+.ov-wrap{overflow-x:auto}
+.ov-table{width:100%;border-collapse:collapse;min-width:500px}
+.ov-table th{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);padding:8px 6px;text-align:center;border-bottom:1px solid var(--bd)}
+.ov-table td{padding:6px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.ov-name-cell{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ov-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:12px;color:#fff;flex-shrink:0;overflow:hidden}
+.ov-av img{width:100%;height:100%;object-fit:cover}
+.ov-cell{border-radius:7px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:1px solid transparent}
 .ov-cell:hover{border-color:var(--pk)}
-.ov-cell.today-col{border-color:rgba(233,30,140,.3)}
-.ov-cell.shift-open{background:rgba(255,229,0,.06)}.ov-cell.shift-close{background:rgba(150,80,255,.06)}.ov-cell.shift-off{opacity:.35}
-.ov-day-head{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);text-align:center;padding:4px 0}
-/* HISTORY TABLE */
+.ov-cell.ov-open{background:rgba(255,229,0,.07)}.ov-cell.ov-close{background:rgba(150,80,255,.07)}.ov-cell.ov-off{opacity:.3}
+.ov-cell-type{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.ov-cell-station{font-size:8px;font-weight:700}
+.ov-today-head{color:var(--pk)!important}
+/* HISTORY */
 .hist-table{width:100%;border-collapse:collapse;font-size:12px}
 .hist-table th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd)}
 .hist-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t)}
@@ -285,104 +309,114 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 <canvas id="bg-canvas"></canvas>
 <div class="toast" id="toast"></div>
 
-<!-- ADMIN LOGIN -->
-<div class="page on z1" id="adm-login">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
-    <div class="login-wrap fade-in">
-      <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
-      <div class="l-brand">Jane's Admin</div>
-      <p class="l-sub">Admin Portal · Staff Schedule Manager</p>
-      <div class="l-card">
-        <label class="lbl">Admin name</label>
-        <select id="adm-sel-nm">
-          <option value="">— Select admin —</option>
-          <option>Jamal</option><option>Josh</option><option>Eva</option><option>Charlet</option>
-        </select>
-        <label class="lbl">PIN</label>
-        <div class="pin-dots"><div class="pdot" id="ap0"></div><div class="pdot" id="ap1"></div><div class="pdot" id="ap2"></div><div class="pdot" id="ap3"></div></div>
-        <div class="pin-grid">
-          <button class="pb" onclick="aPin('1')">1</button><button class="pb" onclick="aPin('2')">2</button><button class="pb" onclick="aPin('3')">3</button>
-          <button class="pb" onclick="aPin('4')">4</button><button class="pb" onclick="aPin('5')">5</button><button class="pb" onclick="aPin('6')">6</button>
-          <button class="pb" onclick="aPin('7')">7</button><button class="pb" onclick="aPin('8')">8</button><button class="pb" onclick="aPin('9')">9</button>
-          <button class="pb sm" onclick="aPinCl()">Clear</button><button class="pb z" onclick="aPin('0')">0</button><button class="pb" onclick="aPinBk()">⌫</button>
-        </div>
-        <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
-        <div class="err" id="adm-err"></div>
-        <div style="text-align:center;margin-top:14px"><a href="janes-portal.html" style="font-size:12px;color:var(--ts);text-decoration:none">← Back to staff portal</a></div>
+<!-- LOGIN -->
+<div id="adm-login" style="display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px;background:var(--bg);position:relative;z-index:1">
+  <div class="login-wrap fade-in">
+    <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
+    <div class="l-brand" style="color:var(--pk);text-shadow:0 0 24px rgba(233,30,140,.5)">Jane's</div>
+    <p class="l-sub">Admin Portal</p>
+    <div class="l-card">
+      <label class="lbl">Admin name</label>
+      <select id="adm-sel-nm">
+        <option value="">— Select admin —</option>
+        <option>Jamal</option><option>Josh</option><option>Eva</option><option>Charlet</option>
+      </select>
+      <label class="lbl">PIN</label>
+      <div class="pin-dots"><div class="pdot" id="ap0"></div><div class="pdot" id="ap1"></div><div class="pdot" id="ap2"></div><div class="pdot" id="ap3"></div></div>
+      <div class="pin-grid">
+        <button class="pb" onclick="aPin('1')">1</button><button class="pb" onclick="aPin('2')">2</button><button class="pb" onclick="aPin('3')">3</button>
+        <button class="pb" onclick="aPin('4')">4</button><button class="pb" onclick="aPin('5')">5</button><button class="pb" onclick="aPin('6')">6</button>
+        <button class="pb" onclick="aPin('7')">7</button><button class="pb" onclick="aPin('8')">8</button><button class="pb" onclick="aPin('9')">9</button>
+        <button class="pb sm" onclick="aPinCl()">Clear</button><button class="pb z" onclick="aPin('0')">0</button><button class="pb" onclick="aPinBk()">⌫</button>
+      </div>
+      <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
+      <div class="err" id="adm-err" style="display:none"></div>
+      <div style="text-align:center;margin-top:16px">
+        <button onclick="goBackToPortal()" style="font-size:12px;color:var(--ts);background:none;border:none;cursor:pointer">← Back to staff portal</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN DASH -->
-<div class="page z1" id="adm-dash" style="display:none;flex-direction:column">
+<!-- ADMIN DASHBOARD -->
+<div id="adm-dash" style="display:none;flex-direction:column;min-height:100vh;background:var(--bg);position:relative;z-index:1">
   <div class="adm-hdr">
     <div class="adm-hdr-left">
       <div class="adm-logo"><img src="data:image/avif;base64,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" alt="J"></div>
-      <div class="adm-title" style="color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)">Jane's <em style="color:var(--t)">Admin</em></div>
+      <div class="adm-title">Jane's <em>Admin</em></div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <a href="janes-portal.html" class="btn ghost xs">← Portal</a>
+      <button onclick="goBackToPortal()" class="btn ghost xs">← Portal</button>
       <button class="btn danger xs" onclick="adminLogout()">Sign Out</button>
     </div>
   </div>
 
   <div class="adm-body">
-    <!-- TABS -->
-    <div class="tabs-wrap" style="margin-bottom:20px">
-      <div class="tab adm-tab on" onclick="switchAdmTab(0)">📋 Schedule Editor</div>
-      <div class="tab adm-tab" onclick="switchAdmTab(1)">📊 Week Overview</div>
-      <div class="tab adm-tab" onclick="switchAdmTab(2)">🕐 Shift History</div>
+    <div class="adm-tabs">
+      <div class="adm-tab on" onclick="switchAdmTab(0)">📋 Schedule Editor</div>
+      <div class="adm-tab" onclick="switchAdmTab(1)">📊 Week Overview</div>
+      <div class="adm-tab" onclick="switchAdmTab(2)">🕐 History</div>
     </div>
 
-    <!-- TAB 0: SCHEDULE EDITOR -->
+    <!-- SCHEDULE EDITOR -->
     <div class="adm-tc on" id="adm-tc-0">
-      <div style="display:grid;grid-template-columns:1fr;gap:16px">
-        <!-- People list -->
-        <div>
-          <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Select Staff Member</div>
-          <div id="people-list"></div>
-        </div>
-        <!-- Person calendar + editor -->
-        <div id="person-schedule-panel" style="display:none">
-          <div class="adm-cal-wrap">
-            <div class="adm-cal-nav">
-              <button onclick="admCalNav(-1)">‹</button>
-              <div>
-                <div class="adm-cal-label" id="adm-cal-label">--</div>
-                <div style="font-size:11px;color:var(--pk);font-weight:700;text-align:center" id="ps-name">--</div>
-              </div>
-              <button onclick="admCalNav(1)">›</button>
-            </div>
-            <div style="margin-bottom:12px" id="ps-wt"></div>
-            <div class="adm-cal-grid" id="adm-cal-grid"></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot open"></div>Opening</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot close"></div>Closing</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot cafe"></div>Cafe</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot bakery"></div>Bakery</div>
-            </div>
+      <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Select Staff Member</div>
+      <div id="people-list"></div>
+
+      <!-- Person Editor Panel -->
+      <div id="person-editor-panel" style="display:none;margin-top:4px">
+        <!-- Week Navigator -->
+        <div class="week-nav">
+          <button onclick="admWkNav(-1)">‹</button>
+          <div>
+            <div class="week-nav-label" id="adm-wk-label">--</div>
+            <div class="week-nav-sub" id="adm-wt-hint"></div>
           </div>
-          <!-- Shift editor -->
-          <div class="shift-editor" id="shift-editor" style="display:none"></div>
+          <button onclick="admWkNav(1)">›</button>
+        </div>
+
+        <!-- Week Type Selector -->
+        <div class="wt-strip">
+          <div class="wt-strip-label">Week type:</div>
+          <div id="adm-wt-5" class="wt-btn active-5" onclick="setDraftWT(5)">5-day<br><span style="font-size:10px;opacity:.7">Mon–Fri</span></div>
+          <div id="adm-wt-6" class="wt-btn" onclick="setDraftWT(6)">6-day<br><span style="font-size:10px;opacity:.7">Mon–Sat</span></div>
+        </div>
+
+        <!-- Day Grid -->
+        <div class="shift-panel">
+          <div class="shift-panel-title">Tap a day to edit <span>— changes save when you tap Save Week</span></div>
+          <div class="day-grid" id="adm-day-grid"></div>
+        </div>
+
+        <!-- Day Editor (stays open) -->
+        <div id="day-editor" style="display:none"></div>
+
+        <!-- Save Button -->
+        <div class="save-bar">
+          <button class="btn primary full" onclick="saveWeekSchedule()" style="padding:16px;font-size:15px">
+            💾 Save This Week's Schedule
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- TAB 1: WEEK OVERVIEW -->
-    <div class="adm-tc" id="adm-tc-1" style="display:none">
-      <div class="card" style="overflow-x:auto">
-        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">This Week — All Staff</div>
-        <div id="week-overview" style="min-width:500px"></div>
+    <!-- WEEK OVERVIEW -->
+    <div class="adm-tc" id="adm-tc-1">
+      <div class="card" style="margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div style="font-family:'Fredoka One',cursive;font-size:18px">This Week</div>
+          <div style="font-size:12px;color:var(--ts)" id="ov-wk-label"></div>
+        </div>
       </div>
+      <div id="week-overview"></div>
     </div>
 
-    <!-- TAB 2: HISTORY -->
-    <div class="adm-tc" id="adm-tc-2" style="display:none">
+    <!-- HISTORY -->
+    <div class="adm-tc" id="adm-tc-2">
       <div class="card" style="overflow-x:auto">
-        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">Shift History — All Staff</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">Shift History</div>
         <table class="hist-table">
-          <thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Station</th><th>Hours</th><th>Role</th></tr></thead>
+          <thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Station</th><th>Hours</th></tr></thead>
           <tbody id="all-hist"></tbody>
         </table>
       </div>
@@ -395,15 +429,15 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 // ═══════════════════════════════════════════════════════
 // JANES DATA LAYER v3 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
-const DB_VERSION = 4;
-const DB_KEY = 'janes_db_v4';
+const DB_VERSION = 5;
+const DB_KEY = 'janes_db_v5';
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
   Kate:   {pin:'2222',role:'Budtender',admin:false,owner:false},
   Jamal:  {pin:'1111',role:'Budtender',admin:true, owner:false},
   JP:     {pin:'4444',role:'Chef',     admin:false,owner:false},
-  Josh:   {pin:'5555',role:'Manager',  admin:true, owner:true},
+  Josh:   {pin:'5555',role:'Owner',    admin:true, owner:true},
   Eva:    {pin:'6666',role:'Owner',    admin:true, owner:true},
   Charlet:{pin:'7777',role:'Owner',    admin:true, owner:true}
 };
@@ -525,7 +559,10 @@ function recordShiftHistory(db, nm, date, shift) {
 }
 
 
-let db, adminUser=null, adminPin='', selectedPerson=null, admCalOff=0, selectedDate=null;
+let db, adminUser=null, adminPin='', selPerson=null, admWkOff=0, selDayIdx=null;
+// Per-person draft for current week being edited
+let draftSched = {}; // draftSched[di] = {type,station} or null
+let draftWT = 5; // draft week type
 
 function initAdmin(){
   db=loadDB();
@@ -533,7 +570,7 @@ function initAdmin(){
 }
 
 function tryAdminAutoLogin(){
-  const s=sessionStorage.getItem('janes_admin');
+  const s=localStorage.getItem('janes_session_admin');
   if(s&&db.staff[s]&&db.staff[s].admin){adminUser=s;buildAdminDash();}
 }
 
@@ -549,252 +586,337 @@ function doAdminLogin(){
   const s=db.staff[nm];
   if(!s||s.pin!==adminPin){showAErr('Incorrect PIN');adminPin='';aDots();const c=document.querySelector('.l-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return;}
   if(!s.admin){showAErr('Admin access only');adminPin='';aDots();return;}
-  adminUser=nm;sessionStorage.setItem('janes_admin',nm);buildAdminDash();
+  adminUser=nm;localStorage.setItem('janes_session_admin',nm);buildAdminDash();
 }
 function showAErr(m){const e=document.getElementById('adm-err');e.textContent=m;e.style.display='block'}
-function adminLogout(){adminUser=null;adminPin='';aDots();document.getElementById('adm-sel-nm').value='';sessionStorage.removeItem('janes_admin');showAdmPage('adm-login')}
+function adminLogout(){adminUser=null;adminPin='';aDots();document.getElementById('adm-sel-nm').value='';document.getElementById('adm-err').style.display='none';localStorage.removeItem('janes_session_admin');showAdmPage('adm-login')}
+
+function goBackToPortal(){
+  const base=window.location.href.replace(/admin\.html.*$/,'').replace(/admin\/?$/,'');
+  // Try index.html first (GitHub Pages default), fallback to janes-portal.html
+  window.location.href=base+'index.html';
+}
 
 function buildAdminDash(){
   showAdmPage('adm-dash');
-  renderPeopleList();
-  renderWeekOverview();
-  if(selectedPerson)renderPersonCalendar();
+  switchAdmTab(0);
 }
 
-function showAdmPage(id){document.querySelectorAll('.adm-page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
+function showAdmPage(id){
+  document.getElementById('adm-login').style.display='none';
+  document.getElementById('adm-dash').style.display='none';
+  document.getElementById(id).style.display='flex';
+}
 
 function switchAdmTab(n){
   document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
   document.querySelectorAll('.adm-tc').forEach((t,i)=>t.classList.toggle('on',i===n));
-  if(n===0)renderPeopleList();
+  if(n===0)renderScheduleEditor();
   if(n===1)renderWeekOverview();
   if(n===2)renderAllHistory();
 }
 
-// PEOPLE LIST
+// ═══════════════════════════════
+// SCHEDULE EDITOR TAB
+// ═══════════════════════════════
+function renderScheduleEditor(){
+  renderPeopleList();
+  if(selPerson) renderPersonEditor();
+  else document.getElementById('person-editor-panel').style.display='none';
+}
+
 function renderPeopleList(){
   const el=document.getElementById('people-list');
   el.innerHTML=Object.entries(db.staff).map(([nm,v])=>{
     const pic=v.pic;
     const bc=v.owner?'badge owner':v.admin?'badge admin':(v.role==='Chef'?'badge chef':'badge budtender');
-    const bl=v.owner?'Owner':v.admin?'Admin':(v.role||'Staff');
-    const wt=v.weekType||5;
+    const bl=v.role||'Staff'; // show ROLE not admin status
     const shifts=db.defaultSched[nm].filter(x=>x).length;
-    return `<button class="person-btn${selectedPerson===nm?' active':''}" onclick="selectPerson('${nm}')">
+    return `<button class="person-btn${selPerson===nm?' active':''}" onclick="selectPerson('${nm}')">
       <div class="person-btn-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
       <div class="person-btn-info">
         <div class="person-btn-name">${nm}</div>
-        <div class="person-btn-role"><span class="${bc}">${bl}</span></div>
+        <div class="person-btn-sub"><span class="${bc}">${bl}</span></div>
       </div>
-      <div class="person-btn-meta">${wt}-day week · ${shifts} shifts/wk</div>
+      <div class="person-btn-meta">${(v.weekType||5)}-day · ${shifts} shifts</div>
     </button>`;
   }).join('');
 }
 
 function selectPerson(nm){
-  selectedPerson=nm;selectedDate=null;
+  selPerson=nm;selDayIdx=null;
+  // Init draft from current week
+  initDraft(nm);
   renderPeopleList();
-  renderPersonCalendar();
-  document.getElementById('person-schedule-panel').style.display='block';
-  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
+  const panel=document.getElementById('person-editor-panel');
+  panel.style.display='block';
+  renderPersonEditor();
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// PERSON CALENDAR
-function renderPersonCalendar(){
-  if(!selectedPerson)return;
-  const nm=selectedPerson,v=db.staff[nm];
-  document.getElementById('ps-name').textContent=nm;
-  document.getElementById('ps-wt').innerHTML=`<button class="wt-btn${v.weekType===5?' active':''}" onclick="setWT('${nm}',5)">5-day</button><button class="wt-btn${v.weekType===6?' active':''}" onclick="setWT('${nm}',6)">6-day</button>`;
+function initDraft(nm){
+  const mon=getAdmMon();
+  const wkSched=getWeekSched(db,nm,mon);
+  draftSched={};
+  for(let i=0;i<7;i++) draftSched[i]=wkSched[i]?{...wkSched[i]}:null;
+  // Week type: check if this specific week has been set, else use person default
+  const wk=weekKey(mon);
+  draftWT=db.weekTypeOverrides&&db.weekTypeOverrides[nm]&&db.weekTypeOverrides[nm][wk]
+    ? db.weekTypeOverrides[nm][wk]
+    : (db.staff[nm].weekType||5);
+}
 
+function getAdmMon(){return getMon(admWkOff)}
+
+function renderPersonEditor(){
+  if(!selPerson)return;
+  const nm=selPerson;
+  const v=db.staff[nm];
+  const mon=getAdmMon();
   const today=new Date();
-  const d=new Date(today.getFullYear(),today.getMonth()+admCalOff,1);
-  const yr=d.getFullYear(),mo=d.getMonth();
-  document.getElementById('adm-cal-label').textContent=`${MO[mo]} ${yr}`;
-  const firstDow=(new Date(yr,mo,1).getDay()+6)%7;
-  const daysInMonth=new Date(yr,mo+1,0).getDate();
-  let html='';
-  ['M','T','W','T','F','S','S'].forEach(x=>{html+=`<div class="adm-cal-head">${x}</div>`});
-  for(let i=0;i<firstDow;i++)html+=`<div class="adm-cal-day empty"></div>`;
-  for(let day=1;day<=daysInMonth;day++){
-    const cellDate=new Date(yr,mo,day);
-    const di=(cellDate.getDay()+6)%7;
-    const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
-    const s=resolveShift(db,nm,cellMon,di);
-    const ds=dateStr(cellDate);
-    const isToday=cellDate.toDateString()===today.toDateString();
-    const isSel=selectedDate===ds;
+
+  // Week label
+  const wkEnd=new Date(mon);wkEnd.setDate(mon.getDate()+6);
+  document.getElementById('adm-wk-label').textContent=`${mon.getDate()} ${MO[mon.getMonth()]} – ${wkEnd.getDate()} ${MO[wkEnd.getMonth()]} ${wkEnd.getFullYear()}`;
+
+  // Check last week to auto-suggest week type
+  const lastMon=getMon(admWkOff-1);
+  const lastWk=weekKey(lastMon);
+  const lastWT=db.weekTypeOverrides&&db.weekTypeOverrides[nm]&&db.weekTypeOverrides[nm][lastWk];
+  const lastShifts=Object.values(getWeekSched(db,nm,lastMon)).filter(x=>x).length;
+  const suggestWT=lastWT||(lastShifts>=6?6:5);
+  document.getElementById('adm-wt-hint').textContent=lastShifts?`Last week: ${lastShifts} shifts worked`:'';
+
+  // Week type buttons
+  document.getElementById('adm-wt-5').className='wt-btn'+(draftWT===5?' active-5':'');
+  document.getElementById('adm-wt-6').className='wt-btn'+(draftWT===6?' active-6':'');
+
+  // Day grid
+  let dgHtml='';
+  for(let i=0;i<7;i++){
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const entry=draftSched[i];
+    const isToday=d.toDateString()===today.toDateString();
+    const isSel=selDayIdx===i;
+    let infoTxt='Off';
     let dots='';
-    if(s){dots+=`<div class="adm-day-dot ${s.tag}"></div>`;if(s.station)dots+=`<div class="adm-day-dot ${s.station}"></div>`;}
-    const infoText=s?`${fmt12(s.s).replace(':00','')}–${fmt12(s.e).replace(':00','')}`:'Off';
-    const stText=s&&s.station?s.station:'';
-    html+=`<div class="adm-cal-day${isToday?' today':''}${s?' has-shift':''}${isSel?' selected':''}" onclick="selectDay('${ds}','${nm}',${di})">
-      <div class="adm-day-num">${day}</div>
-      <div class="adm-day-info" style="color:${s?'var(--t)':'var(--tm)'}">${infoText}</div>
-      <div class="adm-day-info" style="color:${s&&s.station==='cafe'?'var(--cafe)':s&&s.station==='bakery'?'var(--bakery)':'var(--tm)'}">${stText}</div>
-      <div class="adm-day-dot-row">${dots}</div>
+    if(entry&&entry.type){
+      const t=getShiftTimes(draftWT,entry.type,i);
+      infoTxt=`${fmt12(t.s).replace(':00am','am').replace(':00pm','pm')}`;
+      dots+=`<div class="day-cell-dot ${entry.type}"></div>`;
+      if(entry.station)dots+=`<div class="day-cell-dot ${entry.station}"></div>`;
+    }
+    dgHtml+=`<div class="day-cell${isSel?' selected':''}${isToday?' is-today':''}${!entry?' is-off':''}" onclick="selectDay(${i})">
+      <div class="day-cell-name">${DAYS[i]}</div>
+      <div class="day-cell-num">${d.getDate()}</div>
+      <div class="day-cell-info" style="color:${entry?'var(--t)':'var(--tm)'}">${infoTxt}</div>
+      <div class="day-cell-dots">${dots}</div>
     </div>`;
   }
-  document.getElementById('adm-cal-grid').innerHTML=html;
-  if(selectedDate)renderShiftEditor(selectedPerson,selectedDate);
+  document.getElementById('adm-day-grid').innerHTML=dgHtml;
+
+  // Shift editor (persistent, always visible if day selected)
+  renderDayEditor();
 }
 
-function admCalNav(d){admCalOff+=d;renderPersonCalendar()}
-function setWT(nm,wt){db.staff[nm].weekType=wt;saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} set to ${wt}-day week ✓`)}
-
-function selectDay(ds,nm,di){
-  selectedDate=ds;
-  renderPersonCalendar();
-  renderShiftEditor(nm,ds,di);
+function selectDay(di){
+  selDayIdx=di;
+  renderPersonEditor();
 }
 
-function renderShiftEditor(nm,ds,di){
-  const dateObj=new Date(ds+'T12:00:00');
-  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  // Get the week sched (or default)
-  const weekSched=db.schedules[nm][wkKey]?[...db.schedules[nm][wkKey]]:[...db.defaultSched[nm]];
-  const entry=weekSched[di];
-  const wt=db.staff[nm].weekType||5;
-  const shiftTimes=getShiftTimes(wt,entry?entry.type:'open',di);
-  const dow=(dateObj.getDay()+6)%7;
-  const el=document.getElementById('shift-editor');
-  const d=dateObj;
-  el.innerHTML=`<div class="shift-editor-title">
-    ✏️ ${FDAYS[dow]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}
-    <span style="font-size:11px;color:var(--ts);font-family:'Inter',sans-serif;font-weight:600">${nm}</span>
-  </div>
-  <div style="font-size:11px;color:var(--ts);margin-bottom:12px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;line-height:1.7">
-    <strong style="color:var(--t)">${wt}-day week:</strong><br>
-    Opening: ${SHIFT_TIMES[wt].open.s} – ${SHIFT_TIMES[wt].open.e}${di===5?' (Sat: 9:30am)':''}<br>
-    Closing: ${SHIFT_TIMES[wt].close.s} – ${SHIFT_TIMES[wt].close.e}
-  </div>
-  <div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Shift Type</div>
-  <div class="shift-toggle-row">
-    <div class="shift-type-btn${entry&&entry.type==='open'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'open','${entry?entry.station:'cafe'}')">🌅 Opening</div>
-    <div class="shift-type-btn${entry&&entry.type==='close'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'close','${entry?entry.station:'cafe'}')">🌙 Closing</div>
-    <div class="shift-type-btn${!entry?' active-off':''}" onclick="setShiftDayOff('${nm}','${ds}',${di})">🚫 Day Off</div>
-  </div>
-  ${entry?`<div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Station</div>
-  <div class="shift-toggle-row">
-    <div class="shift-type-btn${entry&&entry.station==='cafe'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','cafe')" style="${entry&&entry.station==='cafe'?'background:rgba(126,212,255,.2);border-color:var(--cafe);color:var(--cafe)':''}">☕ Cafe</div>
-    <div class="shift-type-btn${entry&&entry.station==='bakery'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','bakery')" style="${entry&&entry.station==='bakery'?'background:rgba(255,179,71,.2);border-color:var(--bakery);color:var(--bakery)':''}">🥐 Bakery</div>
-  </div>
-  <div class="shift-detail-box">
-    <div class="shift-detail-row"><span class="shift-detail-label">Start time</span><span class="shift-detail-val">${fmt12(shiftTimes.s)}</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">End time</span><span class="shift-detail-val">${fmt12(shiftTimes.e)}</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">Duration</span><span class="shift-detail-val">${hDiff(shiftTimes.s,shiftTimes.e)}h</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">Station</span><span class="shift-detail-val">${entry.station==='cafe'?'☕ Cafe':'🥐 Bakery'}</span></div>
-  </div>`:'<div style="text-align:center;padding:20px;color:var(--ts);font-size:13px">Day Off — tap Opening or Closing to schedule</div>'}`;
+function setDraftWT(wt){
+  draftWT=wt;
+  renderPersonEditor();
+}
+
+function setDraftType(type){
+  if(selDayIdx===null)return;
+  if(type==='off'){draftSched[selDayIdx]=null;}
+  else{
+    if(!draftSched[selDayIdx])draftSched[selDayIdx]={type:'open',station:'cafe'};
+    draftSched[selDayIdx].type=type;
+  }
+  renderDayEditor();
+  // Refresh dots on grid only
+  const mon=getAdmMon();
+  const entry=draftSched[selDayIdx];
+  const cell=document.querySelectorAll('.day-cell')[selDayIdx];
+  if(cell){
+    const infoEl=cell.querySelector('.day-cell-info');
+    const dotEl=cell.querySelector('.day-cell-dots');
+    if(entry&&entry.type){
+      const t=getShiftTimes(draftWT,entry.type,selDayIdx);
+      if(infoEl){infoEl.textContent=fmt12(t.s);infoEl.style.color='var(--t)';}
+      if(dotEl){dotEl.innerHTML=`<div class="day-cell-dot ${entry.type}"></div>${entry.station?`<div class="day-cell-dot ${entry.station}"></div>`:''}`;}
+    } else {
+      if(infoEl){infoEl.textContent='Off';infoEl.style.color='var(--tm)';}
+      if(dotEl)dotEl.innerHTML='';
+    }
+  }
+}
+
+function setDraftStation(st){
+  if(selDayIdx===null||!draftSched[selDayIdx])return;
+  draftSched[selDayIdx].station=st;
+  renderDayEditor();
+  // update dot
+  const cell=document.querySelectorAll('.day-cell')[selDayIdx];
+  if(cell){
+    const dotEl=cell.querySelector('.day-cell-dots');
+    const entry=draftSched[selDayIdx];
+    if(dotEl&&entry)dotEl.innerHTML=`<div class="day-cell-dot ${entry.type}"></div>${entry.station?`<div class="day-cell-dot ${entry.station}"></div>`:''}`;
+  }
+}
+
+function renderDayEditor(){
+  const el=document.getElementById('day-editor');
+  if(selDayIdx===null){el.style.display='none';return;}
   el.style.display='block';
+  const di=selDayIdx;
+  const mon=getAdmMon();
+  const d=new Date(mon);d.setDate(mon.getDate()+di);
+  const entry=draftSched[di];
+  const t=entry&&entry.type?getShiftTimes(draftWT,entry.type,di):null;
+
+  el.innerHTML=`<div class="edit-form">
+    <div class="edit-form-title">✏️ <span class="date-lbl">${FDAYS[di]}, ${d.getDate()} ${MO[d.getMonth()]} — ${selPerson}</span></div>
+    <div style="font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Shift Type</div>
+    <div class="shift-type-row">
+      <div class="stype-btn${entry&&entry.type==='open'?' sel-open':''}" onclick="setDraftType('open')">
+        <span style="font-size:18px">🌅</span><span>Opening</span>
+      </div>
+      <div class="stype-btn${entry&&entry.type==='close'?' sel-close':''}" onclick="setDraftType('close')">
+        <span style="font-size:18px">🌙</span><span>Closing</span>
+      </div>
+      <div class="stype-btn${!entry?' sel-off':''}" onclick="setDraftType('off')">
+        <span style="font-size:18px">🚫</span><span>Day Off</span>
+      </div>
+    </div>
+    ${entry&&entry.type?`
+    <div style="font-size:10px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Station</div>
+    <div class="station-row">
+      <div class="station-btn${entry.station==='cafe'?' sel-cafe':''}" onclick="setDraftStation('cafe')">
+        <span style="font-size:20px">☕</span><span>Cafe</span>
+      </div>
+      <div class="station-btn${entry.station==='bakery'?' sel-bakery':''}" onclick="setDraftStation('bakery')">
+        <span style="font-size:20px">🥐</span><span>Bakery</span>
+      </div>
+    </div>
+    <div class="time-preview">
+      <div><div class="time-preview-label">Start</div><div class="time-preview-val">${fmt12(t.s)}</div></div>
+      <div style="width:1px;height:30px;background:var(--bd)"></div>
+      <div><div class="time-preview-label">Duration</div><div class="time-preview-val">${hDiff(t.s,t.e)}h</div></div>
+      <div style="width:1px;height:30px;background:var(--bd)"></div>
+      <div><div class="time-preview-label">End</div><div class="time-preview-val">${fmt12(t.e)}</div></div>
+    </div>`:'<div style="text-align:center;padding:16px;color:var(--ts);font-size:13px">Day off — tap Opening or Closing to schedule</div>'}
+  </div>`;
 }
 
-function setShiftDay(nm,ds,di,type,station){
-  const dateObj=new Date(ds+'T12:00:00');
-  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
-  db.schedules[nm][wkKey][di]={type,station};
-  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to ${type} · ${station} ✓`);
-}
-function setShiftDayOff(nm,ds,di){
-  const dateObj=new Date(ds+'T12:00:00');
-  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
-  db.schedules[nm][wkKey][di]=null;
-  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to off ✓`);
+function saveWeekSchedule(){
+  if(!selPerson){toast('Select a person first');return;}
+  const nm=selPerson;
+  const mon=getAdmMon();
+  const wk=weekKey(mon);
+  // Save week type override
+  if(!db.weekTypeOverrides)db.weekTypeOverrides={};
+  if(!db.weekTypeOverrides[nm])db.weekTypeOverrides[nm]={};
+  db.weekTypeOverrides[nm][wk]=draftWT;
+  db.staff[nm].weekType=draftWT; // also update default
+  // Save schedule
+  const sched=[];
+  for(let i=0;i<7;i++) sched.push(draftSched[i]?{...draftSched[i]}:null);
+  setWeekSched(db,nm,mon,sched);
+  saveDB(db);
+  toast(`${nm} — week saved ✓`);
+  renderPersonEditor();
+  renderPeopleList();
 }
 
-// WEEK OVERVIEW (all staff)
+function admWkNav(d){admWkOff+=d;selDayIdx=null;if(selPerson)initDraft(selPerson);renderPersonEditor();}
+
+// ═══════════════════════════════
+// WEEK OVERVIEW TAB
+// ═══════════════════════════════
 function renderWeekOverview(){
   const today=new Date();
   const mon=getMon(0);
-  // headers
-  let hHtml=`<div class="overview-row"><div class="ov-name" style="font-size:9px;color:var(--tm);font-weight:700;text-transform:uppercase;letter-spacing:.08em">Staff</div>`;
+  const wkEnd=new Date(mon);wkEnd.setDate(mon.getDate()+6);
+  document.getElementById('ov-wk-label').textContent=`${mon.getDate()} ${MO[mon.getMonth()]} – ${wkEnd.getDate()} ${MO[wkEnd.getMonth()]} ${wkEnd.getFullYear()}`;
+
+  let html=`<div class="ov-wrap"><table class="ov-table"><thead><tr><th style="text-align:left">Staff</th>`;
   for(let i=0;i<7;i++){
     const d=new Date(mon);d.setDate(mon.getDate()+i);
     const isT=d.toDateString()===today.toDateString();
-    hHtml+=`<div class="adm-day-head" style="${isT?'color:var(--pk)':''}">${DAYS[i]}<br><span style="font-size:8px">${d.getDate()}</span></div>`;
+    html+=`<th class="${isT?'ov-today-head':''}">${DAYS[i]}<br><span style="font-weight:400">${d.getDate()}</span></th>`;
   }
-  hHtml+=`</div>`;
-  let rows='';
+  html+=`</tr></thead><tbody>`;
   Object.entries(db.staff).forEach(([nm,v])=>{
     const pic=v.pic;
-    rows+=`<div class="overview-row">
-      <div class="ov-name" style="display:flex;align-items:center;gap:6px">
-        <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:10px;color:#fff;overflow:hidden;flex-shrink:0">${pic?`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`:`${nm[0]}`}</div>
-        <span style="font-size:11px;font-weight:700;color:var(--t)">${nm}</span>
-      </div>`;
+    html+=`<tr><td><div class="ov-name-cell"><div class="ov-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div><span style="font-size:12px;font-weight:700;color:var(--t)">${nm}</span></div></td>`;
     for(let i=0;i<7;i++){
-      const d=new Date(mon);d.setDate(mon.getDate()+i);
-      const isT=d.toDateString()===today.toDateString();
       const s=resolveShift(db,nm,mon,i);
-      rows+=`<div class="ov-cell${isT?' today-col':''}${s?` shift-${s.tag}`:' shift-off'}" onclick="selectPersonDay('${nm}',${i})">
-        ${s?`<div style="font-size:8px;font-weight:800;color:${s.tag==='open'?'var(--y)':'#c084fc'}">${cap(s.tag)}</div><div style="font-size:8px;color:${s.station==='cafe'?'var(--cafe)':'var(--bakery)'}">${s.station||''}</div>`:'<div style="font-size:9px;color:var(--tm)">Off</div>'}
-      </div>`;
+      const isT=(()=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d.toDateString()===today.toDateString()})();
+      if(s){
+        html+=`<td><div class="ov-cell ov-${s.tag}" onclick="jumpToPersonDay('${nm}',${i})">
+          <div class="ov-cell-type" style="color:${s.tag==='open'?'var(--y)':'#c084fc'}">${cap(s.tag)}</div>
+          <div class="ov-cell-station" style="color:${s.station==='cafe'?'var(--cafe)':'var(--bakery)'}">${s.station||''}</div>
+        </div></td>`;
+      } else {
+        html+=`<td><div class="ov-cell ov-off">Off</div></td>`;
+      }
     }
-    rows+=`</div>`;
+    html+=`</tr>`;
   });
-  document.getElementById('week-overview').innerHTML=hHtml+rows;
+  html+=`</tbody></table></div>`;
+  document.getElementById('week-overview').innerHTML=html;
 }
 
-function selectPersonDay(nm,di){
-  selectedPerson=nm;
-  const mon=getMon(0);
-  const d=new Date(mon);d.setDate(mon.getDate()+di);
-  selectedDate=dateStr(d);
+function jumpToPersonDay(nm,di){
+  selPerson=nm;selDayIdx=di;admWkOff=0;
+  initDraft(nm);
   switchAdmTab(0);
-  renderPeopleList();
-  renderPersonCalendar();
-  document.getElementById('person-schedule-panel').style.display='block';
-  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>{
+    renderPeopleList();
+    const panel=document.getElementById('person-editor-panel');
+    panel.style.display='block';
+    renderPersonEditor();
+    panel.scrollIntoView({behavior:'smooth'});
+  },50);
 }
 
-// ALL HISTORY
+// ═══════════════════════════════
+// HISTORY TAB
+// ═══════════════════════════════
 function renderAllHistory(){
-  const el=document.getElementById('all-hist');
   let rows='';
-  Object.entries(db.shiftHistory).forEach(([nm,hist])=>{
+  Object.entries(db.shiftHistory||{}).forEach(([nm,hist])=>{
     if(!hist||!hist.length)return;
-    hist.slice(0,20).forEach(h=>{
+    hist.slice(0,15).forEach(h=>{
       const d=new Date(h.date+'T12:00:00');
-      rows+=`<tr><td>${nm}</td><td>${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}</td><td><span class="chip ${h.type}">${cap(h.type)}</span></td><td>${h.station?stationChip(h.station):'-'}</td><td>${h.hours}h</td><td>${h.role}</td></tr>`;
+      rows+=`<tr>
+        <td style="font-weight:700">${nm}</td>
+        <td>${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}</td>
+        <td><span class="chip ${h.type}">${cap(h.type)}</span></td>
+        <td>${h.station?stationChip(h.station):'-'}</td>
+        <td>${h.hours}h</td>
+      </tr>`;
     });
   });
-  el.innerHTML=rows||`<tr><td colspan="6" style="text-align:center;color:var(--ts);padding:20px">No history recorded yet</td></tr>`;
+  document.getElementById('all-hist').innerHTML=rows||`<tr><td colspan="5" style="text-align:center;color:var(--ts);padding:20px">No history recorded yet</td></tr>`;
 }
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2600)}
 
-// ANIMATED BG
+// BG
 (function(){
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');let W,H,pts=[];
   function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}resize();window.addEventListener('resize',resize);
-  class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.2+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.2+.06;this.op=Math.random()*.22+.05}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}update(){this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;this.a+=.006;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset()}}
+  class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.2+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.2+.06;this.op=Math.random()*.2+.05}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}update(){this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;this.a+=.006;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset()}}
   for(let i=0;i<45;i++)pts.push(new P());
   const orbs=[{x:.8,y:.15,r:280,c:'rgba(233,30,140,0.045)'},{x:.1,y:.85,r:220,c:'rgba(136,14,79,0.034)'},{x:.5,y:.5,r:180,c:'rgba(233,30,140,0.023)'}];
   function frame(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,o.r);g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(frame)}
   frame();
 })();
-
-// Fix tab display
-document.querySelectorAll('.adm-tc').forEach((t,i)=>{t.style.display=i===0?'block':'none'});
-document.querySelector('#adm-dash').style.display='none';
-
-function switchAdmTab(n){
-  document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
-  document.querySelectorAll('.adm-tc').forEach((t,i)=>t.style.display=i===n?'block':'none');
-  if(n===0){renderPeopleList();if(selectedPerson)renderPersonCalendar();}
-  if(n===1)renderWeekOverview();
-  if(n===2)renderAllHistory();
-}
-
-function showAdmPage(id){
-  document.getElementById('adm-login').classList.remove('on');document.getElementById('adm-login').style.display='none';
-  document.getElementById('adm-dash').classList.add('on');document.getElementById('adm-dash').style.display='flex';
-  if(id==='adm-login'){document.getElementById('adm-login').style.display='flex';document.getElementById('adm-dash').style.display='none';}
-}
-
 initAdmin();
 </script>
 </body>
