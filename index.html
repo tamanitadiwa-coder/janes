@@ -542,7 +542,7 @@ function init(){
 }
 
 function tryAutoLogin(){
-  const s=sessionStorage.getItem('janes_user');
+  const s=localStorage.getItem('janes_session_user');
   if(s&&db.staff[s]){me=s;buildDash();goLock();}
 }
 
@@ -570,10 +570,10 @@ function doLogin(){
   if(pinVal.length<4){showErr('Enter your 4-digit PIN.');return}
   const s=db.staff[nm];
   if(!s||s.pin!==pinVal){showErr('Incorrect PIN. Try again.');pinVal='';dots();const c=document.querySelector('.l-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return;}
-  me=nm;sessionStorage.setItem('janes_user',me);buildDash();
+  me=nm;localStorage.setItem('janes_session_user',me);buildDash();
 }
 function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block'}
-function logout(){me=null;pinVal='';myWk=0;teamWk=0;lockPin='';dots();ldots();document.getElementById('sel-nm').value='';document.getElementById('err').style.display='none';sessionStorage.removeItem('janes_user');showPage('pg-login')}
+function logout(){me=null;pinVal='';myWk=0;teamWk=0;lockPin='';dots();ldots();document.getElementById('sel-nm').value='';document.getElementById('err').style.display='none';localStorage.removeItem('janes_session_user');showPage('pg-login')}
 
 function goLock(){
   if(!me)return;
@@ -606,7 +606,11 @@ function buildDash(){
   document.getElementById('greet-date').textContent=new Date().toLocaleDateString('en-ZA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   setAv('hdr-av',me);
   document.getElementById('hdr-nm').textContent=me;
-  switchTab(0);showPage('pg-dash');toast(`Welcome back, ${me}! 💕`);
+  switchTab(0);showPage('pg-dash');
+  // Show admin button for admins immediately on login
+  const aw=document.getElementById('admin-portal-btn-wrap');
+  if(aw)aw.style.display=(db.staff[me]&&db.staff[me].admin)?'block':'none';
+  toast(`Welcome back, ${me}! 💕`);
 }
 
 function setAv(elId,nm){
@@ -903,7 +907,7 @@ function renderProfile(){
   const mon=getMon(0);
   const sc=db.defaultSched[me].filter(x=>x).length;
   const hrs=Array(7).fill(0).reduce((a,_,i)=>{const sh=resolveShift(db,me,mon,i);return a+(sh?hDiff(sh.s,sh.e):0)},0);
-  const roleLabel=s.owner?'Owner':s.admin?'Admin':(s.role||'Staff');
+  const roleLabel=s.owner?s.role||'Owner':s.admin?`${s.role||'Staff'} · Admin`:(s.role||'Staff');
   document.getElementById('prof-role').textContent=roleLabel;
   document.getElementById('prof-name').textContent=me;
   document.getElementById('prof-stats-grid').innerHTML=`
