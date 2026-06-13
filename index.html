@@ -10,14 +10,14 @@
 html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 :root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--y:#FFE500;--g:#00E676;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#ffffff;--ts:#8888a0;--tm:#444455;--glow:rgba(233,30,140,0.18);--glow2:rgba(233,30,140,0.09);--r:14px;--cafe:#7ed4ff;--bakery:#FFB347}
-.page{display:none;min-height:100vh;flex-direction:column;background:var(--bg)}.page.on{display:flex}
+.page{display:none;min-height:100vh;flex-direction:column;background:var(--bg);overflow-x:hidden}.page.on{display:flex}
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}.z1{position:relative;z-index:1}
 /* LOGIN */
 #pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
 .login-wrap{width:100%;max-width:360px;text-align:center}
 .logo-ring{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45),0 0 100px rgba(233,30,140,.12);overflow:hidden}
 .logo-ring img{width:85%;height:85%;object-fit:contain}
-.l-brand{font-family:'Fredoka One',cursive;font-size:28px;color:var(--t);margin-bottom:3px}
+.l-brand{font-family:'Fredoka One',cursive;font-size:28px;color:var(--pk);text-shadow:0 0 24px rgba(233,30,140,.5);margin-bottom:3px}
 .l-sub{font-size:11px;color:var(--ts);margin-bottom:24px;letter-spacing:.06em;text-transform:uppercase}
 .l-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:26px;text-align:left;box-shadow:0 8px 48px rgba(0,0,0,.6)}
 .lbl{display:block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ts);margin-bottom:8px}
@@ -42,7 +42,7 @@ html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff
 .hdr-left{display:flex;align-items:center;gap:10px}
 .hdr-logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;box-shadow:0 0 16px rgba(233,30,140,.4);flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .hdr-logo img{width:90%;height:90%;object-fit:contain}
-.hdr-brand{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}.hdr-r{display:flex;align-items:center;gap:8px}
+.hdr-brand{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)}.hdr-r{display:flex;align-items:center;gap:8px}
 .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3);cursor:pointer;position:relative;transition:border-color .2s}
 .av:hover{border-color:var(--pk)}.av img{width:100%;height:100%;object-fit:cover}
 .av-upload{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65);opacity:0;transition:opacity .2s;font-size:14px;border-radius:50%}
@@ -53,7 +53,7 @@ html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff
 input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var(--ts);display:none}
 @media(min-width:400px){.hdr-name{display:block}}
 /* BODY */
-.body{flex:1;overflow-y:auto;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
 .greet{border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;background:var(--s1);position:relative;overflow:hidden}
 .greet::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.18),transparent 70%);top:-120px;right:-60px;pointer-events:none}
 .greet-hi{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:3px}.greet-hi em{color:var(--pk);font-style:normal}
@@ -88,7 +88,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .sr-time{font-size:13px;font-weight:700;color:var(--t)}.sr-h{font-size:11px;color:var(--ts);margin-top:1px}
 .sr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 /* CHIPS */
-.station-chip{padding:3px 8px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.station-chip{padding:3px 10px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .station-chip.cafe{background:rgba(126,212,255,.12);color:var(--cafe);border:1px solid rgba(126,212,255,.25)}
 .station-chip.bakery{background:rgba(255,179,71,.12);color:var(--bakery);border:1px solid rgba(255,179,71,.25)}
 .chip{padding:3px 9px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
@@ -110,11 +110,14 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .tv-day-head{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
 .today-dot{width:7px;height:7px;border-radius:50%;background:var(--pk);box-shadow:0 0 8px var(--pk);flex-shrink:0;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
-.tv-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;margin-bottom:5px;transition:all .15s;cursor:pointer}
+.tv-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:6px;transition:all .15s;cursor:pointer;width:100%}
 .tv-row:hover{border-color:var(--pk);transform:translateY(-1px);background:var(--s2)}
-.tv-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:15px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.25)}
+.tv-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3);box-shadow:0 0 12px rgba(233,30,140,.2)}
 .tv-av img{width:100%;height:100%;object-fit:cover}
-.tv-name{font-size:13px;font-weight:700;color:var(--t);min-width:65px}.tv-role{font-size:11px;color:var(--ts);flex:1}.tv-time{font-size:12px;font-weight:600;color:var(--t)}
+.tv-name{font-size:14px;font-weight:700;color:var(--t);min-width:72px;flex-shrink:0}
+.tv-role{font-size:11px;color:var(--ts);flex:1;min-width:0}
+.tv-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.tv-time{font-size:12px;font-weight:700;color:var(--t);white-space:nowrap}
 .tv-off-row{font-size:11px;color:var(--tm);margin-top:5px;padding-left:2px}
 /* PROFILE CARD */
 .profile-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
@@ -194,7 +197,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 @keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}.shake{animation:sk .35s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeUp .45s ease both}
 /* LOCK */
-#pg-lock{background:var(--bg);align-items:center;justify-content:center;min-height:100vh}
+#pg-lock{background:var(--bg);align-items:center;justify-content:center;min-height:100vh;overflow-x:hidden;overflow-y:auto}
 .lock-content{text-align:center;max-width:320px;width:100%;padding:24px}
 .lock-time{font-family:'Fredoka One',cursive;font-size:72px;color:var(--t);line-height:1;margin-bottom:4px}
 .lock-date{font-size:12px;color:var(--ts);margin-bottom:32px;letter-spacing:.04em;text-transform:uppercase}
@@ -261,7 +264,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
     <div class="login-wrap fade-in">
       <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
-      <div class="l-brand">Jane's</div>
+      <div class="l-brand" style="color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)">Jane's</div>
       <p class="l-sub">Staff Portal · Salt River</p>
       <div class="l-card">
         <label class="lbl">Your name</label>
@@ -300,7 +303,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <button class="lu-pb" onclick="lpp('7')">7</button><button class="lu-pb" onclick="lpp('8')">8</button><button class="lu-pb" onclick="lpp('9')">9</button>
       <button class="lu-pb sm" onclick="lpc()">Clear</button><button class="lu-pb z" onclick="lpp('0')">0</button><button class="lu-pb" onclick="lpbk()">⌫</button>
     </div>
-    <div style="margin-top:20px"><a href="admin.html" style="font-size:11px;color:var(--ts);text-decoration:none;border:1px solid var(--bd);padding:6px 14px;border-radius:100px;display:inline-block;transition:all .2s" onmouseover="this.style.borderColor='var(--pk)';this.style.color='var(--pk)'" onmouseout="this.style.borderColor='var(--bd)';this.style.color='var(--ts)'">⚙️ Admin Portal</a></div>
+
     <div class="swipe-hint">Swipe left to view schedule <span class="swipe-arrow">→</span></div>
   </div>
 </div>
@@ -310,7 +313,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   <div class="hdr">
     <div class="hdr-left">
       <div class="hdr-logo"><img src="data:image/avif;base64,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" alt="J"></div>
-      <div class="hdr-brand">Jane's</div>
+      <div class="hdr-brand" style="color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)">Jane's</div>
     </div>
     <div class="hdr-r">
       <div class="av" id="hdr-av" onclick="switchTab(4)"><div class="av-upload">📷</div></div>
@@ -385,6 +388,11 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <div id="hist-list"></div>
       </div>
       <div class="divider"></div>
+      <div id="admin-portal-btn-wrap" style="display:none;margin-bottom:12px">
+        <a id="admin-portal-btn" href="admin.html" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
+          ⚙️ Open Admin Portal
+        </a>
+      </div>
       <button class="btn danger full" onclick="logout()">Sign Out</button>
     </div>
   </div>
@@ -395,15 +403,15 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 // ═══════════════════════════════════════════════════════
 // JANES DATA LAYER v3 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
-const DB_VERSION = 3;
-const DB_KEY = 'janes_db_v3';
+const DB_VERSION = 4;
+const DB_KEY = 'janes_db_v4';
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
   Kate:   {pin:'2222',role:'Budtender',admin:false,owner:false},
   Jamal:  {pin:'1111',role:'Budtender',admin:true, owner:false},
   JP:     {pin:'4444',role:'Chef',     admin:false,owner:false},
-  Josh:   {pin:'5555',role:'Owner',    admin:true, owner:true},
+  Josh:   {pin:'5555',role:'Manager',  admin:true, owner:true},
   Eva:    {pin:'6666',role:'Owner',    admin:true, owner:true},
   Charlet:{pin:'7777',role:'Owner',    admin:true, owner:true}
 };
@@ -654,8 +662,10 @@ function renderMyShifts(){
         ${s?`<div class="sr-h">${h}h · ${wt}-day week</div>`:''}
       </div>
       <div class="sr-right">
-        ${s?`<span class="chip ${s.tag}">${cap(s.tag)}</span>`:'<span class="chip off">Off</span>'}
-        ${s&&s.station?stationChip(s.station):''}
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          ${s?`<span class="chip ${s.tag}">${cap(s.tag)}</span>`:'<span class="chip off">Off</span>'}
+          ${s&&s.station?stationChip(s.station):''}
+        </div>
         ${isT?'<span class="today-badge">TODAY</span>':''}
         ${taskBadge}
       </div>
@@ -780,11 +790,17 @@ function renderTeam(){
       const pic=v.pic;
       html+=`<div class="tv-row" onclick="openPersonSheet('${nm}')">
         <div class="tv-av" data-nm="${nm}">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
-        <div class="tv-name">${nm}</div>
-        <div class="tv-role">${s.role}</div>
-        <div class="tv-time">${fmt12(s.s)} – ${fmt12(s.e)}</div>
-        <span class="chip ${s.tag}">${cap(s.tag)}</span>
-        ${s.station?stationChip(s.station):''}
+        <div style="flex:1;min-width:0">
+          <div class="tv-name">${nm}</div>
+          <div class="tv-role">${s.role}</div>
+        </div>
+        <div class="tv-right">
+          <div class="tv-time">${fmt12(s.s)} – ${fmt12(s.e)}</div>
+          <div style="display:flex;gap:4px;align-items:center;flex-wrap:nowrap">
+            <span class="chip ${s.tag}">${cap(s.tag)}</span>
+            ${s.station?stationChip(s.station):''}
+          </div>
+        </div>
       </div>`;
     });}
     if(off.length)html+=`<div class="tv-off-row">Off: ${off.join(', ')}</div>`;
@@ -894,6 +910,9 @@ function renderProfile(){
     <div class="info-item"><div class="iv">${sc}</div><div class="il">Shifts / Week</div></div>
     <div class="info-item"><div class="iv">${hrs}h</div><div class="il">Hours / Week</div></div>`;
   setAv('prof-av',me);document.getElementById('hdr-nm').textContent=me;
+  // Show admin portal button for admins only
+  const adminWrap=document.getElementById('admin-portal-btn-wrap');
+  if(adminWrap)adminWrap.style.display=s.admin?'block':'none';
   renderHistory();
 }
 function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
