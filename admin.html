@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Jane's Admin Portal</title>
+<title>Jane's Staff Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
 html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 :root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--y:#FFE500;--g:#00E676;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#ffffff;--ts:#8888a0;--tm:#444455;--glow:rgba(233,30,140,0.18);--glow2:rgba(233,30,140,0.09);--r:14px;--cafe:#7ed4ff;--bakery:#FFB347}
-.page{display:none;min-height:100vh;flex-direction:column;background:var(--bg)}.page.on{display:flex}
+.page{display:none;min-height:100vh;flex-direction:column;background:var(--bg);overflow-x:hidden}.page.on{display:flex}
 #bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}.z1{position:relative;z-index:1}
 /* LOGIN */
 #pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
@@ -53,7 +53,7 @@ html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff
 input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var(--ts);display:none}
 @media(min-width:400px){.hdr-name{display:block}}
 /* BODY */
-.body{flex:1;overflow-y:auto;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
 .greet{border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;background:var(--s1);position:relative;overflow:hidden}
 .greet::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.18),transparent 70%);top:-120px;right:-60px;pointer-events:none}
 .greet-hi{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:3px}.greet-hi em{color:var(--pk);font-style:normal}
@@ -88,7 +88,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .sr-time{font-size:13px;font-weight:700;color:var(--t)}.sr-h{font-size:11px;color:var(--ts);margin-top:1px}
 .sr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
 /* CHIPS */
-.station-chip{padding:3px 8px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.station-chip{padding:3px 10px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
 .station-chip.cafe{background:rgba(126,212,255,.12);color:var(--cafe);border:1px solid rgba(126,212,255,.25)}
 .station-chip.bakery{background:rgba(255,179,71,.12);color:var(--bakery);border:1px solid rgba(255,179,71,.25)}
 .chip{padding:3px 9px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
@@ -110,11 +110,14 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .tv-day-head{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
 .today-dot{width:7px;height:7px;border-radius:50%;background:var(--pk);box-shadow:0 0 8px var(--pk);flex-shrink:0;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
-.tv-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;margin-bottom:5px;transition:all .15s;cursor:pointer}
+.tv-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:6px;transition:all .15s;cursor:pointer;width:100%}
 .tv-row:hover{border-color:var(--pk);transform:translateY(-1px);background:var(--s2)}
-.tv-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:15px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.25)}
+.tv-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3);box-shadow:0 0 12px rgba(233,30,140,.2)}
 .tv-av img{width:100%;height:100%;object-fit:cover}
-.tv-name{font-size:13px;font-weight:700;color:var(--t);min-width:65px}.tv-role{font-size:11px;color:var(--ts);flex:1}.tv-time{font-size:12px;font-weight:600;color:var(--t)}
+.tv-name{font-size:14px;font-weight:700;color:var(--t);min-width:72px;flex-shrink:0}
+.tv-role{font-size:11px;color:var(--ts);flex:1;min-width:0}
+.tv-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.tv-time{font-size:12px;font-weight:700;color:var(--t);white-space:nowrap}
 .tv-off-row{font-size:11px;color:var(--tm);margin-top:5px;padding-left:2px}
 /* PROFILE CARD */
 .profile-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
@@ -194,7 +197,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 @keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}.shake{animation:sk .35s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeUp .45s ease both}
 /* LOCK */
-#pg-lock{background:var(--bg);align-items:center;justify-content:center;min-height:100vh}
+#pg-lock{background:var(--bg);align-items:center;justify-content:center;min-height:100vh;overflow-x:hidden;overflow-y:auto}
 .lock-content{text-align:center;max-width:320px;width:100%;padding:24px}
 .lock-time{font-family:'Fredoka One',cursive;font-size:72px;color:var(--t);line-height:1;margin-bottom:4px}
 .lock-date{font-size:12px;color:var(--ts);margin-bottom:32px;letter-spacing:.04em;text-transform:uppercase}
@@ -208,184 +211,189 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .swipe-hint{font-size:11px;color:var(--tm);margin-top:18px;display:flex;align-items:center;justify-content:center;gap:6px}
 .swipe-arrow{animation:sw 2s infinite}@keyframes sw{0%,100%{transform:translateX(0);opacity:.4}50%{transform:translateX(8px);opacity:1}}
 
-
-.adm-hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
-.adm-hdr-left{display:flex;align-items:center;gap:10px}
-.adm-logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;box-shadow:0 0 16px rgba(233,30,140,.4);display:flex;align-items:center;justify-content:center}
-.adm-logo img{width:90%;height:90%;object-fit:contain}
-.adm-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}
-.adm-title em{color:var(--pk);font-style:normal}
-.adm-body{flex:1;overflow-y:auto;padding:20px;max-width:860px;width:100%;margin:0 auto;padding-bottom:60px}
-/* ADMIN LOGIN */
-#adm-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
-/* PEOPLE ROW */
-.person-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .15s;width:100%;margin-bottom:8px;text-align:left}
-.person-btn:hover{border-color:var(--pk);background:var(--s2);transform:translateY(-1px)}
-.person-btn.active{border-color:var(--pk);background:rgba(233,30,140,.06)}
-.person-btn-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3)}
-.person-btn-av img{width:100%;height:100%;object-fit:cover}
-.person-btn-info{flex:1}
-.person-btn-name{font-size:15px;font-weight:700;color:var(--t)}
-.person-btn-role{font-size:11px;color:var(--ts);margin-top:2px}
-.person-btn-meta{font-size:11px;color:var(--ts)}
-/* MONTH CALENDAR */
-.adm-cal-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.adm-cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.adm-cal-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 14px;border-radius:7px;transition:all .15s;line-height:1}
-.adm-cal-nav button:hover{color:var(--pk);border-color:var(--pk)}
-.adm-cal-label{font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)}
-.adm-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.adm-cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
-.adm-cal-day{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:60px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
-.adm-cal-day:hover{border-color:var(--pk);background:var(--s3)}
-.adm-cal-day.today{border-color:rgba(233,30,140,.5);background:rgba(233,30,140,.06)}
-.adm-cal-day.has-shift{border-color:rgba(0,230,118,.35)}
-.adm-cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
-.adm-cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1);box-shadow:0 0 16px var(--glow2)}
-.adm-day-num{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);line-height:1}
-.adm-day-info{font-size:8px;color:var(--ts);text-align:center;line-height:1.3}
-.adm-day-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
-.adm-day-dot{width:5px;height:5px;border-radius:50%}
-.adm-day-dot.open{background:var(--y)}.adm-day-dot.close{background:#c084fc}
-.adm-day-dot.cafe{background:var(--cafe)}.adm-day-dot.bakery{background:var(--bakery)}
-/* SHIFT EDITOR */
-.shift-editor{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;animation:fadeUp .3s ease}
-.shift-editor-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--t);margin-bottom:16px;display:flex;align-items:center;gap:10px}
-.shift-toggle-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.shift-type-btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);flex:1;min-width:80px;text-align:center}
-.shift-type-btn:hover{border-color:var(--pk);color:var(--t)}
-.shift-type-btn.active{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(233,30,140,.4)}
-.shift-type-btn.active-off{background:rgba(255,255,255,.06);border-color:var(--bd2);color:var(--ts)}
-.shift-detail-box{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
-.shift-detail-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
-.shift-detail-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
-.shift-detail-label{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
-.shift-detail-val{font-size:14px;font-weight:700;color:var(--t)}
-/* WEEK TYPE */
-.wt-toggle{display:flex;gap:6px;margin-bottom:16px}
-.wt-btn{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);text-align:center}
-.wt-btn.active{background:linear-gradient(135deg,#0055cc,#0077ff);color:#fff;border-color:transparent}
-/* BULK / OVERVIEW */
-.overview-row{display:grid;grid-template-columns:120px repeat(7,1fr);gap:4px;margin-bottom:3px;align-items:center}
-.ov-name{font-size:12px;font-weight:700;color:var(--t);padding:8px 0}
-.ov-cell{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 2px;text-align:center;font-size:9px;font-weight:700;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:border-color .15s}
-.ov-cell:hover{border-color:var(--pk)}
-.ov-cell.today-col{border-color:rgba(233,30,140,.3)}
-.ov-cell.shift-open{background:rgba(255,229,0,.06)}.ov-cell.shift-close{background:rgba(150,80,255,.06)}.ov-cell.shift-off{opacity:.35}
-.ov-day-head{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);text-align:center;padding:4px 0}
-/* HISTORY TABLE */
-.hist-table{width:100%;border-collapse:collapse;font-size:12px}
-.hist-table th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd)}
-.hist-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t)}
-.hist-table tr:hover td{background:rgba(255,255,255,.02)}
-
 </style>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
 <div class="toast" id="toast"></div>
 
-<!-- ADMIN LOGIN -->
-<div class="page on z1" id="adm-login">
+<!-- SHIFT MODAL -->
+<div class="sheet-bg" id="day-sheet-bg" onclick="if(event.target===this)closeDaySheet()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <h3 style="font-family:'Fredoka One',cursive;font-size:20px" id="day-sheet-title">Day</h3>
+      <button class="btn ghost xs" onclick="closeDaySheet()">Close</button>
+    </div>
+    <div id="day-shift-info"></div>
+    <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">My Tasks This Day</div>
+    <div id="day-tasks-list"></div>
+    <div class="task-add-row">
+      <input type="text" id="task-input" placeholder="Add a task for this day..." maxlength="100" onkeydown="if(event.key==='Enter')addTask()">
+      <button class="btn primary xs" onclick="addTask()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- PERSON SHEET -->
+<div class="sheet-bg" id="person-sheet-bg" onclick="if(event.target===this)closePersonSheet()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:6px">
+      <button class="btn ghost xs" onclick="closePersonSheet()">Close</button>
+    </div>
+    <div id="person-sheet-content"></div>
+  </div>
+</div>
+
+<!-- DUTY MODAL -->
+<div class="modal-bg" id="duty-modal-bg" onclick="if(event.target===this)closeDutyModal()">
+  <div class="modal">
+    <h3>📋 Duty List</h3>
+    <div id="duty-list"></div>
+    <div class="duty-add-row" id="duty-add-row" style="display:none">
+      <input type="text" id="duty-inp" placeholder="Add duty..." onkeydown="if(event.key==='Enter')addDuty()">
+      <button class="btn primary xs" onclick="addDuty()">Add</button>
+    </div>
+    <div class="modal-btns" style="margin-top:14px"><button class="btn ghost full" onclick="closeDutyModal()">Close</button></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="page on z1" id="pg-login">
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
     <div class="login-wrap fade-in">
       <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
-      <div class="l-brand">Jane's Admin</div>
-      <p class="l-sub">Admin Portal · Staff Schedule Manager</p>
+      <div class="l-brand">Jane's</div>
+      <p class="l-sub">Staff Portal · Salt River</p>
       <div class="l-card">
-        <label class="lbl">Admin name</label>
-        <select id="adm-sel-nm">
-          <option value="">— Select admin —</option>
-          <option>Jamal</option><option>Josh</option><option>Eva</option><option>Charlet</option>
+        <label class="lbl">Your name</label>
+        <select id="sel-nm">
+          <option value="">— Select —</option>
+          <option>Panashe</option><option>Kate</option><option>Jamal</option>
+          <option>JP</option><option>Josh</option><option>Eva</option><option>Charlet</option>
         </select>
         <label class="lbl">PIN</label>
-        <div class="pin-dots"><div class="pdot" id="ap0"></div><div class="pdot" id="ap1"></div><div class="pdot" id="ap2"></div><div class="pdot" id="ap3"></div></div>
+        <div class="pin-dots"><div class="pdot" id="p0"></div><div class="pdot" id="p1"></div><div class="pdot" id="p2"></div><div class="pdot" id="p3"></div></div>
         <div class="pin-grid">
-          <button class="pb" onclick="aPin('1')">1</button><button class="pb" onclick="aPin('2')">2</button><button class="pb" onclick="aPin('3')">3</button>
-          <button class="pb" onclick="aPin('4')">4</button><button class="pb" onclick="aPin('5')">5</button><button class="pb" onclick="aPin('6')">6</button>
-          <button class="pb" onclick="aPin('7')">7</button><button class="pb" onclick="aPin('8')">8</button><button class="pb" onclick="aPin('9')">9</button>
-          <button class="pb sm" onclick="aPinCl()">Clear</button><button class="pb z" onclick="aPin('0')">0</button><button class="pb" onclick="aPinBk()">⌫</button>
+          <button class="pb" onclick="pp('1')">1</button><button class="pb" onclick="pp('2')">2</button><button class="pb" onclick="pp('3')">3</button>
+          <button class="pb" onclick="pp('4')">4</button><button class="pb" onclick="pp('5')">5</button><button class="pb" onclick="pp('6')">6</button>
+          <button class="pb" onclick="pp('7')">7</button><button class="pb" onclick="pp('8')">8</button><button class="pb" onclick="pp('9')">9</button>
+          <button class="pb sm" onclick="pc()">Clear</button><button class="pb z" onclick="pp('0')">0</button><button class="pb" onclick="pbk()">⌫</button>
         </div>
-        <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
-        <div class="err" id="adm-err"></div>
-        <div style="text-align:center;margin-top:14px"><a href="janes-portal.html" style="font-size:12px;color:var(--ts);text-decoration:none">← Back to staff portal</a></div>
+        <button class="btn primary full" onclick="doLogin()">Sign In →</button>
+        <div class="err" id="err"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ADMIN DASH -->
-<div class="page z1" id="adm-dash" style="display:none;flex-direction:column">
-  <div class="adm-hdr">
-    <div class="adm-hdr-left">
-      <div class="adm-logo"><img src="data:image/avif;base64,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" alt="J"></div>
-      <div class="adm-title">Jane's <em>Admin</em></div>
+<!-- LOCK SCREEN -->
+<div class="page z1" id="pg-lock">
+  <div class="lock-content fade-in">
+    <div class="lock-time" id="lock-time">--:--</div>
+    <div class="lock-date" id="lock-date">--</div>
+    <div class="lock-av" id="lock-av"></div>
+    <div class="lock-name" id="lock-name">--</div>
+    <div class="lock-hint">Enter PIN to unlock</div>
+    <div class="lu-dots"><div class="pdot" id="lp0"></div><div class="pdot" id="lp1"></div><div class="pdot" id="lp2"></div><div class="pdot" id="lp3"></div></div>
+    <div class="lu-grid">
+      <button class="lu-pb" onclick="lpp('1')">1</button><button class="lu-pb" onclick="lpp('2')">2</button><button class="lu-pb" onclick="lpp('3')">3</button>
+      <button class="lu-pb" onclick="lpp('4')">4</button><button class="lu-pb" onclick="lpp('5')">5</button><button class="lu-pb" onclick="lpp('6')">6</button>
+      <button class="lu-pb" onclick="lpp('7')">7</button><button class="lu-pb" onclick="lpp('8')">8</button><button class="lu-pb" onclick="lpp('9')">9</button>
+      <button class="lu-pb sm" onclick="lpc()">Clear</button><button class="lu-pb z" onclick="lpp('0')">0</button><button class="lu-pb" onclick="lpbk()">⌫</button>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <a href="janes-portal.html" class="btn ghost xs">← Portal</a>
-      <button class="btn danger xs" onclick="adminLogout()">Sign Out</button>
+
+    <div class="swipe-hint">Swipe left to view schedule <span class="swipe-arrow">→</span></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page z1" id="pg-dash">
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-logo"><img src="data:image/avif;base64,AAAAHGZ0eXBhdmlmAAAAAG1pZjFhdmlmbWlhZgAAAXBtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA5waXRtAAAAAAABAAAANGlsb2MAAAAAREAAAgABAAAAAAGUAAEAAAAAAAAFOQACAAAAAAbNAAEAAAAAAAAA7wAAADhpaW5mAAAAAAACAAAAFWluZmUCAAAAAAEAAGF2MDEAAAAAFWluZmUCAAAAAAIAAGF2MDEAAAAAr2lwcnAAAACKaXBjbwAAAAxhdjFDgSACAAAAABRpc3BlAAAAAAAAADAAAAAxAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAcAAAAAA5waXhpAAAAAAEIAAAAOGF1eEMAAAAAdXJuOm1wZWc6bXBlZ0I6Y2ljcDpzeXN0ZW1zOmF1eGlsaWFyeTphbHBoYQAAAAAdaXBtYQAAAAAAAAACAAEDgQIDAAIEhAIFhgAAABppcmVmAAAAAAAAAA5hdXhsAAIAAQABAAAGMG1kYXQSAAoJOBVvwYQENBpAMqkKFwAIIIIFAN0rQK+pIgd7wZTiGXkjQpGX1fQ+zbZ00LYeBbSmqgKvEPagL7BkKELy3keiMeFkcNV0NGGliwRHXBeFZC9UpfS/bupOhwpOx7limw2fT6YngTR2BGG8bv3hrsMWOTrMnTnTzewbX8GfSnALbQGagWMxsQ1KUfJN5w34ZtXmQix0UlgF/EG1K4AlQKYQSA6T77Q5q3H8ziKwAbq+7v4Uy5bCPc3hxOqJrrBa9z/4/tVxI8FDEijGowI37eAIi3Mj87dGpN2trbSDdRNLKIJSJgVGjrT8EF9RLpfSJmLcbglBjiXUsSj5LsUSeK1K73wpusXuYpgUdC7DZGTIFaEU0/7wpcM7LWiTzrmOwSGBU7kMvI8dPWRy1LgDWLfhP4mwLUW5VKzqV3O4NuGh3jWZ3Xy7P8okSr3JvsCVZnHuJcXSeu5mC6SNTweBs2F5CX8tZROzlSh7gA14Ay97WMqOstbQ5L1jluGxRKn0tNxjZUjVt3bCD/AtOig9NvloYKohSM2jxnRyLAim3Rh5IEmGmu3W0wzT6llozHgp1+uzzR7hARSFlksA+nCXXl2rDutqfUwhfe7P5yXOb/kK3sopIy41cWPhZG1a2Gkxoy+75omUOytEBqgQ+sQBvmvnklZOKbt6pYug8DXHkPWK0HHUT2DklgT5FhwgZl60bNMpmYVrPFWeTTPIl2Re+rtbqkVHJM0OP0HHIkOKOc18Ob8wFEEZy1Z4XkoSXn6mLeZ/PKAOdUT96gkwzxK2jwb6zhirQm1Uah6NYWXVkU2Chb35gZJPFdTsFoC6KeFAUqad3kGlD7rw4hLTOaLGoICJhrHHhK98QE6XW0cV1t7HX6WopEz48dcOZHGo63+R30OLaykQlPTjWZ840eUU0Bbc4/Wny9MuQ2GddMxkSsk8VieQI18oXWb+xAvcXUf1ZRqst5257q0GM3qcXCRj8O1/PNFfaMMZoae35EqPDb+DswFieqhDZImBJFjUbqJC5dEuE8vWJK60V9uRY5Qzrg51Yc21J2EpGj6MPJxYtIkQ0l7GYoUws+U+rFoXeWyWjhYMcyh9SdVzUjfDfsFrjQ/PFkg4h+7eHjNg6TfyTu1J7fpHxmbirwy1EM3EYoSuH26tz4Fdm25mdZlGwoIeP96d7eAipcgbJWMjklb+sYPDlkXEnkPy67Ad+34oNdLAg1l2dfhSgGp1oRqm20dwd28658NR7fXbpI5EwmtzLpTth6rxoCZvt/NOrJ3y74bzmzt6denFF8baPqgm2E8z68j0ozD54F/hu8GyFykpifmtUGUlAPk88KfyR7kxo+D8b0LN0zgeQk/9U0Wwpyq8Oaq4hyYUL5fpxrnEX1Qeq0SFnPGuOvP0CU37So+iFYvd+++WmKBRhnPhqlNQYsfM4De2UUpz/ahXb98xpQm+vMuHr8/uC7vahpU8N4sAAiDhA4GtWdrsOU7pUiIzraaktn9QnWxYYfxS6IuxMQI+9gQH8D3GikC1+GqGsYrw0x1pViwFsn9+pd128uUIjeFZzXrjnvugnQqVlrmTw5tE44ss4aP+zb9pu4DqZm4R8JsZdWNoRWNcTZ+Nxy/RKVsT+5ZtZTqjMi7xcEKA6EHU3WveBhmNDdtKP+hFr+OsE0a82rDy9Nuo52oMBFIaIuY+vkRti764lvn83U+4043AZmH7jLmYimw9R4emIgB9QRxvno705RwrYfUfS5L6YUk6x8a6BUtzgugVUYE8oLk+aSuysbeU0RhJaBIACgYYFW/BhUAy4gEXACCBQN0rhij/vMmTFpomDvslGNiDe33U61W/wfEUuOIMjvBsvn/erG+EHIjcV98DceKSvLr9kRLaK12veokMhuP0jmTsFuTl15P4rREp/lv4J9KFWxwOB4h93wYbO+EaQ1iqhHsj99gTSoFPRKgfXH1FlfA6yryelkefCetEp0lIqhJdYE5eGMzS0b2by8zuRXT32uzoYCxYtTfgtucaeYnXzg+03jcmeWQUi82U79Q/xjPxFoBeeMmDvDfwYZlWUeuXb539vp7PwN8Q3pJpITJPoYcc/lxe9ZeTBAo8LV4M" alt="J"></div>
+      <div class="hdr-brand">Jane's</div>
+    </div>
+    <div class="hdr-r">
+      <div class="av" id="hdr-av" onclick="switchTab(4)"><div class="av-upload">📷</div></div>
+      <div class="hdr-name" id="hdr-nm">--</div>
+      <button class="btn ghost xs" onclick="goLock()">🔒</button>
     </div>
   </div>
-
-  <div class="adm-body">
-    <!-- TABS -->
-    <div class="tabs-wrap" style="margin-bottom:20px">
-      <div class="tab adm-tab on" onclick="switchAdmTab(0)">📋 Schedule Editor</div>
-      <div class="tab adm-tab" onclick="switchAdmTab(1)">📊 Week Overview</div>
-      <div class="tab adm-tab" onclick="switchAdmTab(2)">🕐 Shift History</div>
+  <div class="body">
+    <div class="greet">
+      <div class="greet-hi" id="greet-hi">Hey <em id="greet-nm">there</em>!</div>
+      <div class="greet-sub" id="greet-sub">Your schedule is ready.</div>
+      <div class="greet-date" id="greet-date"></div>
     </div>
-
-    <!-- TAB 0: SCHEDULE EDITOR -->
-    <div class="adm-tc on" id="adm-tc-0">
-      <div style="display:grid;grid-template-columns:1fr;gap:16px">
-        <!-- People list -->
-        <div>
-          <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Select Staff Member</div>
-          <div id="people-list"></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-v" id="st-s">-</div><div class="stat-l">Shifts</div></div>
+      <div class="stat"><div class="stat-v" id="st-h">-</div><div class="stat-l">Hours</div></div>
+      <div class="stat"><div class="stat-v" id="st-n">-</div><div class="stat-l">Next Shift</div></div>
+    </div>
+    <div class="tabs-wrap">
+      <div class="tab on" onclick="switchTab(0)">📋 My Schedule</div>
+      <div class="tab" onclick="switchTab(1)">👥 Team</div>
+      <div class="tab" onclick="switchTab(2)">📅 Calendar</div>
+      <div class="tab" onclick="switchTab(3)">🗓 Planner</div>
+      <div class="tab" onclick="switchTab(4)">👤 Profile</div>
+    </div>
+    <!-- MY SCHEDULE -->
+    <div class="tab-content on" id="tc-0">
+      <div class="wk-nav"><button onclick="wk(-1)">‹</button><span class="wk-label" id="my-wk">--</span><button onclick="wk(1)">›</button></div>
+      <div id="hours-summary-my"></div>
+      <div id="my-shifts"></div>
+    </div>
+    <!-- TEAM -->
+    <div class="tab-content" id="tc-1">
+      <div class="wk-nav"><button onclick="wkT(-1)">‹</button><span class="wk-label" id="team-wk">--</span><button onclick="wkT(1)">›</button></div>
+      <div id="team-view"></div>
+    </div>
+    <!-- CALENDAR -->
+    <div class="tab-content" id="tc-2">
+      <div class="cal-month-nav">
+        <button onclick="calNav(-1)">‹</button>
+        <div class="cal-month-label" id="cal-month-label">--</div>
+        <button onclick="calNav(1)">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot open"></div>Opening</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot close"></div>Closing</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot cafe"></div>Cafe</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot bakery"></div>Bakery</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot task"></div>Task</div>
+      </div>
+    </div>
+    <!-- PLANNER -->
+    <div class="tab-content" id="tc-3"><div id="planner-view"></div></div>
+    <!-- PROFILE -->
+    <div class="tab-content" id="tc-4">
+      <div class="profile-card">
+        <div class="av-lg" id="prof-av" onclick="triggerUpload()"><div class="av-upload">📷</div></div>
+        <input type="file" id="pic-input" accept="image/*" onchange="handlePic(event)">
+        <div class="profile-role" id="prof-role">--</div>
+        <div class="profile-name-big" id="prof-name">--</div>
+        <div class="info-grid" id="prof-stats-grid"></div>
+        <div class="divider"></div>
+        <div class="sec-lbl" style="text-align:left">Change PIN</div>
+        <div class="profile-pin-row">
+          <input type="password" id="new-pin" placeholder="New 4-digit PIN" maxlength="4">
+          <button class="btn primary xs" onclick="changePin()">Update</button>
         </div>
-        <!-- Person calendar + editor -->
-        <div id="person-schedule-panel" style="display:none">
-          <div class="adm-cal-wrap">
-            <div class="adm-cal-nav">
-              <button onclick="admCalNav(-1)">‹</button>
-              <div>
-                <div class="adm-cal-label" id="adm-cal-label">--</div>
-                <div style="font-size:11px;color:var(--pk);font-weight:700;text-align:center" id="ps-name">--</div>
-              </div>
-              <button onclick="admCalNav(1)">›</button>
-            </div>
-            <div style="margin-bottom:12px" id="ps-wt"></div>
-            <div class="adm-cal-grid" id="adm-cal-grid"></div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot open"></div>Opening</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot close"></div>Closing</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot cafe"></div>Cafe</div>
-              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot bakery"></div>Bakery</div>
-            </div>
-          </div>
-          <!-- Shift editor -->
-          <div class="shift-editor" id="shift-editor" style="display:none"></div>
-        </div>
       </div>
-    </div>
-
-    <!-- TAB 1: WEEK OVERVIEW -->
-    <div class="adm-tc" id="adm-tc-1" style="display:none">
-      <div class="card" style="overflow-x:auto">
-        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">This Week — All Staff</div>
-        <div id="week-overview" style="min-width:500px"></div>
+      <div class="card">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:14px">📊 My Shift History</div>
+        <div id="hist-list"></div>
       </div>
-    </div>
-
-    <!-- TAB 2: HISTORY -->
-    <div class="adm-tc" id="adm-tc-2" style="display:none">
-      <div class="card" style="overflow-x:auto">
-        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">Shift History — All Staff</div>
-        <table class="hist-table">
-          <thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Station</th><th>Hours</th><th>Role</th></tr></thead>
-          <tbody id="all-hist"></tbody>
-        </table>
+      <div class="divider"></div>
+      <div id="admin-portal-btn-wrap" style="display:none;margin-bottom:12px">
+        <a id="admin-portal-btn" href="admin.html" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
+          ⚙️ Open Admin Portal
+        </a>
       </div>
+      <button class="btn danger full" onclick="logout()">Sign Out</button>
     </div>
   </div>
 </div>
@@ -525,277 +533,419 @@ function recordShiftHistory(db, nm, date, shift) {
 }
 
 
-let db, adminUser=null, adminPin='', selectedPerson=null, admCalOff=0, selectedDate=null;
+let db, me=null, pinVal='', myWk=0, teamWk=0, lockPin='', lockClockInterval=null;
+let calOff=0, activeEvFilter='all';
 
-function initAdmin(){
+function init(){
   db=loadDB();
-  tryAdminAutoLogin();
+  tryAutoLogin();
 }
 
-function tryAdminAutoLogin(){
-  const s=sessionStorage.getItem('janes_admin');
-  if(s&&db.staff[s]&&db.staff[s].admin){adminUser=s;buildAdminDash();}
+function tryAutoLogin(){
+  const s=sessionStorage.getItem('janes_user');
+  if(s&&db.staff[s]){me=s;buildDash();goLock();}
 }
 
-function aPin(d){if(adminPin.length>=4)return;adminPin+=d;aDots();if(adminPin.length===4)setTimeout(doAdminLogin,260)}
-function aPinBk(){adminPin=adminPin.slice(0,-1);aDots()}
-function aPinCl(){adminPin='';aDots()}
-function aDots(){for(let i=0;i<4;i++)document.getElementById('ap'+i).classList.toggle('on',i<adminPin.length)}
+// PIN
+function pp(d){if(pinVal.length>=4)return;pinVal+=d;dots();if(pinVal.length===4)setTimeout(doLogin,260)}
+function pbk(){pinVal=pinVal.slice(0,-1);dots()}
+function pc(){pinVal='';dots()}
+function dots(){for(let i=0;i<4;i++)document.getElementById('p'+i).classList.toggle('on',i<pinVal.length)}
 
-function doAdminLogin(){
-  const nm=document.getElementById('adm-sel-nm').value;
-  if(!nm){showAErr('Select your name');return}
-  if(adminPin.length<4){showAErr('Enter your PIN');return}
+// LOCK PIN
+function lpp(d){if(lockPin.length>=4)return;lockPin+=d;ldots();if(lockPin.length===4)setTimeout(doUnlock,260)}
+function lpbk(){lockPin=lockPin.slice(0,-1);ldots()}
+function lpc(){lockPin='';ldots()}
+function ldots(){for(let i=0;i<4;i++)document.getElementById('lp'+i).classList.toggle('on',i<lockPin.length)}
+function doUnlock(){
+  if(!me){showPage('pg-login');return}
+  if(db.staff[me].pin!==lockPin){lockPin='';ldots();const lc=document.querySelector('.lock-content');lc.classList.remove('shake');void lc.offsetWidth;lc.classList.add('shake');return;}
+  lockPin='';ldots();showPage('pg-dash');
+}
+
+function doLogin(){
+  const nm=document.getElementById('sel-nm').value;
+  const err=document.getElementById('err');err.style.display='none';
+  if(!nm){showErr('Please select your name.');return}
+  if(pinVal.length<4){showErr('Enter your 4-digit PIN.');return}
   const s=db.staff[nm];
-  if(!s||s.pin!==adminPin){showAErr('Incorrect PIN');adminPin='';aDots();const c=document.querySelector('.l-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return;}
-  if(!s.admin){showAErr('Admin access only');adminPin='';aDots();return;}
-  adminUser=nm;sessionStorage.setItem('janes_admin',nm);buildAdminDash();
+  if(!s||s.pin!==pinVal){showErr('Incorrect PIN. Try again.');pinVal='';dots();const c=document.querySelector('.l-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return;}
+  me=nm;sessionStorage.setItem('janes_user',me);buildDash();
 }
-function showAErr(m){const e=document.getElementById('adm-err');e.textContent=m;e.style.display='block'}
-function adminLogout(){adminUser=null;adminPin='';aDots();document.getElementById('adm-sel-nm').value='';sessionStorage.removeItem('janes_admin');showAdmPage('adm-login')}
+function showErr(m){const e=document.getElementById('err');e.textContent=m;e.style.display='block'}
+function logout(){me=null;pinVal='';myWk=0;teamWk=0;lockPin='';dots();ldots();document.getElementById('sel-nm').value='';document.getElementById('err').style.display='none';sessionStorage.removeItem('janes_user');showPage('pg-login')}
 
-function buildAdminDash(){
-  showAdmPage('adm-dash');
-  renderPeopleList();
-  renderWeekOverview();
-  if(selectedPerson)renderPersonCalendar();
+function goLock(){
+  if(!me)return;
+  updateLockClock();
+  if(lockClockInterval)clearInterval(lockClockInterval);
+  lockClockInterval=setInterval(updateLockClock,1000);
+  const lav=document.getElementById('lock-av');
+  lav.innerHTML=db.staff[me].pic?`<img src="${db.staff[me].pic}">`:`${me[0]}`;
+  document.getElementById('lock-name').textContent=me;
+  lockPin='';ldots();showPage('pg-lock');
+}
+function updateLockClock(){
+  const now=new Date();
+  document.getElementById('lock-time').textContent=`${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  const dow=now.getDay();
+  document.getElementById('lock-date').textContent=`${FDAYS[dow===0?6:dow-1]}, ${now.getDate()} ${MO[now.getMonth()]} ${now.getFullYear()}`;
+}
+let tSX=0,tSY=0;
+document.getElementById('pg-lock').addEventListener('touchstart',e=>{tSX=e.touches[0].clientX;tSY=e.touches[0].clientY},{passive:true});
+document.getElementById('pg-lock').addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tSX,dy=Math.abs(e.changedTouches[0].clientY-tSY);if(dx<-60&&dy<50){showPage('pg-dash');switchTab(1);}});
+
+function buildDash(){
+  const h=new Date().getHours();
+  const g=h<5?'Good night':h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  document.getElementById('greet-hi').innerHTML=`${g}, <em>${me}</em>!`;
+  const s=db.staff[me];
+  const mon=getMon(0);
+  const shifts=db.defaultSched[me].filter(x=>x).length;
+  document.getElementById('greet-sub').textContent=s.owner?`Owner · ${shifts} shifts · ${s.weekType}-day week`:(s.admin?`Admin · ${shifts} shifts · ${s.weekType}-day week`:`${shifts} shifts this week`);
+  document.getElementById('greet-date').textContent=new Date().toLocaleDateString('en-ZA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  setAv('hdr-av',me);
+  document.getElementById('hdr-nm').textContent=me;
+  switchTab(0);showPage('pg-dash');toast(`Welcome back, ${me}! 💕`);
 }
 
-function showAdmPage(id){document.querySelectorAll('.adm-page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
-
-function switchAdmTab(n){
-  document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
-  document.querySelectorAll('.adm-tc').forEach((t,i)=>t.classList.toggle('on',i===n));
-  if(n===0)renderPeopleList();
-  if(n===1)renderWeekOverview();
-  if(n===2)renderAllHistory();
+function setAv(elId,nm){
+  const el=document.getElementById(elId);if(!el)return;
+  const pic=db.staff[nm]&&db.staff[nm].pic;
+  if(pic){el.innerHTML=`<img src="${pic}" alt="${nm}"><div class="av-upload">📷</div>`;}
+  else{el.innerHTML=`${nm[0]}<div class="av-upload">📷</div>`;}
+}
+function triggerUpload(){document.getElementById('pic-input').click()}
+function handlePic(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    db.staff[me].pic=ev.target.result;saveDB(db);
+    setAv('hdr-av',me);setAv('prof-av',me);
+    document.querySelectorAll(`.tv-av[data-nm="${me}"]`).forEach(el=>{el.innerHTML=`<img src="${db.staff[me].pic}" alt="${me}">`;});
+    const lav=document.getElementById('lock-av');if(lav)lav.innerHTML=`<img src="${db.staff[me].pic}">`;
+    toast('Photo updated — everyone sees it ✓');
+  };
+  reader.readAsDataURL(file);
 }
 
-// PEOPLE LIST
-function renderPeopleList(){
-  const el=document.getElementById('people-list');
-  el.innerHTML=Object.entries(db.staff).map(([nm,v])=>{
-    const pic=v.pic;
-    const bc=v.owner?'badge owner':v.admin?'badge admin':(v.role==='Chef'?'badge chef':'badge budtender');
-    const bl=v.owner?'Owner':v.admin?'Admin':(v.role||'Staff');
-    const wt=v.weekType||5;
-    const shifts=db.defaultSched[nm].filter(x=>x).length;
-    return `<button class="person-btn${selectedPerson===nm?' active':''}" onclick="selectPerson('${nm}')">
-      <div class="person-btn-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
-      <div class="person-btn-info">
-        <div class="person-btn-name">${nm}</div>
-        <div class="person-btn-role"><span class="${bc}">${bl}</span></div>
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===n));
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('on',i===n));
+  if(n===0)renderMyShifts();
+  if(n===1)renderTeam();
+  if(n===2)renderCalendar();
+  if(n===3)renderPlanner();
+  if(n===4)renderProfile();
+}
+
+// MY SHIFTS
+function renderMyShifts(){
+  const today=new Date(), mon=getMon(myWk);
+  document.getElementById('my-wk').textContent=`${mon.getDate()} ${MO[mon.getMonth()]} – ${(()=>{const e=new Date(mon);e.setDate(mon.getDate()+6);return `${e.getDate()} ${MO[e.getMonth()]}`})()}`;
+  const wt=db.staff[me].weekType||5;
+  let shifts=0,hours=0,nxt=null,doneHrs=0;
+  const rows=Array(7).fill(0).map((_,i)=>{
+    const s=resolveShift(db,me,mon,i);
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const isT=d.toDateString()===today.toDateString(),isFut=d>today&&!isT,isPast=d<today&&!isT;
+    if(s){shifts++;const h=hDiff(s.s,s.e);hours+=h;if(isPast||isT)doneHrs+=h;if(isFut&&nxt===null)nxt=Math.ceil((d-today)/86400000)}
+    const h=s?hDiff(s.s,s.e):0;
+    const tasks=db.personalTasks[me]&&db.personalTasks[me][dateStr(d)]||[];
+    const taskBadge=tasks.length?`<span style="font-size:9px;background:rgba(233,30,140,.12);color:var(--pk);border:1px solid rgba(233,30,140,.2);padding:2px 7px;border-radius:100px;font-weight:800">${tasks.length} task${tasks.length>1?'s':''}</span>`:'';
+    return `<div class="shift-row${isT?' today':''}${!s?' off':''}" onclick="openDaySheet('${dateStr(d)}','${DAYS[i]} ${d.getDate()} ${MO[d.getMonth()]}',${!!s})">
+      <div class="sr-day"><div class="sr-day-name">${DAYS[i]}</div><div class="sr-day-num">${d.getDate()}</div></div>
+      <div class="sr-div"></div>
+      <div class="sr-info">
+        <div class="sr-role">${s?s.role:'Day Off'}</div>
+        <div class="sr-time">${s?`${fmt12(s.s)} – ${fmt12(s.e)}`:'Rest up 😴'}</div>
+        ${s?`<div class="sr-h">${h}h · ${wt}-day week</div>`:''}
       </div>
-      <div class="person-btn-meta">${wt}-day week · ${shifts} shifts/wk</div>
-    </button>`;
+      <div class="sr-right">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+          ${s?`<span class="chip ${s.tag}">${cap(s.tag)}</span>`:'<span class="chip off">Off</span>'}
+          ${s&&s.station?stationChip(s.station):''}
+        </div>
+        ${isT?'<span class="today-badge">TODAY</span>':''}
+        ${taskBadge}
+      </div>
+    </div>`;
   }).join('');
+  const remaining=Math.max(0,hours-doneHrs),pct=hours>0?Math.round((doneHrs/hours)*100):0;
+  const wtBadge=`<span class="wk-type-badge ${wt===6?'six':'five'}">${wt}-day week</span>`;
+  document.getElementById('hours-summary-my').innerHTML=`<div class="hours-summary"><div class="hs-title">Hours Tracker ${wtBadge}</div><div style="display:flex;gap:8px;margin-bottom:10px">${['Total|'+hours+'h|var(--pk)','Done|'+Math.round(doneHrs*10)/10+'h|#00E676','Left|'+Math.round(remaining*10)/10+'h|var(--y)'].map(x=>{const[l,v,c]=x.split('|');return `<div style="flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px;text-align:center"><div style="font-family:Fredoka One,cursive;font-size:24px;color:${c}">${v}</div><div style="font-size:9px;color:var(--ts);margin-top:2px;text-transform:uppercase;letter-spacing:.08em;font-weight:700">${l}</div></div>`;}).join('')}</div><div class="hs-progress"><div class="hs-progress-fill" style="width:${pct}%"></div></div><div class="hs-counts"><span>${pct}% complete</span><span>${shifts} shifts</span></div></div>`;
+  document.getElementById('my-shifts').innerHTML=rows;
+  document.getElementById('st-s').textContent=shifts;
+  document.getElementById('st-h').textContent=hours+'h';
+  document.getElementById('st-n').textContent=nxt===null?'–':nxt===0?'Now':nxt===1?'Tmrw':nxt+'d';
+}
+function wk(d){myWk+=d;renderMyShifts()}
+
+// DAY SHEET (tasks)
+let currentDayStr='', currentDayLabel='';
+function openDaySheet(ds, label, hasShift){
+  currentDayStr=ds; currentDayLabel=label;
+  const sheet=document.getElementById('day-sheet');
+  const dateObj=new Date(ds+'T12:00:00');
+  const shiftInfo=resolveShift(db,me,getMon(myWk),dateObj.getDay()===0?6:dateObj.getDay()-1);
+  let shiftHtml='';
+  if(shiftInfo){shiftHtml=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:14px"><div class="sr-role" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">${shiftInfo.role}</div><div style="font-size:14px;font-weight:700;color:var(--t)">${fmt12(shiftInfo.s)} – ${fmt12(shiftInfo.e)}</div><div style="display:flex;gap:6px;margin-top:6px">${stationChip(shiftInfo.station)}<span class="chip ${shiftInfo.tag}">${cap(shiftInfo.tag)}</span></div></div>`;}
+  document.getElementById('day-sheet-title').textContent=label;
+  document.getElementById('day-shift-info').innerHTML=shiftHtml;
+  renderDayTasks();
+  document.getElementById('day-sheet-bg').classList.add('on');
+}
+function closeDaySheet(){document.getElementById('day-sheet-bg').classList.remove('on')}
+function renderDayTasks(){
+  if(!db.personalTasks[me])db.personalTasks[me]={};
+  const tasks=db.personalTasks[me][currentDayStr]||[];
+  const list=document.getElementById('day-tasks-list');
+  if(!tasks.length){list.innerHTML=`<div class="empty-state" style="padding:16px"><div class="ei">📝</div>No tasks for this day</div>`;return}
+  list.innerHTML=tasks.map(t=>`<div class="task-item">
+    <input type="checkbox" class="task-check" ${t.done?'checked':''} onchange="toggleTask('${t.id}',this.checked)">
+    <span class="task-text${t.done?' done':''}">${t.text}</span>
+    <button class="task-del" onclick="deleteTask('${t.id}')">✕</button>
+  </div>`).join('');
+}
+function addTask(){
+  const inp=document.getElementById('task-input');const txt=inp.value.trim();if(!txt)return;
+  if(!db.personalTasks[me])db.personalTasks[me]={};
+  if(!db.personalTasks[me][currentDayStr])db.personalTasks[me][currentDayStr]=[];
+  db.personalTasks[me][currentDayStr].push({id:Date.now().toString(),text:txt,done:false});
+  saveDB(db);inp.value='';renderDayTasks();renderMyShifts();
+}
+function toggleTask(id,done){
+  if(!db.personalTasks[me]||!db.personalTasks[me][currentDayStr])return;
+  const t=db.personalTasks[me][currentDayStr].find(x=>x.id===id);if(t)t.done=done;saveDB(db);renderDayTasks();
+}
+function deleteTask(id){
+  if(!db.personalTasks[me]||!db.personalTasks[me][currentDayStr])return;
+  db.personalTasks[me][currentDayStr]=db.personalTasks[me][currentDayStr].filter(x=>x.id!==id);
+  saveDB(db);renderDayTasks();renderMyShifts();
 }
 
-function selectPerson(nm){
-  selectedPerson=nm;selectedDate=null;
-  renderPeopleList();
-  renderPersonCalendar();
-  document.getElementById('person-schedule-panel').style.display='block';
-  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
-}
-
-// PERSON CALENDAR
-function renderPersonCalendar(){
-  if(!selectedPerson)return;
-  const nm=selectedPerson,v=db.staff[nm];
-  document.getElementById('ps-name').textContent=nm;
-  document.getElementById('ps-wt').innerHTML=`<button class="wt-btn${v.weekType===5?' active':''}" onclick="setWT('${nm}',5)">5-day</button><button class="wt-btn${v.weekType===6?' active':''}" onclick="setWT('${nm}',6)">6-day</button>`;
-
+// CALENDAR TAB
+function renderCalendar(){
   const today=new Date();
-  const d=new Date(today.getFullYear(),today.getMonth()+admCalOff,1);
+  const d=new Date(today.getFullYear(),today.getMonth()+calOff,1);
   const yr=d.getFullYear(),mo=d.getMonth();
-  document.getElementById('adm-cal-label').textContent=`${MO[mo]} ${yr}`;
-  const firstDow=(new Date(yr,mo,1).getDay()+6)%7;
+  document.getElementById('cal-month-label').textContent=`${MO[mo]} ${yr}`;
+  const firstDow=(new Date(yr,mo,1).getDay()+6)%7; // Mon=0
   const daysInMonth=new Date(yr,mo+1,0).getDate();
   let html='';
-  ['M','T','W','T','F','S','S'].forEach(x=>{html+=`<div class="adm-cal-head">${x}</div>`});
-  for(let i=0;i<firstDow;i++)html+=`<div class="adm-cal-day empty"></div>`;
+  // day headers
+  ['M','T','W','T','F','S','S'].forEach(d=>{html+=`<div class="cal-head">${d}</div>`});
+  // empty cells
+  for(let i=0;i<firstDow;i++)html+=`<div class="cal-day empty"></div>`;
   for(let day=1;day<=daysInMonth;day++){
     const cellDate=new Date(yr,mo,day);
     const di=(cellDate.getDay()+6)%7;
+    const mon=getMon(0); // use default sched for calendar visual
+    // Find the Monday of this week
     const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
-    const s=resolveShift(db,nm,cellMon,di);
+    const shift=resolveShift(db,me,cellMon,di);
     const ds=dateStr(cellDate);
     const isToday=cellDate.toDateString()===today.toDateString();
-    const isSel=selectedDate===ds;
+    const tasks=db.personalTasks[me]&&db.personalTasks[me][ds]||[];
     let dots='';
-    if(s){dots+=`<div class="adm-day-dot ${s.tag}"></div>`;if(s.station)dots+=`<div class="adm-day-dot ${s.station}"></div>`;}
-    const infoText=s?`${fmt12(s.s).replace(':00','')}–${fmt12(s.e).replace(':00','')}`:'Off';
-    const stText=s&&s.station?s.station:'';
-    html+=`<div class="adm-cal-day${isToday?' today':''}${s?' has-shift':''}${isSel?' selected':''}" onclick="selectDay('${ds}','${nm}',${di})">
-      <div class="adm-day-num">${day}</div>
-      <div class="adm-day-info" style="color:${s?'var(--t)':'var(--tm)'}">${infoText}</div>
-      <div class="adm-day-info" style="color:${s&&s.station==='cafe'?'var(--cafe)':s&&s.station==='bakery'?'var(--bakery)':'var(--tm)'}">${stText}</div>
-      <div class="adm-day-dot-row">${dots}</div>
+    if(shift)dots+=`<div class="cal-dot ${shift.tag}"></div>`;
+    if(shift&&shift.station)dots+=`<div class="cal-dot ${shift.station}"></div>`;
+    if(tasks.length)dots+=`<div class="cal-dot task"></div>`;
+    html+=`<div class="cal-day${isToday?' today':''}${shift?' has-shift':''}" onclick="openCalDay('${ds}','${DAYS[di]} ${day} ${MO[mo]}',${!!shift})">
+      <div class="cal-day-num">${day}</div>
+      <div class="cal-dot-row">${dots}</div>
     </div>`;
   }
-  document.getElementById('adm-cal-grid').innerHTML=html;
-  if(selectedDate)renderShiftEditor(selectedPerson,selectedDate);
+  document.getElementById('cal-grid').innerHTML=html;
 }
-
-function admCalNav(d){admCalOff+=d;renderPersonCalendar()}
-function setWT(nm,wt){db.staff[nm].weekType=wt;saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} set to ${wt}-day week ✓`)}
-
-function selectDay(ds,nm,di){
-  selectedDate=ds;
-  renderPersonCalendar();
-  renderShiftEditor(nm,ds,di);
-}
-
-function renderShiftEditor(nm,ds,di){
+function calNav(d){calOff+=d;renderCalendar()}
+function openCalDay(ds,label,hasShift){
+  currentDayStr=ds;currentDayLabel=label;
   const dateObj=new Date(ds+'T12:00:00');
+  const di=(dateObj.getDay()+6)%7;
   const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  // Get the week sched (or default)
-  const weekSched=db.schedules[nm][wkKey]?[...db.schedules[nm][wkKey]]:[...db.defaultSched[nm]];
-  const entry=weekSched[di];
-  const wt=db.staff[nm].weekType||5;
-  const shiftTimes=getShiftTimes(wt,entry?entry.type:'open',di);
-  const dow=(dateObj.getDay()+6)%7;
-  const el=document.getElementById('shift-editor');
-  const d=dateObj;
-  el.innerHTML=`<div class="shift-editor-title">
-    ✏️ ${FDAYS[dow]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}
-    <span style="font-size:11px;color:var(--ts);font-family:'Inter',sans-serif;font-weight:600">${nm}</span>
-  </div>
-  <div style="font-size:11px;color:var(--ts);margin-bottom:12px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;line-height:1.7">
-    <strong style="color:var(--t)">${wt}-day week:</strong><br>
-    Opening: ${SHIFT_TIMES[wt].open.s} – ${SHIFT_TIMES[wt].open.e}${di===5?' (Sat: 9:30am)':''}<br>
-    Closing: ${SHIFT_TIMES[wt].close.s} – ${SHIFT_TIMES[wt].close.e}
-  </div>
-  <div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Shift Type</div>
-  <div class="shift-toggle-row">
-    <div class="shift-type-btn${entry&&entry.type==='open'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'open','${entry?entry.station:'cafe'}')">🌅 Opening</div>
-    <div class="shift-type-btn${entry&&entry.type==='close'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'close','${entry?entry.station:'cafe'}')">🌙 Closing</div>
-    <div class="shift-type-btn${!entry?' active-off':''}" onclick="setShiftDayOff('${nm}','${ds}',${di})">🚫 Day Off</div>
-  </div>
-  ${entry?`<div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Station</div>
-  <div class="shift-toggle-row">
-    <div class="shift-type-btn${entry&&entry.station==='cafe'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','cafe')" style="${entry&&entry.station==='cafe'?'background:rgba(126,212,255,.2);border-color:var(--cafe);color:var(--cafe)':''}">☕ Cafe</div>
-    <div class="shift-type-btn${entry&&entry.station==='bakery'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','bakery')" style="${entry&&entry.station==='bakery'?'background:rgba(255,179,71,.2);border-color:var(--bakery);color:var(--bakery)':''}">🥐 Bakery</div>
-  </div>
-  <div class="shift-detail-box">
-    <div class="shift-detail-row"><span class="shift-detail-label">Start time</span><span class="shift-detail-val">${fmt12(shiftTimes.s)}</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">End time</span><span class="shift-detail-val">${fmt12(shiftTimes.e)}</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">Duration</span><span class="shift-detail-val">${hDiff(shiftTimes.s,shiftTimes.e)}h</span></div>
-    <div class="shift-detail-row"><span class="shift-detail-label">Station</span><span class="shift-detail-val">${entry.station==='cafe'?'☕ Cafe':'🥐 Bakery'}</span></div>
-  </div>`:'<div style="text-align:center;padding:20px;color:var(--ts);font-size:13px">Day Off — tap Opening or Closing to schedule</div>'}`;
-  el.style.display='block';
+  const shiftInfo=resolveShift(db,me,cellMon,di);
+  let shiftHtml='';
+  if(shiftInfo){shiftHtml=`<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:14px"><div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">${shiftInfo.role}</div><div style="font-size:14px;font-weight:700;color:var(--t)">${fmt12(shiftInfo.s)} – ${fmt12(shiftInfo.e)}</div><div style="display:flex;gap:6px;margin-top:6px">${stationChip(shiftInfo.station)}<span class="chip ${shiftInfo.tag}">${cap(shiftInfo.tag)}</span></div></div>`;}
+  document.getElementById('day-sheet-title').textContent=label;
+  document.getElementById('day-shift-info').innerHTML=shiftHtml;
+  renderDayTasks();
+  document.getElementById('day-sheet-bg').classList.add('on');
 }
 
-function setShiftDay(nm,ds,di,type,station){
-  const dateObj=new Date(ds+'T12:00:00');
-  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
-  db.schedules[nm][wkKey][di]={type,station};
-  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to ${type} · ${station} ✓`);
-}
-function setShiftDayOff(nm,ds,di){
-  const dateObj=new Date(ds+'T12:00:00');
-  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
-  const wkKey=weekKey(cellMon);
-  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
-  db.schedules[nm][wkKey][di]=null;
-  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to off ✓`);
-}
-
-// WEEK OVERVIEW (all staff)
-function renderWeekOverview(){
-  const today=new Date();
-  const mon=getMon(0);
-  // headers
-  let hHtml=`<div class="overview-row"><div class="ov-name" style="font-size:9px;color:var(--tm);font-weight:700;text-transform:uppercase;letter-spacing:.08em">Staff</div>`;
+// TEAM VIEW
+function renderTeam(){
+  const today=new Date(),mon=getMon(teamWk);
+  document.getElementById('team-wk').textContent=`${mon.getDate()} ${MO[mon.getMonth()]} – ${(()=>{const e=new Date(mon);e.setDate(mon.getDate()+6);return `${e.getDate()} ${MO[e.getMonth()]}`})()}`;
+  let html='';
   for(let i=0;i<7;i++){
     const d=new Date(mon);d.setDate(mon.getDate()+i);
     const isT=d.toDateString()===today.toDateString();
-    hHtml+=`<div class="adm-day-head" style="${isT?'color:var(--pk)':''}">${DAYS[i]}<br><span style="font-size:8px">${d.getDate()}</span></div>`;
+    const working=Object.keys(db.staff).filter(nm=>resolveShift(db,nm,mon,i));
+    const off=Object.keys(db.staff).filter(nm=>!resolveShift(db,nm,mon,i));
+    html+=`<div class="tv-day-block"><div class="tv-day-head">${isT?'<div class="today-dot"></div>':''}<span>${DAYS[i]} ${d.getDate()} ${MO[d.getMonth()]}${isT?' · Today':''}</span></div>`;
+    if(!working.length){html+=`<div class="tv-row" style="cursor:default"><span style="font-size:13px;color:var(--ts)">No staff scheduled</span></div>`;}
+    else{working.forEach(nm=>{
+      const s=resolveShift(db,nm,mon,i),v=db.staff[nm];
+      const pic=v.pic;
+      html+=`<div class="tv-row" onclick="openPersonSheet('${nm}')">
+        <div class="tv-av" data-nm="${nm}">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
+        <div style="flex:1;min-width:0">
+          <div class="tv-name">${nm}</div>
+          <div class="tv-role">${s.role}</div>
+        </div>
+        <div class="tv-right">
+          <div class="tv-time">${fmt12(s.s)} – ${fmt12(s.e)}</div>
+          <div style="display:flex;gap:4px;align-items:center;flex-wrap:nowrap">
+            <span class="chip ${s.tag}">${cap(s.tag)}</span>
+            ${s.station?stationChip(s.station):''}
+          </div>
+        </div>
+      </div>`;
+    });}
+    if(off.length)html+=`<div class="tv-off-row">Off: ${off.join(', ')}</div>`;
+    html+=`</div>`;
   }
-  hHtml+=`</div>`;
-  let rows='';
-  Object.entries(db.staff).forEach(([nm,v])=>{
-    const pic=v.pic;
-    rows+=`<div class="overview-row">
-      <div class="ov-name" style="display:flex;align-items:center;gap:6px">
-        <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:10px;color:#fff;overflow:hidden;flex-shrink:0">${pic?`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`:`${nm[0]}`}</div>
-        <span style="font-size:11px;font-weight:700;color:var(--t)">${nm}</span>
-      </div>`;
-    for(let i=0;i<7;i++){
-      const d=new Date(mon);d.setDate(mon.getDate()+i);
-      const isT=d.toDateString()===today.toDateString();
-      const s=resolveShift(db,nm,mon,i);
-      rows+=`<div class="ov-cell${isT?' today-col':''}${s?` shift-${s.tag}`:' shift-off'}" onclick="selectPersonDay('${nm}',${i})">
-        ${s?`<div style="font-size:8px;font-weight:800;color:${s.tag==='open'?'var(--y)':'#c084fc'}">${cap(s.tag)}</div><div style="font-size:8px;color:${s.station==='cafe'?'var(--cafe)':'var(--bakery)'}">${s.station||''}</div>`:'<div style="font-size:9px;color:var(--tm)">Off</div>'}
-      </div>`;
-    }
-    rows+=`</div>`;
-  });
-  document.getElementById('week-overview').innerHTML=hHtml+rows;
+  document.getElementById('team-view').innerHTML=html;
 }
+function wkT(d){teamWk+=d;renderTeam()}
 
-function selectPersonDay(nm,di){
-  selectedPerson=nm;
+// PERSON SHEET (click person in team view)
+function openPersonSheet(nm){
+  const v=db.staff[nm];
+  const mon=getMon(teamWk);
+  const pic=v.pic;
+  const wt=v.weekType||5;
+  let html=`<div class="person-sheet-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>`;
+  html+=`<div style="text-align:center;margin-bottom:18px">
+    <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">${v.owner?'Owner':v.admin?'Admin':v.role}</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:26px;color:var(--t)">${nm}</div>
+    <div style="font-size:11px;color:var(--ts);margin-top:4px">${wt}-day week</div>
+  </div>`;
+  // Week schedule
+  html+=`<div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">This week</div>`;
+  Array(7).fill(0).forEach((_,i)=>{
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const s=resolveShift(db,nm,mon,i);
+    const isT=d.toDateString()===new Date().toDateString();
+    html+=`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--s2);border:1px solid ${isT?'rgba(233,30,140,.4)':'var(--bd)'};border-radius:9px;margin-bottom:5px">
+      <div style="min-width:36px;text-align:center"><div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">${DAYS[i]}</div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:var(--t);line-height:1">${d.getDate()}</div></div>
+      <div style="flex:1">
+        ${s?`<div style="font-size:13px;font-weight:700;color:var(--t)">${fmt12(s.s)} – ${fmt12(s.e)}</div><div style="display:flex;gap:5px;margin-top:4px"><span class="chip ${s.tag}">${cap(s.tag)}</span>${stationChip(s.station)}</div>`:`<div style="font-size:13px;color:var(--ts)">Day Off</div>`}
+      </div>
+      ${isT?'<span class="today-badge">TODAY</span>':''}
+    </div>`;
+  });
+  document.getElementById('person-sheet-content').innerHTML=html;
+  document.getElementById('person-sheet-bg').classList.add('on');
+}
+function closePersonSheet(){document.getElementById('person-sheet-bg').classList.remove('on')}
+
+// PLANNER
+function renderPlanner(){
+  const isAdmin=db.staff[me].admin;
+  document.getElementById('planner-view').innerHTML=`
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--t)">📅 Events & Planner</div>
+        <div style="display:flex;gap:6px">
+          ${isAdmin?'<button class="btn primary xs" onclick="toggleEvForm()">+ Add</button>':''}
+          <button class="btn ghost xs" onclick="openDutyModal()">📋 Duties</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
+        ${['all','event','promo','prep'].map(t=>`<button class="btn ghost xs" id="fe-${t}" onclick="filterEv('${t}')">${t}</button>`).join('')}
+      </div>
+      <div id="ev-list"></div>
+      ${isAdmin?`<div id="ev-form" style="display:none"><div class="ev-form">
+        <input type="text" id="ev-title" placeholder="Title">
+        <input type="date" id="ev-date">
+        <select id="ev-type"><option value="event">📅 Event</option><option value="promo">🎉 Promotion</option><option value="prep">🔧 Preparation</option></select>
+        <textarea id="ev-desc" placeholder="Details, notes..."></textarea>
+        <button class="btn primary sm-btn" onclick="saveEv()">Save Entry</button>
+      </div></div>`:''}
+    </div>`;
+  filterEv(activeEvFilter);
+}
+function filterEv(type){
+  activeEvFilter=type;
+  ['all','event','promo','prep'].forEach(t=>{const el=document.getElementById(`fe-${t}`);if(!el)return;if(t===type){el.style.borderColor='var(--pk)';el.style.color='var(--pk)';el.style.background='var(--glow2)';}else{el.style.borderColor='';el.style.color='';el.style.background='';}});
+  const list=document.getElementById('ev-list');if(!list)return;
+  const filtered=(db.events||[]).filter(e=>type==='all'||e.type===type).sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const icons={event:'📅',promo:'🎉',prep:'🔧'};
+  if(!filtered.length){list.innerHTML=`<div class="empty-state"><div class="ei">📋</div>${db.staff[me].admin?'No entries — tap + Add':'No entries yet'}</div>`;return}
+  list.innerHTML=filtered.map(e=>{const d=new Date(e.date+'T12:00:00');const dow=(d.getDay()+6)%7;const dStr=`${FDAYS[dow]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}`;return `<div class="ev-item"><div class="ev-dot ${e.type}"></div><div class="ev-info"><div class="ev-title">${icons[e.type]||''} ${e.title}</div><div class="ev-meta">${dStr}${e.desc?`<br>${e.desc}`:''}</div></div><span class="ev-tag ${e.type}">${e.type}</span>${db.staff[me].admin?`<button class="ev-del" onclick="deleteEv('${e.id}')">✕</button>`:''}</div>`;}).join('');
+}
+function toggleEvForm(){const f=document.getElementById('ev-form');if(f)f.style.display=f.style.display==='none'?'block':'none'}
+function saveEv(){const title=document.getElementById('ev-title').value.trim(),date=document.getElementById('ev-date').value,type=document.getElementById('ev-type').value,desc=document.getElementById('ev-desc').value.trim();if(!title||!date){toast('Fill in title and date');return}if(!db.events)db.events=[];db.events.push({id:Date.now().toString(),title,date,type,desc});saveDB(db);document.getElementById('ev-title').value='';document.getElementById('ev-desc').value='';document.getElementById('ev-date').value='';toggleEvForm();filterEv(activeEvFilter);toast('Entry added ✓')}
+function deleteEv(id){db.events=(db.events||[]).filter(e=>e.id!==id);saveDB(db);filterEv(activeEvFilter);toast('Removed')}
+
+// DUTY MODAL
+function openDutyModal(){
+  renderDuties();
+  document.getElementById('duty-modal-bg').classList.add('on');
+}
+function closeDutyModal(){document.getElementById('duty-modal-bg').classList.remove('on')}
+function renderDuties(){
+  const isAdmin=db.staff[me].admin;
+  document.getElementById('duty-add-row').style.display=isAdmin?'flex':'none';
+  const list=document.getElementById('duty-list');
+  if(!db.duties||!db.duties.length){list.innerHTML=`<div class="empty-state"><div class="ei">✅</div>${isAdmin?'No duties — add some':'No duties yet'}</div>`;return}
+  list.innerHTML=db.duties.map(d=>`<div class="duty-item"><input type="checkbox" class="duty-check" ${d.done?'checked':''} onchange="toggleDuty('${d.id}',this.checked)"><span class="duty-text${d.done?' done':''}">${d.text}</span>${isAdmin?`<button class="duty-del" onclick="deleteDuty('${d.id}')">✕</button>`:''}</div>`).join('');
+}
+function addDuty(){const inp=document.getElementById('duty-inp');const txt=inp.value.trim();if(!txt)return;if(!db.duties)db.duties=[];db.duties.push({id:Date.now().toString(),text:txt,done:false});saveDB(db);inp.value='';renderDuties();toast('Duty added ✓')}
+function toggleDuty(id,done){const d=(db.duties||[]).find(x=>x.id===id);if(d)d.done=done;saveDB(db);renderDuties()}
+function deleteDuty(id){db.duties=(db.duties||[]).filter(x=>x.id!==id);saveDB(db);renderDuties();toast('Duty removed')}
+
+// PROFILE
+function renderProfile(){
+  const s=db.staff[me];
   const mon=getMon(0);
-  const d=new Date(mon);d.setDate(mon.getDate()+di);
-  selectedDate=dateStr(d);
-  switchAdmTab(0);
-  renderPeopleList();
-  renderPersonCalendar();
-  document.getElementById('person-schedule-panel').style.display='block';
-  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
+  const sc=db.defaultSched[me].filter(x=>x).length;
+  const hrs=Array(7).fill(0).reduce((a,_,i)=>{const sh=resolveShift(db,me,mon,i);return a+(sh?hDiff(sh.s,sh.e):0)},0);
+  const roleLabel=s.owner?'Owner':s.admin?'Admin':(s.role||'Staff');
+  document.getElementById('prof-role').textContent=roleLabel;
+  document.getElementById('prof-name').textContent=me;
+  document.getElementById('prof-stats-grid').innerHTML=`
+    <div class="info-item"><div class="iv">${sc}</div><div class="il">Shifts / Week</div></div>
+    <div class="info-item"><div class="iv">${hrs}h</div><div class="il">Hours / Week</div></div>`;
+  setAv('prof-av',me);document.getElementById('hdr-nm').textContent=me;
+  // Show admin portal button for admins only
+  const adminWrap=document.getElementById('admin-portal-btn-wrap');
+  if(adminWrap)adminWrap.style.display=s.admin?'block':'none';
+  renderHistory();
+}
+function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
+
+function renderHistory(){
+  const hist=(db.shiftHistory[me]||[]).slice(0,30);
+  const el=document.getElementById('hist-list');if(!el)return;
+  if(!hist.length){el.innerHTML=`<div class="empty-state"><div class="ei">📊</div>No history yet</div>`;return}
+  el.innerHTML=hist.map(h=>{const d=new Date(h.date+'T12:00:00');return `<div class="hist-row"><div class="hist-date">${FDAYS[(d.getDay()+6)%7]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}</div><div class="hist-info"><span class="chip ${h.type}">${cap(h.type)}</span>${h.station?stationChip(h.station):''}<span style="font-size:12px;color:var(--ts)">${h.hours}h · ${h.role}</span></div></div>`;}).join('');
 }
 
-// ALL HISTORY
-function renderAllHistory(){
-  const el=document.getElementById('all-hist');
-  let rows='';
-  Object.entries(db.shiftHistory).forEach(([nm,hist])=>{
-    if(!hist||!hist.length)return;
-    hist.slice(0,20).forEach(h=>{
-      const d=new Date(h.date+'T12:00:00');
-      rows+=`<tr><td>${nm}</td><td>${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}</td><td><span class="chip ${h.type}">${cap(h.type)}</span></td><td>${h.station?stationChip(h.station):'-'}</td><td>${h.hours}h</td><td>${h.role}</td></tr>`;
-    });
-  });
-  el.innerHTML=rows||`<tr><td colspan="6" style="text-align:center;color:var(--ts);padding:20px">No history recorded yet</td></tr>`;
+// Record today's shift in history (called on login)
+function recordTodayShift(){
+  const today=new Date(), mon=getMon(0);
+  const di=(today.getDay()+6)%7;
+  const s=resolveShift(db,me,mon,di);
+  if(s)recordShiftHistory(db,me,today,s);
 }
 
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2600)}
 
 // ANIMATED BG
 (function(){
   const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');let W,H,pts=[];
   function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}resize();window.addEventListener('resize',resize);
-  class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.2+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.2+.06;this.op=Math.random()*.22+.05}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}update(){this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;this.a+=.006;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset()}}
-  for(let i=0;i<45;i++)pts.push(new P());
-  const orbs=[{x:.8,y:.15,r:280,c:'rgba(233,30,140,0.045)'},{x:.1,y:.85,r:220,c:'rgba(136,14,79,0.034)'},{x:.5,y:.5,r:180,c:'rgba(233,30,140,0.023)'}];
+  class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.3+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.22+.07;this.op=Math.random()*.26+.06}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}update(){this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;this.a+=.006;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset()}}
+  for(let i=0;i<50;i++)pts.push(new P());
+  const orbs=[{x:.8,y:.15,r:300,c:'rgba(233,30,140,0.05)'},{x:.1,y:.85,r:240,c:'rgba(136,14,79,0.038)'},{x:.5,y:.5,r:200,c:'rgba(233,30,140,0.026)'}];
   function frame(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,o.r);g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(frame)}
   frame();
 })();
-
-// Fix tab display
-document.querySelectorAll('.adm-tc').forEach((t,i)=>{t.style.display=i===0?'block':'none'});
-document.querySelector('#adm-dash').style.display='none';
-
-function switchAdmTab(n){
-  document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
-  document.querySelectorAll('.adm-tc').forEach((t,i)=>t.style.display=i===n?'block':'none');
-  if(n===0){renderPeopleList();if(selectedPerson)renderPersonCalendar();}
-  if(n===1)renderWeekOverview();
-  if(n===2)renderAllHistory();
-}
-
-function showAdmPage(id){
-  document.getElementById('adm-login').classList.remove('on');document.getElementById('adm-login').style.display='none';
-  document.getElementById('adm-dash').classList.add('on');document.getElementById('adm-dash').style.display='flex';
-  if(id==='adm-login'){document.getElementById('adm-login').style.display='flex';document.getElementById('adm-dash').style.display='none';}
-}
-
-initAdmin();
+init();
 </script>
 </body>
 </html>
