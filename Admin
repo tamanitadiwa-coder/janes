@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Jane's Admin Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+:root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--y:#FFE500;--g:#00E676;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#ffffff;--ts:#8888a0;--tm:#444455;--glow:rgba(233,30,140,0.18);--glow2:rgba(233,30,140,0.09);--r:14px;--cafe:#7ed4ff;--bakery:#FFB347}
+.page{display:none;min-height:100vh;flex-direction:column;background:var(--bg)}.page.on{display:flex}
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}.z1{position:relative;z-index:1}
+/* LOGIN */
+#pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
+.login-wrap{width:100%;max-width:360px;text-align:center}
+.logo-ring{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45),0 0 100px rgba(233,30,140,.12);overflow:hidden}
+.logo-ring img{width:85%;height:85%;object-fit:contain}
+.l-brand{font-family:'Fredoka One',cursive;font-size:28px;color:var(--t);margin-bottom:3px}
+.l-sub{font-size:11px;color:var(--ts);margin-bottom:24px;letter-spacing:.06em;text-transform:uppercase}
+.l-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:26px;text-align:left;box-shadow:0 8px 48px rgba(0,0,0,.6)}
+.lbl{display:block;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ts);margin-bottom:8px}
+.l-card select{width:100%;padding:13px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;color:var(--t);font-family:'Inter',sans-serif;font-size:14px;font-weight:500;outline:none;appearance:none;margin-bottom:20px;cursor:pointer;transition:border-color .2s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.l-card select:focus{border-color:var(--pk)}.l-card select option{background:#1a1a2a}
+.pin-dots{display:flex;gap:10px;justify-content:center;margin-bottom:16px}
+.pdot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--bd2);background:transparent;transition:all .15s}
+.pdot.on{background:var(--pk);border-color:var(--pk);box-shadow:0 0 14px rgba(233,30,140,.8);transform:scale(1.15)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:20px}
+.pb{padding:15px;border-radius:10px;border:1px solid var(--bd);background:var(--s2);color:var(--t);font-family:'Inter',sans-serif;font-size:18px;font-weight:600;cursor:pointer;transition:all .12s;line-height:1}
+.pb:hover{background:var(--s3);border-color:rgba(233,30,140,.5)}.pb:active{transform:scale(.88);background:var(--pk)}
+.pb.sm{font-size:11px;font-weight:700;color:var(--ts)}.pb.z{grid-column:2}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.02em;border:none;text-decoration:none;gap:6px}
+.btn.primary{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;box-shadow:0 4px 20px rgba(233,30,140,.4)}
+.btn.primary:hover{box-shadow:0 6px 28px rgba(233,30,140,.55);transform:translateY(-1px)}.btn.primary:active{transform:scale(.97)}
+.btn.ghost{background:transparent;border:1px solid var(--bd);color:var(--ts)}.btn.ghost:hover{border-color:var(--pk);color:var(--pk);background:var(--glow2)}
+.btn.danger{background:rgba(255,60,60,.1);border:1px solid rgba(255,60,60,.25);color:#ff7070}.btn.danger:hover{background:rgba(255,60,60,.18)}
+.btn.full{width:100%}.btn.xs{padding:7px 14px;font-size:11px;border-radius:7px}.btn.sm-btn{padding:9px 16px;font-size:12px;border-radius:8px}
+.err{color:#ff7080;font-size:12px;text-align:center;margin-top:10px;font-weight:600;display:none;background:rgba(255,60,80,.07);border:1px solid rgba(255,60,80,.15);border-radius:8px;padding:8px}
+/* HEADER */
+.hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.hdr-left{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;box-shadow:0 0 16px rgba(233,30,140,.4);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.hdr-logo img{width:90%;height:90%;object-fit:contain}
+.hdr-brand{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}.hdr-r{display:flex;align-items:center;gap:8px}
+.av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3);cursor:pointer;position:relative;transition:border-color .2s}
+.av:hover{border-color:var(--pk)}.av img{width:100%;height:100%;object-fit:cover}
+.av-upload{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.65);opacity:0;transition:opacity .2s;font-size:14px;border-radius:50%}
+.av:hover .av-upload{opacity:1}
+.av-lg{width:82px;height:82px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:32px;color:#fff;overflow:hidden;border:3px solid rgba(233,30,140,.5);box-shadow:0 0 40px rgba(233,30,140,.35);cursor:pointer;position:relative;margin:0 auto 16px;flex-shrink:0}
+.av-lg:hover{box-shadow:0 0 56px rgba(233,30,140,.55)}.av-lg img{width:100%;height:100%;object-fit:cover}
+.av-lg .av-upload{font-size:22px}.av-lg:hover .av-upload{opacity:1}
+input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var(--ts);display:none}
+@media(min-width:400px){.hdr-name{display:block}}
+/* BODY */
+.body{flex:1;overflow-y:auto;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
+.greet{border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;background:var(--s1);position:relative;overflow:hidden}
+.greet::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.18),transparent 70%);top:-120px;right:-60px;pointer-events:none}
+.greet-hi{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:3px}.greet-hi em{color:var(--pk);font-style:normal}
+.greet-sub{font-size:12px;color:var(--ts);line-height:1.5}
+.greet-date{font-size:10px;color:var(--tm);margin-top:5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stat{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:12px 8px;text-align:center;transition:all .2s}
+.stat:hover{border-color:rgba(233,30,140,.35);transform:translateY(-2px)}
+.stat-v{font-family:'Fredoka One',cursive;font-size:26px;color:var(--pk);line-height:1}
+.stat-l{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-top:3px}
+/* TABS */
+.tabs-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:16px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tab{padding:9px 14px;font-size:12px;font-weight:600;color:var(--ts);cursor:pointer;border-radius:9px;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:var(--t);background:rgba(255,255,255,.04)}.tab.on{color:#fff;background:linear-gradient(135deg,var(--pk),var(--pk2));box-shadow:0 2px 12px rgba(233,30,140,.4)}
+.tab-content{display:none}.tab-content.on{display:block}
+/* WEEK NAV */
+.wk-nav{display:flex;align-items:center;justify-content:space-between;background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:9px 14px;margin-bottom:12px}
+.wk-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 12px;border-radius:7px;transition:all .15s;line-height:1}
+.wk-nav button:hover{color:var(--pk);border-color:var(--pk)}.wk-nav button:active{transform:scale(.88)}.wk-label{font-size:13px;font-weight:600;color:var(--t)}
+/* SHIFT ROWS */
+.shift-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:6px;transition:all .18s;cursor:pointer;position:relative;overflow:hidden}
+.shift-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;border-radius:3px 0 0 3px}
+.shift-row:hover{border-color:var(--bd2);background:var(--s2);transform:translateY(-1px)}
+.shift-row.today{border-color:rgba(233,30,140,.4);background:rgba(233,30,140,.04)}.shift-row.today::before{background:var(--pk)}
+.shift-row.off{opacity:.32;cursor:default}
+.sr-day{min-width:40px;text-align:center;flex-shrink:0}.sr-day-name{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)}
+.sr-day-num{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);line-height:1}
+.sr-div{width:1px;height:38px;background:var(--bd);flex-shrink:0}.sr-info{flex:1;min-width:0}
+.sr-role{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:1px}
+.sr-time{font-size:13px;font-weight:700;color:var(--t)}.sr-h{font-size:11px;color:var(--ts);margin-top:1px}
+.sr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+/* CHIPS */
+.station-chip{padding:3px 8px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.station-chip.cafe{background:rgba(126,212,255,.12);color:var(--cafe);border:1px solid rgba(126,212,255,.25)}
+.station-chip.bakery{background:rgba(255,179,71,.12);color:var(--bakery);border:1px solid rgba(255,179,71,.25)}
+.chip{padding:3px 9px;border-radius:100px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.chip.open{background:rgba(255,229,0,.1);color:var(--y);border:1px solid rgba(255,229,0,.2)}
+.chip.close{background:rgba(150,80,255,.1);color:#c084fc;border:1px solid rgba(150,80,255,.2)}
+.chip.off{background:rgba(255,255,255,.04);color:var(--ts);border:1px solid var(--bd)}
+.today-badge{font-size:9px;font-weight:800;color:var(--pk);background:rgba(233,30,140,.12);padding:2px 8px;border-radius:100px;border:1px solid rgba(233,30,140,.25)}
+.wk-type-badge{display:inline-flex;align-items:center;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-left:6px}
+.wk-type-badge.five{color:var(--g);background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.2)}
+.wk-type-badge.six{color:var(--y);background:rgba(255,229,0,.1);border:1px solid rgba(255,229,0,.2)}
+/* HOURS */
+.hours-summary{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+.hs-title{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px}
+.hs-progress{height:5px;background:var(--bd2);border-radius:5px;margin:10px 0 5px;overflow:hidden}
+.hs-progress-fill{height:100%;background:linear-gradient(90deg,var(--pk),#ff6eb4);border-radius:5px;transition:width .8s ease}
+.hs-counts{display:flex;justify-content:space-between;font-size:10px;color:var(--tm)}
+/* TEAM */
+.tv-day-block{margin-bottom:18px}
+.tv-day-head{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px}
+.today-dot{width:7px;height:7px;border-radius:50%;background:var(--pk);box-shadow:0 0 8px var(--pk);flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.tv-row{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;margin-bottom:5px;transition:all .15s;cursor:pointer}
+.tv-row:hover{border-color:var(--pk);transform:translateY(-1px);background:var(--s2)}
+.tv-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:15px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.25)}
+.tv-av img{width:100%;height:100%;object-fit:cover}
+.tv-name{font-size:13px;font-weight:700;color:var(--t);min-width:65px}.tv-role{font-size:11px;color:var(--ts);flex:1}.tv-time{font-size:12px;font-weight:600;color:var(--t)}
+.tv-off-row{font-size:11px;color:var(--tm);margin-top:5px;padding-left:2px}
+/* PROFILE CARD */
+.profile-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:24px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.profile-card::before{content:'';position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.14),transparent 70%);top:-80px;right:-40px;pointer-events:none}
+.profile-role{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pk);margin-bottom:4px}
+.profile-name-big{font-family:'Fredoka One',cursive;font-size:28px;color:var(--t)}
+.profile-pin-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px}
+.profile-pin-row input{background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;outline:none;width:130px;transition:border-color .2s}
+.profile-pin-row input:focus{border-color:var(--pk)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.info-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px;text-align:center}
+.info-item .iv{font-family:'Fredoka One',cursive;font-size:22px;color:var(--pk)}.info-item .il{font-size:10px;color:var(--ts);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;font-weight:700}
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
+.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:54px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cal-day:hover{border-color:var(--pk);background:var(--s2)}
+.cal-day.today{border-color:var(--pk);background:rgba(233,30,140,.06)}
+.cal-day.has-shift{border-color:rgba(0,230,118,.3)}
+.cal-day.empty{opacity:.2;cursor:default}
+.cal-day-num{font-family:'Fredoka One',cursive;font-size:16px;color:var(--t);line-height:1}
+.cal-dot-row{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
+.cal-dot{width:5px;height:5px;border-radius:50%}
+.cal-dot.open{background:var(--y)}.cal-dot.close{background:#c084fc}.cal-dot.task{background:var(--pk)}
+.cal-dot.cafe{background:var(--cafe)}.cal-dot.bakery{background:var(--bakery)}
+.cal-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-month-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 12px;border-radius:7px;transition:all .15s;line-height:1}
+.cal-month-nav button:hover{color:var(--pk);border-color:var(--pk)}
+.cal-month-label{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}
+/* BOTTOM SHEET */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+.sheet-bg.on{display:flex}
+.sheet{background:var(--s1);border:1px solid var(--bd);border-radius:20px 20px 0 0;padding:22px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;box-shadow:0 -20px 60px rgba(0,0,0,.8)}
+.sheet-handle{width:40px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 18px}
+/* TASKS */
+.task-item{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;margin-bottom:5px}
+.task-check{width:18px;height:18px;cursor:pointer;accent-color:var(--pk);flex-shrink:0}
+.task-text{font-size:13px;color:var(--t);flex:1;font-weight:500}.task-text.done{text-decoration:line-through;color:var(--ts)}
+.task-del{background:none;border:none;color:var(--tm);cursor:pointer;font-size:13px;padding:3px;transition:color .15s}.task-del:hover{color:#ff7070}
+.task-add-row{display:flex;gap:8px;margin-top:10px}
+.task-add-row input{background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;flex:1;transition:border-color .2s}.task-add-row input:focus{border-color:var(--pk)}
+/* HISTORY */
+.hist-row{padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;margin-bottom:5px}
+.hist-date{font-size:11px;color:var(--ts);margin-bottom:3px}.hist-info{font-size:13px;font-weight:600;color:var(--t);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* DUTY MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-bg.on{display:flex}.modal{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:24px;width:100%;max-width:400px;max-height:85vh;overflow-y:auto}
+.modal h3{font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:10px}.modal p{font-size:14px;color:var(--ts);line-height:1.8;margin-bottom:18px}.modal-btns{display:flex;gap:8px}
+.duty-item{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;margin-bottom:5px}
+.duty-check{width:18px;height:18px;cursor:pointer;accent-color:var(--pk);flex-shrink:0}.duty-text{font-size:13px;color:var(--t);flex:1}.duty-text.done{text-decoration:line-through;color:var(--ts)}
+.duty-del{background:none;border:none;color:var(--tm);cursor:pointer;font-size:13px;padding:3px}.duty-del:hover{color:#ff7070}
+.duty-add-row{display:flex;gap:8px;margin-top:10px}.duty-add-row input{background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;flex:1}.duty-add-row input:focus{border-color:var(--pk)}
+/* PLANNER */
+.ev-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px}
+.ev-item:hover{border-color:var(--bd2)}.ev-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ev-dot.promo{background:var(--pk)}.ev-dot.prep{background:var(--y)}.ev-dot.event{background:#7ed4ff}
+.ev-info{flex:1}.ev-title{font-size:13px;font-weight:700;color:var(--t)}.ev-meta{font-size:11px;color:var(--ts);margin-top:2px;line-height:1.5}
+.ev-tag{font-size:9px;font-weight:800;text-transform:uppercase;padding:2px 8px;border-radius:100px;flex-shrink:0;align-self:flex-start}
+.ev-tag.promo{color:var(--pk);background:rgba(233,30,140,.1);border:1px solid rgba(233,30,140,.2)}
+.ev-tag.prep{color:var(--y);background:rgba(255,229,0,.08);border:1px solid rgba(255,229,0,.15)}
+.ev-tag.event{color:#7ed4ff;background:rgba(100,200,255,.08);border:1px solid rgba(100,200,255,.15)}
+.ev-del{background:none;border:none;color:var(--ts);cursor:pointer;font-size:14px;padding:2px;align-self:flex-start}.ev-del:hover{color:#ff7070}
+.ev-form{display:flex;flex-direction:column;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)}
+.ev-form input,.ev-form select,.ev-form textarea{background:var(--s2);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;width:100%;transition:border-color .2s}
+.ev-form input:focus,.ev-form select:focus,.ev-form textarea:focus{border-color:var(--pk)}
+.ev-form textarea{resize:vertical;min-height:60px}.ev-form select option{background:#1a1a2a}
+/* PERSON SHEET */
+.person-sheet-av{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:36px;color:#fff;overflow:hidden;border:3px solid rgba(233,30,140,.5);box-shadow:0 0 40px rgba(233,30,140,.35);margin:0 auto 12px;flex-shrink:0}
+.person-sheet-av img{width:100%;height:100%;object-fit:cover}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;padding:10px 24px;border-radius:100px;font-size:12px;font-weight:800;opacity:0;transition:all .28s;z-index:999;white-space:nowrap;pointer-events:none;box-shadow:0 4px 24px rgba(233,30,140,.55)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.sec-lbl{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ts);margin-bottom:10px}
+.divider{height:1px;background:var(--bd);margin:16px 0}
+.empty-state{text-align:center;padding:26px 20px;color:var(--ts);font-size:13px}.empty-state .ei{font-size:30px;margin-bottom:8px}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:12px}
+@keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}.shake{animation:sk .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}.fade-in{animation:fadeUp .45s ease both}
+/* LOCK */
+#pg-lock{background:var(--bg);align-items:center;justify-content:center;min-height:100vh}
+.lock-content{text-align:center;max-width:320px;width:100%;padding:24px}
+.lock-time{font-family:'Fredoka One',cursive;font-size:72px;color:var(--t);line-height:1;margin-bottom:4px}
+.lock-date{font-size:12px;color:var(--ts);margin-bottom:32px;letter-spacing:.04em;text-transform:uppercase}
+.lock-av{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:24px;color:#fff;margin:0 auto 10px;overflow:hidden;border:2px solid rgba(233,30,140,.4);box-shadow:0 0 24px rgba(233,30,140,.35)}
+.lock-av img{width:100%;height:100%;object-fit:cover}
+.lock-name{font-size:15px;font-weight:700;color:var(--t);margin-bottom:4px}.lock-hint{font-size:11px;color:var(--ts);margin-bottom:24px}
+.lu-dots{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.lu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:210px;margin:0 auto 14px}
+.lu-pb{padding:13px;border-radius:10px;border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--t);font-size:18px;font-weight:600;cursor:pointer;transition:all .12s}
+.lu-pb:hover{background:var(--s3)}.lu-pb:active{transform:scale(.88);background:var(--pk)}.lu-pb.sm{font-size:11px;font-weight:700;color:var(--ts)}.lu-pb.z{grid-column:2}
+.swipe-hint{font-size:11px;color:var(--tm);margin-top:18px;display:flex;align-items:center;justify-content:center;gap:6px}
+.swipe-arrow{animation:sw 2s infinite}@keyframes sw{0%,100%{transform:translateX(0);opacity:.4}50%{transform:translateX(8px);opacity:1}}
+
+
+.adm-hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.adm-hdr-left{display:flex;align-items:center;gap:10px}
+.adm-logo{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;box-shadow:0 0 16px rgba(233,30,140,.4);display:flex;align-items:center;justify-content:center}
+.adm-logo img{width:90%;height:90%;object-fit:contain}
+.adm-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--t)}
+.adm-title em{color:var(--pk);font-style:normal}
+.adm-body{flex:1;overflow-y:auto;padding:20px;max-width:860px;width:100%;margin:0 auto;padding-bottom:60px}
+/* ADMIN LOGIN */
+#adm-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
+/* PEOPLE ROW */
+.person-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .15s;width:100%;margin-bottom:8px;text-align:left}
+.person-btn:hover{border-color:var(--pk);background:var(--s2);transform:translateY(-1px)}
+.person-btn.active{border-color:var(--pk);background:rgba(233,30,140,.06)}
+.person-btn-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;flex-shrink:0;overflow:hidden;border:2px solid rgba(233,30,140,.3)}
+.person-btn-av img{width:100%;height:100%;object-fit:cover}
+.person-btn-info{flex:1}
+.person-btn-name{font-size:15px;font-weight:700;color:var(--t)}
+.person-btn-role{font-size:11px;color:var(--ts);margin-top:2px}
+.person-btn-meta{font-size:11px;color:var(--ts)}
+/* MONTH CALENDAR */
+.adm-cal-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.adm-cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.adm-cal-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 14px;border-radius:7px;transition:all .15s;line-height:1}
+.adm-cal-nav button:hover{color:var(--pk);border-color:var(--pk)}
+.adm-cal-label{font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)}
+.adm-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.adm-cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
+.adm-cal-day{background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:6px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:60px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.adm-cal-day:hover{border-color:var(--pk);background:var(--s3)}
+.adm-cal-day.today{border-color:rgba(233,30,140,.5);background:rgba(233,30,140,.06)}
+.adm-cal-day.has-shift{border-color:rgba(0,230,118,.35)}
+.adm-cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
+.adm-cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1);box-shadow:0 0 16px var(--glow2)}
+.adm-day-num{font-family:'Fredoka One',cursive;font-size:15px;color:var(--t);line-height:1}
+.adm-day-info{font-size:8px;color:var(--ts);text-align:center;line-height:1.3}
+.adm-day-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
+.adm-day-dot{width:5px;height:5px;border-radius:50%}
+.adm-day-dot.open{background:var(--y)}.adm-day-dot.close{background:#c084fc}
+.adm-day-dot.cafe{background:var(--cafe)}.adm-day-dot.bakery{background:var(--bakery)}
+/* SHIFT EDITOR */
+.shift-editor{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;animation:fadeUp .3s ease}
+.shift-editor-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--t);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.shift-toggle-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.shift-type-btn{padding:10px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);flex:1;min-width:80px;text-align:center}
+.shift-type-btn:hover{border-color:var(--pk);color:var(--t)}
+.shift-type-btn.active{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border-color:transparent;box-shadow:0 2px 12px rgba(233,30,140,.4)}
+.shift-type-btn.active-off{background:rgba(255,255,255,.06);border-color:var(--bd2);color:var(--ts)}
+.shift-detail-box{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:16px;margin-bottom:14px}
+.shift-detail-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
+.shift-detail-row:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.shift-detail-label{font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em}
+.shift-detail-val{font-size:14px;font-weight:700;color:var(--t)}
+/* WEEK TYPE */
+.wt-toggle{display:flex;gap:6px;margin-bottom:16px}
+.wt-btn{flex:1;padding:10px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid var(--bd);background:var(--s2);color:var(--ts);text-align:center}
+.wt-btn.active{background:linear-gradient(135deg,#0055cc,#0077ff);color:#fff;border-color:transparent}
+/* BULK / OVERVIEW */
+.overview-row{display:grid;grid-template-columns:120px repeat(7,1fr);gap:4px;margin-bottom:3px;align-items:center}
+.ov-name{font-size:12px;font-weight:700;color:var(--t);padding:8px 0}
+.ov-cell{background:var(--s2);border:1px solid var(--bd);border-radius:6px;padding:4px 2px;text-align:center;font-size:9px;font-weight:700;min-height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:border-color .15s}
+.ov-cell:hover{border-color:var(--pk)}
+.ov-cell.today-col{border-color:rgba(233,30,140,.3)}
+.ov-cell.shift-open{background:rgba(255,229,0,.06)}.ov-cell.shift-close{background:rgba(150,80,255,.06)}.ov-cell.shift-off{opacity:.35}
+.ov-day-head{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);text-align:center;padding:4px 0}
+/* HISTORY TABLE */
+.hist-table{width:100%;border-collapse:collapse;font-size:12px}
+.hist-table th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);padding:8px 10px;text-align:left;border-bottom:1px solid var(--bd)}
+.hist-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t)}
+.hist-table tr:hover td{background:rgba(255,255,255,.02)}
+
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div class="toast" id="toast"></div>
+
+<!-- ADMIN LOGIN -->
+<div class="page on z1" id="adm-login">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+    <div class="login-wrap fade-in">
+      <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
+      <div class="l-brand">Jane's Admin</div>
+      <p class="l-sub">Admin Portal · Staff Schedule Manager</p>
+      <div class="l-card">
+        <label class="lbl">Admin name</label>
+        <select id="adm-sel-nm">
+          <option value="">— Select admin —</option>
+          <option>Jamal</option><option>Josh</option><option>Eva</option><option>Charlet</option>
+        </select>
+        <label class="lbl">PIN</label>
+        <div class="pin-dots"><div class="pdot" id="ap0"></div><div class="pdot" id="ap1"></div><div class="pdot" id="ap2"></div><div class="pdot" id="ap3"></div></div>
+        <div class="pin-grid">
+          <button class="pb" onclick="aPin('1')">1</button><button class="pb" onclick="aPin('2')">2</button><button class="pb" onclick="aPin('3')">3</button>
+          <button class="pb" onclick="aPin('4')">4</button><button class="pb" onclick="aPin('5')">5</button><button class="pb" onclick="aPin('6')">6</button>
+          <button class="pb" onclick="aPin('7')">7</button><button class="pb" onclick="aPin('8')">8</button><button class="pb" onclick="aPin('9')">9</button>
+          <button class="pb sm" onclick="aPinCl()">Clear</button><button class="pb z" onclick="aPin('0')">0</button><button class="pb" onclick="aPinBk()">⌫</button>
+        </div>
+        <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
+        <div class="err" id="adm-err"></div>
+        <div style="text-align:center;margin-top:14px"><a href="janes-portal.html" style="font-size:12px;color:var(--ts);text-decoration:none">← Back to staff portal</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASH -->
+<div class="page z1" id="adm-dash" style="display:none;flex-direction:column">
+  <div class="adm-hdr">
+    <div class="adm-hdr-left">
+      <div class="adm-logo"><img src="data:image/avif;base64,AAAAHGZ0eXBhdmlmAAAAAG1pZjFhdmlmbWlhZgAAAXBtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA5waXRtAAAAAAABAAAANGlsb2MAAAAAREAAAgABAAAAAAGUAAEAAAAAAAAFOQACAAAAAAbNAAEAAAAAAAAA7wAAADhpaW5mAAAAAAACAAAAFWluZmUCAAAAAAEAAGF2MDEAAAAAFWluZmUCAAAAAAIAAGF2MDEAAAAAr2lwcnAAAACKaXBjbwAAAAxhdjFDgSACAAAAABRpc3BlAAAAAAAAADAAAAAxAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQAcAAAAAA5waXhpAAAAAAEIAAAAOGF1eEMAAAAAdXJuOm1wZWc6bXBlZ0I6Y2ljcDpzeXN0ZW1zOmF1eGlsaWFyeTphbHBoYQAAAAAdaXBtYQAAAAAAAAACAAEDgQIDAAIEhAIFhgAAABppcmVmAAAAAAAAAA5hdXhsAAIAAQABAAAGMG1kYXQSAAoJOBVvwYQENBpAMqkKFwAIIIIFAN0rQK+pIgd7wZTiGXkjQpGX1fQ+zbZ00LYeBbSmqgKvEPagL7BkKELy3keiMeFkcNV0NGGliwRHXBeFZC9UpfS/bupOhwpOx7limw2fT6YngTR2BGG8bv3hrsMWOTrMnTnTzewbX8GfSnALbQGagWMxsQ1KUfJN5w34ZtXmQix0UlgF/EG1K4AlQKYQSA6T77Q5q3H8ziKwAbq+7v4Uy5bCPc3hxOqJrrBa9z/4/tVxI8FDEijGowI37eAIi3Mj87dGpN2trbSDdRNLKIJSJgVGjrT8EF9RLpfSJmLcbglBjiXUsSj5LsUSeK1K73wpusXuYpgUdC7DZGTIFaEU0/7wpcM7LWiTzrmOwSGBU7kMvI8dPWRy1LgDWLfhP4mwLUW5VKzqV3O4NuGh3jWZ3Xy7P8okSr3JvsCVZnHuJcXSeu5mC6SNTweBs2F5CX8tZROzlSh7gA14Ay97WMqOstbQ5L1jluGxRKn0tNxjZUjVt3bCD/AtOig9NvloYKohSM2jxnRyLAim3Rh5IEmGmu3W0wzT6llozHgp1+uzzR7hARSFlksA+nCXXl2rDutqfUwhfe7P5yXOb/kK3sopIy41cWPhZG1a2Gkxoy+75omUOytEBqgQ+sQBvmvnklZOKbt6pYug8DXHkPWK0HHUT2DklgT5FhwgZl60bNMpmYVrPFWeTTPIl2Re+rtbqkVHJM0OP0HHIkOKOc18Ob8wFEEZy1Z4XkoSXn6mLeZ/PKAOdUT96gkwzxK2jwb6zhirQm1Uah6NYWXVkU2Chb35gZJPFdTsFoC6KeFAUqad3kGlD7rw4hLTOaLGoICJhrHHhK98QE6XW0cV1t7HX6WopEz48dcOZHGo63+R30OLaykQlPTjWZ840eUU0Bbc4/Wny9MuQ2GddMxkSsk8VieQI18oXWb+xAvcXUf1ZRqst5257q0GM3qcXCRj8O1/PNFfaMMZoae35EqPDb+DswFieqhDZImBJFjUbqJC5dEuE8vWJK60V9uRY5Qzrg51Yc21J2EpGj6MPJxYtIkQ0l7GYoUws+U+rFoXeWyWjhYMcyh9SdVzUjfDfsFrjQ/PFkg4h+7eHjNg6TfyTu1J7fpHxmbirwy1EM3EYoSuH26tz4Fdm25mdZlGwoIeP96d7eAipcgbJWMjklb+sYPDlkXEnkPy67Ad+34oNdLAg1l2dfhSgGp1oRqm20dwd28658NR7fXbpI5EwmtzLpTth6rxoCZvt/NOrJ3y74bzmzt6denFF8baPqgm2E8z68j0ozD54F/hu8GyFykpifmtUGUlAPk88KfyR7kxo+D8b0LN0zgeQk/9U0Wwpyq8Oaq4hyYUL5fpxrnEX1Qeq0SFnPGuOvP0CU37So+iFYvd+++WmKBRhnPhqlNQYsfM4De2UUpz/ahXb98xpQm+vMuHr8/uC7vahpU8N4sAAiDhA4GtWdrsOU7pUiIzraaktn9QnWxYYfxS6IuxMQI+9gQH8D3GikC1+GqGsYrw0x1pViwFsn9+pd128uUIjeFZzXrjnvugnQqVlrmTw5tE44ss4aP+zb9pu4DqZm4R8JsZdWNoRWNcTZ+Nxy/RKVsT+5ZtZTqjMi7xcEKA6EHU3WveBhmNDdtKP+hFr+OsE0a82rDy9Nuo52oMBFIaIuY+vkRti764lvn83U+4043AZmH7jLmYimw9R4emIgB9QRxvno705RwrYfUfS5L6YUk6x8a6BUtzgugVUYE8oLk+aSuysbeU0RhJaBIACgYYFW/BhUAy4gEXACCBQN0rhij/vMmTFpomDvslGNiDe33U61W/wfEUuOIMjvBsvn/erG+EHIjcV98DceKSvLr9kRLaK12veokMhuP0jmTsFuTl15P4rREp/lv4J9KFWxwOB4h93wYbO+EaQ1iqhHsj99gTSoFPRKgfXH1FlfA6yryelkefCetEp0lIqhJdYE5eGMzS0b2by8zuRXT32uzoYCxYtTfgtucaeYnXzg+03jcmeWQUi82U79Q/xjPxFoBeeMmDvDfwYZlWUeuXb539vp7PwN8Q3pJpITJPoYcc/lxe9ZeTBAo8LV4M" alt="J"></div>
+      <div class="adm-title">Jane's <em>Admin</em></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <a href="janes-portal.html" class="btn ghost xs">← Portal</a>
+      <button class="btn danger xs" onclick="adminLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="adm-body">
+    <!-- TABS -->
+    <div class="tabs-wrap" style="margin-bottom:20px">
+      <div class="tab adm-tab on" onclick="switchAdmTab(0)">📋 Schedule Editor</div>
+      <div class="tab adm-tab" onclick="switchAdmTab(1)">📊 Week Overview</div>
+      <div class="tab adm-tab" onclick="switchAdmTab(2)">🕐 Shift History</div>
+    </div>
+
+    <!-- TAB 0: SCHEDULE EDITOR -->
+    <div class="adm-tc on" id="adm-tc-0">
+      <div style="display:grid;grid-template-columns:1fr;gap:16px">
+        <!-- People list -->
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Select Staff Member</div>
+          <div id="people-list"></div>
+        </div>
+        <!-- Person calendar + editor -->
+        <div id="person-schedule-panel" style="display:none">
+          <div class="adm-cal-wrap">
+            <div class="adm-cal-nav">
+              <button onclick="admCalNav(-1)">‹</button>
+              <div>
+                <div class="adm-cal-label" id="adm-cal-label">--</div>
+                <div style="font-size:11px;color:var(--pk);font-weight:700;text-align:center" id="ps-name">--</div>
+              </div>
+              <button onclick="admCalNav(1)">›</button>
+            </div>
+            <div style="margin-bottom:12px" id="ps-wt"></div>
+            <div class="adm-cal-grid" id="adm-cal-grid"></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot open"></div>Opening</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot close"></div>Closing</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot cafe"></div>Cafe</div>
+              <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><div class="adm-day-dot bakery"></div>Bakery</div>
+            </div>
+          </div>
+          <!-- Shift editor -->
+          <div class="shift-editor" id="shift-editor" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 1: WEEK OVERVIEW -->
+    <div class="adm-tc" id="adm-tc-1" style="display:none">
+      <div class="card" style="overflow-x:auto">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">This Week — All Staff</div>
+        <div id="week-overview" style="min-width:500px"></div>
+      </div>
+    </div>
+
+    <!-- TAB 2: HISTORY -->
+    <div class="adm-tc" id="adm-tc-2" style="display:none">
+      <div class="card" style="overflow-x:auto">
+        <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:16px">Shift History — All Staff</div>
+        <table class="hist-table">
+          <thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Station</th><th>Hours</th><th>Role</th></tr></thead>
+          <tbody id="all-hist"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════
+// JANES DATA LAYER v3 — localStorage backed, future-safe
+// ═══════════════════════════════════════════════════════
+const DB_VERSION = 3;
+const DB_KEY = 'janes_db_v3';
+
+const DEFAULT_STAFF = {
+  Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
+  Kate:   {pin:'2222',role:'Budtender',admin:false,owner:false},
+  Jamal:  {pin:'1111',role:'Budtender',admin:true, owner:false},
+  JP:     {pin:'4444',role:'Chef',     admin:false,owner:false},
+  Josh:   {pin:'5555',role:'Owner',    admin:true, owner:true},
+  Eva:    {pin:'6666',role:'Owner',    admin:true, owner:true},
+  Charlet:{pin:'7777',role:'Owner',    admin:true, owner:true}
+};
+
+// Default schedules: {type:'open'|'close', station:'cafe'|'bakery'} or null per day Mon-Sun
+const DEFAULT_SCHEDULES = {
+  Panashe: [{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'close',station:'bakery'},{type:'close',station:'bakery'},{type:'open',station:'cafe'},null],
+  Kate:    [null,{type:'open',station:'cafe'},{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,{type:'close',station:'cafe'},{type:'close',station:'cafe'}],
+  Jamal:   [{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,null],
+  JP:      [{type:'close',station:'bakery'},null,{type:'open',station:'bakery'},{type:'open',station:'bakery'},{type:'close',station:'bakery'},null,{type:'open',station:'bakery'}],
+  Josh:    [{type:'open',station:'cafe'},{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'open',station:'cafe'},{type:'open',station:'cafe'},null],
+  Eva:     [{type:'open',station:'cafe'},{type:'open',station:'cafe'},{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,null,null],
+  Charlet: [{type:'open',station:'bakery'},{type:'open',station:'bakery'},null,{type:'close',station:'cafe'},{type:'close',station:'cafe'},{type:'open',station:'cafe'},null]
+};
+
+const SHIFT_TIMES = {
+  5:{open:{s:'07:30',e:'16:30'},close:{s:'09:30',e:'19:00'}},
+  6:{open:{s:'07:30',e:'15:30'},close:{s:'11:00',e:'19:00'}}
+};
+const SAT_OPEN={s:'09:30',e:'15:30'}, SAT_CLOSE={s:'09:30',e:'19:00'};
+
+function getShiftTimes(wt, type, di) {
+  if(di===5) return type==='open'?SAT_OPEN:SAT_CLOSE;
+  const t=SHIFT_TIMES[wt]||SHIFT_TIMES[5];
+  return t[type]||t.open;
+}
+
+// ── DB init / load ──
+function loadDB() {
+  try {
+    const raw = localStorage.getItem(DB_KEY);
+    if(raw) {
+      const db = JSON.parse(raw);
+      if(db.version === DB_VERSION) return db;
+    }
+  } catch(e) {}
+  return initDB();
+}
+
+function initDB() {
+  const db = {
+    version: DB_VERSION,
+    staff: {},        // pin, admin, owner, role, pic, weekType
+    schedules: {},    // schedules[nm][weekKey] = [{type,station}|null] x7
+    defaultSched: {}, // schedules[nm] = [...] weekly default
+    events: [],       // planner events
+    duties: [],       // duty list
+    personalTasks: {},// personalTasks[nm][dateStr] = [{id,text,done}]
+    shiftHistory: {}, // shiftHistory[nm] = [{date,type,station,role,hours}]
+    notes: {}         // notes[nm] = [{id,date,text}]
+  };
+  // Seed staff
+  Object.entries(DEFAULT_STAFF).forEach(([nm,info])=>{
+    db.staff[nm] = {...info, weekType:info.role==='Chef'||info.owner?6:5, pic:null};
+    db.defaultSched[nm] = JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+    db.schedules[nm] = {};
+    db.personalTasks[nm] = {};
+    db.shiftHistory[nm] = [];
+  });
+  saveDB(db);
+  return db;
+}
+
+function saveDB(db) {
+  try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) { console.warn('DB save failed',e); }
+}
+
+// ── Schedule helpers ──
+function weekKey(mon) {
+  return `${mon.getFullYear()}-${String(mon.getMonth()+1).padStart(2,'0')}-${String(mon.getDate()).padStart(2,'0')}`;
+}
+
+function getWeekSched(db, nm, mon) {
+  const wk = weekKey(mon);
+  return db.schedules[nm][wk] || db.defaultSched[nm] || Array(7).fill(null);
+}
+
+function setWeekSched(db, nm, mon, sched) {
+  const wk = weekKey(mon);
+  db.schedules[nm][wk] = sched;
+  saveDB(db);
+}
+
+function resolveShift(db, nm, mon, di) {
+  const sched = getWeekSched(db, nm, mon);
+  const entry = sched[di];
+  if(!entry||!entry.type) return null;
+  const wt = db.staff[nm].weekType || 5;
+  const t = getShiftTimes(wt, entry.type, di);
+  return {s:t.s, e:t.e, role:db.staff[nm].role, tag:entry.type, station:entry.station||null};
+}
+
+// ── Utilities ──
+function hDiff(s,e){const[sh,sm]=s.split(':').map(Number),[eh,em]=e.split(':').map(Number);return Math.round(((eh*60+em)-(sh*60+sm))/60*10)/10}
+function cap(s){return s?s[0].toUpperCase()+s.slice(1):''}
+function fmt12(t){const[h,m]=t.split(':').map(Number);const ap=h>=12?'pm':'am';const hh=h%12||12;return `${hh}:${m.toString().padStart(2,'0')}${ap}`}
+function getMon(off){const t=new Date(),dow=t.getDay(),mo=dow===0?-6:1-dow,m=new Date(t);m.setDate(t.getDate()+mo+(off*7));return m}
+function fmtDate(d){return `${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}`}
+function dateStr(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const FDAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function stationChip(station){
+  if(!station)return '';
+  return `<span class="station-chip ${station}">${station==='cafe'?'☕ Cafe':'🥐 Bakery'}</span>`;
+}
+
+function recordShiftHistory(db, nm, date, shift) {
+  if(!db.shiftHistory[nm]) db.shiftHistory[nm]=[];
+  const entry={id:Date.now().toString(),date:dateStr(date),type:shift.tag,station:shift.station,role:shift.role,hours:hDiff(shift.s,shift.e)};
+  // avoid duplicates for same date
+  db.shiftHistory[nm]=db.shiftHistory[nm].filter(h=>h.date!==entry.date);
+  db.shiftHistory[nm].unshift(entry);
+  // keep last 365 entries
+  if(db.shiftHistory[nm].length>365) db.shiftHistory[nm]=db.shiftHistory[nm].slice(0,365);
+  saveDB(db);
+}
+
+
+let db, adminUser=null, adminPin='', selectedPerson=null, admCalOff=0, selectedDate=null;
+
+function initAdmin(){
+  db=loadDB();
+  tryAdminAutoLogin();
+}
+
+function tryAdminAutoLogin(){
+  const s=sessionStorage.getItem('janes_admin');
+  if(s&&db.staff[s]&&db.staff[s].admin){adminUser=s;buildAdminDash();}
+}
+
+function aPin(d){if(adminPin.length>=4)return;adminPin+=d;aDots();if(adminPin.length===4)setTimeout(doAdminLogin,260)}
+function aPinBk(){adminPin=adminPin.slice(0,-1);aDots()}
+function aPinCl(){adminPin='';aDots()}
+function aDots(){for(let i=0;i<4;i++)document.getElementById('ap'+i).classList.toggle('on',i<adminPin.length)}
+
+function doAdminLogin(){
+  const nm=document.getElementById('adm-sel-nm').value;
+  if(!nm){showAErr('Select your name');return}
+  if(adminPin.length<4){showAErr('Enter your PIN');return}
+  const s=db.staff[nm];
+  if(!s||s.pin!==adminPin){showAErr('Incorrect PIN');adminPin='';aDots();const c=document.querySelector('.l-card');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');return;}
+  if(!s.admin){showAErr('Admin access only');adminPin='';aDots();return;}
+  adminUser=nm;sessionStorage.setItem('janes_admin',nm);buildAdminDash();
+}
+function showAErr(m){const e=document.getElementById('adm-err');e.textContent=m;e.style.display='block'}
+function adminLogout(){adminUser=null;adminPin='';aDots();document.getElementById('adm-sel-nm').value='';sessionStorage.removeItem('janes_admin');showAdmPage('adm-login')}
+
+function buildAdminDash(){
+  showAdmPage('adm-dash');
+  renderPeopleList();
+  renderWeekOverview();
+  if(selectedPerson)renderPersonCalendar();
+}
+
+function showAdmPage(id){document.querySelectorAll('.adm-page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0)}
+
+function switchAdmTab(n){
+  document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
+  document.querySelectorAll('.adm-tc').forEach((t,i)=>t.classList.toggle('on',i===n));
+  if(n===0)renderPeopleList();
+  if(n===1)renderWeekOverview();
+  if(n===2)renderAllHistory();
+}
+
+// PEOPLE LIST
+function renderPeopleList(){
+  const el=document.getElementById('people-list');
+  el.innerHTML=Object.entries(db.staff).map(([nm,v])=>{
+    const pic=v.pic;
+    const bc=v.owner?'badge owner':v.admin?'badge admin':(v.role==='Chef'?'badge chef':'badge budtender');
+    const bl=v.owner?'Owner':v.admin?'Admin':(v.role||'Staff');
+    const wt=v.weekType||5;
+    const shifts=db.defaultSched[nm].filter(x=>x).length;
+    return `<button class="person-btn${selectedPerson===nm?' active':''}" onclick="selectPerson('${nm}')">
+      <div class="person-btn-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
+      <div class="person-btn-info">
+        <div class="person-btn-name">${nm}</div>
+        <div class="person-btn-role"><span class="${bc}">${bl}</span></div>
+      </div>
+      <div class="person-btn-meta">${wt}-day week · ${shifts} shifts/wk</div>
+    </button>`;
+  }).join('');
+}
+
+function selectPerson(nm){
+  selectedPerson=nm;selectedDate=null;
+  renderPeopleList();
+  renderPersonCalendar();
+  document.getElementById('person-schedule-panel').style.display='block';
+  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
+}
+
+// PERSON CALENDAR
+function renderPersonCalendar(){
+  if(!selectedPerson)return;
+  const nm=selectedPerson,v=db.staff[nm];
+  document.getElementById('ps-name').textContent=nm;
+  document.getElementById('ps-wt').innerHTML=`<button class="wt-btn${v.weekType===5?' active':''}" onclick="setWT('${nm}',5)">5-day</button><button class="wt-btn${v.weekType===6?' active':''}" onclick="setWT('${nm}',6)">6-day</button>`;
+
+  const today=new Date();
+  const d=new Date(today.getFullYear(),today.getMonth()+admCalOff,1);
+  const yr=d.getFullYear(),mo=d.getMonth();
+  document.getElementById('adm-cal-label').textContent=`${MO[mo]} ${yr}`;
+  const firstDow=(new Date(yr,mo,1).getDay()+6)%7;
+  const daysInMonth=new Date(yr,mo+1,0).getDate();
+  let html='';
+  ['M','T','W','T','F','S','S'].forEach(x=>{html+=`<div class="adm-cal-head">${x}</div>`});
+  for(let i=0;i<firstDow;i++)html+=`<div class="adm-cal-day empty"></div>`;
+  for(let day=1;day<=daysInMonth;day++){
+    const cellDate=new Date(yr,mo,day);
+    const di=(cellDate.getDay()+6)%7;
+    const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
+    const s=resolveShift(db,nm,cellMon,di);
+    const ds=dateStr(cellDate);
+    const isToday=cellDate.toDateString()===today.toDateString();
+    const isSel=selectedDate===ds;
+    let dots='';
+    if(s){dots+=`<div class="adm-day-dot ${s.tag}"></div>`;if(s.station)dots+=`<div class="adm-day-dot ${s.station}"></div>`;}
+    const infoText=s?`${fmt12(s.s).replace(':00','')}–${fmt12(s.e).replace(':00','')}`:'Off';
+    const stText=s&&s.station?s.station:'';
+    html+=`<div class="adm-cal-day${isToday?' today':''}${s?' has-shift':''}${isSel?' selected':''}" onclick="selectDay('${ds}','${nm}',${di})">
+      <div class="adm-day-num">${day}</div>
+      <div class="adm-day-info" style="color:${s?'var(--t)':'var(--tm)'}">${infoText}</div>
+      <div class="adm-day-info" style="color:${s&&s.station==='cafe'?'var(--cafe)':s&&s.station==='bakery'?'var(--bakery)':'var(--tm)'}">${stText}</div>
+      <div class="adm-day-dot-row">${dots}</div>
+    </div>`;
+  }
+  document.getElementById('adm-cal-grid').innerHTML=html;
+  if(selectedDate)renderShiftEditor(selectedPerson,selectedDate);
+}
+
+function admCalNav(d){admCalOff+=d;renderPersonCalendar()}
+function setWT(nm,wt){db.staff[nm].weekType=wt;saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} set to ${wt}-day week ✓`)}
+
+function selectDay(ds,nm,di){
+  selectedDate=ds;
+  renderPersonCalendar();
+  renderShiftEditor(nm,ds,di);
+}
+
+function renderShiftEditor(nm,ds,di){
+  const dateObj=new Date(ds+'T12:00:00');
+  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
+  const wkKey=weekKey(cellMon);
+  // Get the week sched (or default)
+  const weekSched=db.schedules[nm][wkKey]?[...db.schedules[nm][wkKey]]:[...db.defaultSched[nm]];
+  const entry=weekSched[di];
+  const wt=db.staff[nm].weekType||5;
+  const shiftTimes=getShiftTimes(wt,entry?entry.type:'open',di);
+  const dow=(dateObj.getDay()+6)%7;
+  const el=document.getElementById('shift-editor');
+  const d=dateObj;
+  el.innerHTML=`<div class="shift-editor-title">
+    ✏️ ${FDAYS[dow]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}
+    <span style="font-size:11px;color:var(--ts);font-family:'Inter',sans-serif;font-weight:600">${nm}</span>
+  </div>
+  <div style="font-size:11px;color:var(--ts);margin-bottom:12px;background:var(--s2);border:1px solid var(--bd);border-radius:8px;padding:10px;line-height:1.7">
+    <strong style="color:var(--t)">${wt}-day week:</strong><br>
+    Opening: ${SHIFT_TIMES[wt].open.s} – ${SHIFT_TIMES[wt].open.e}${di===5?' (Sat: 9:30am)':''}<br>
+    Closing: ${SHIFT_TIMES[wt].close.s} – ${SHIFT_TIMES[wt].close.e}
+  </div>
+  <div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Shift Type</div>
+  <div class="shift-toggle-row">
+    <div class="shift-type-btn${entry&&entry.type==='open'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'open','${entry?entry.station:'cafe'}')">🌅 Opening</div>
+    <div class="shift-type-btn${entry&&entry.type==='close'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'close','${entry?entry.station:'cafe'}')">🌙 Closing</div>
+    <div class="shift-type-btn${!entry?' active-off':''}" onclick="setShiftDayOff('${nm}','${ds}',${di})">🚫 Day Off</div>
+  </div>
+  ${entry?`<div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Station</div>
+  <div class="shift-toggle-row">
+    <div class="shift-type-btn${entry&&entry.station==='cafe'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','cafe')" style="${entry&&entry.station==='cafe'?'background:rgba(126,212,255,.2);border-color:var(--cafe);color:var(--cafe)':''}">☕ Cafe</div>
+    <div class="shift-type-btn${entry&&entry.station==='bakery'?' active':''}" onclick="setShiftDay('${nm}','${ds}',${di},'${entry.type}','bakery')" style="${entry&&entry.station==='bakery'?'background:rgba(255,179,71,.2);border-color:var(--bakery);color:var(--bakery)':''}">🥐 Bakery</div>
+  </div>
+  <div class="shift-detail-box">
+    <div class="shift-detail-row"><span class="shift-detail-label">Start time</span><span class="shift-detail-val">${fmt12(shiftTimes.s)}</span></div>
+    <div class="shift-detail-row"><span class="shift-detail-label">End time</span><span class="shift-detail-val">${fmt12(shiftTimes.e)}</span></div>
+    <div class="shift-detail-row"><span class="shift-detail-label">Duration</span><span class="shift-detail-val">${hDiff(shiftTimes.s,shiftTimes.e)}h</span></div>
+    <div class="shift-detail-row"><span class="shift-detail-label">Station</span><span class="shift-detail-val">${entry.station==='cafe'?'☕ Cafe':'🥐 Bakery'}</span></div>
+  </div>`:'<div style="text-align:center;padding:20px;color:var(--ts);font-size:13px">Day Off — tap Opening or Closing to schedule</div>'}`;
+  el.style.display='block';
+}
+
+function setShiftDay(nm,ds,di,type,station){
+  const dateObj=new Date(ds+'T12:00:00');
+  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
+  const wkKey=weekKey(cellMon);
+  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
+  db.schedules[nm][wkKey][di]={type,station};
+  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to ${type} · ${station} ✓`);
+}
+function setShiftDayOff(nm,ds,di){
+  const dateObj=new Date(ds+'T12:00:00');
+  const cellMon=new Date(dateObj);cellMon.setDate(dateObj.getDate()-di);
+  const wkKey=weekKey(cellMon);
+  if(!db.schedules[nm][wkKey])db.schedules[nm][wkKey]=[...db.defaultSched[nm]];
+  db.schedules[nm][wkKey][di]=null;
+  saveDB(db);renderPersonCalendar();renderWeekOverview();toast(`${nm} ${DAYS[di]} set to off ✓`);
+}
+
+// WEEK OVERVIEW (all staff)
+function renderWeekOverview(){
+  const today=new Date();
+  const mon=getMon(0);
+  // headers
+  let hHtml=`<div class="overview-row"><div class="ov-name" style="font-size:9px;color:var(--tm);font-weight:700;text-transform:uppercase;letter-spacing:.08em">Staff</div>`;
+  for(let i=0;i<7;i++){
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const isT=d.toDateString()===today.toDateString();
+    hHtml+=`<div class="adm-day-head" style="${isT?'color:var(--pk)':''}">${DAYS[i]}<br><span style="font-size:8px">${d.getDate()}</span></div>`;
+  }
+  hHtml+=`</div>`;
+  let rows='';
+  Object.entries(db.staff).forEach(([nm,v])=>{
+    const pic=v.pic;
+    rows+=`<div class="overview-row">
+      <div class="ov-name" style="display:flex;align-items:center;gap:6px">
+        <div style="width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:10px;color:#fff;overflow:hidden;flex-shrink:0">${pic?`<img src="${pic}" style="width:100%;height:100%;object-fit:cover">`:`${nm[0]}`}</div>
+        <span style="font-size:11px;font-weight:700;color:var(--t)">${nm}</span>
+      </div>`;
+    for(let i=0;i<7;i++){
+      const d=new Date(mon);d.setDate(mon.getDate()+i);
+      const isT=d.toDateString()===today.toDateString();
+      const s=resolveShift(db,nm,mon,i);
+      rows+=`<div class="ov-cell${isT?' today-col':''}${s?` shift-${s.tag}`:' shift-off'}" onclick="selectPersonDay('${nm}',${i})">
+        ${s?`<div style="font-size:8px;font-weight:800;color:${s.tag==='open'?'var(--y)':'#c084fc'}">${cap(s.tag)}</div><div style="font-size:8px;color:${s.station==='cafe'?'var(--cafe)':'var(--bakery)'}">${s.station||''}</div>`:'<div style="font-size:9px;color:var(--tm)">Off</div>'}
+      </div>`;
+    }
+    rows+=`</div>`;
+  });
+  document.getElementById('week-overview').innerHTML=hHtml+rows;
+}
+
+function selectPersonDay(nm,di){
+  selectedPerson=nm;
+  const mon=getMon(0);
+  const d=new Date(mon);d.setDate(mon.getDate()+di);
+  selectedDate=dateStr(d);
+  switchAdmTab(0);
+  renderPeopleList();
+  renderPersonCalendar();
+  document.getElementById('person-schedule-panel').style.display='block';
+  document.getElementById('person-schedule-panel').scrollIntoView({behavior:'smooth'});
+}
+
+// ALL HISTORY
+function renderAllHistory(){
+  const el=document.getElementById('all-hist');
+  let rows='';
+  Object.entries(db.shiftHistory).forEach(([nm,hist])=>{
+    if(!hist||!hist.length)return;
+    hist.slice(0,20).forEach(h=>{
+      const d=new Date(h.date+'T12:00:00');
+      rows+=`<tr><td>${nm}</td><td>${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}</td><td><span class="chip ${h.type}">${cap(h.type)}</span></td><td>${h.station?stationChip(h.station):'-'}</td><td>${h.hours}h</td><td>${h.role}</td></tr>`;
+    });
+  });
+  el.innerHTML=rows||`<tr><td colspan="6" style="text-align:center;color:var(--ts);padding:20px">No history recorded yet</td></tr>`;
+}
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2600)}
+
+// ANIMATED BG
+(function(){
+  const c=document.getElementById('bg-canvas'),ctx=c.getContext('2d');let W,H,pts=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}resize();window.addEventListener('resize',resize);
+  class P{constructor(){this.reset()}reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.2+.3;this.a=Math.random()*Math.PI*2;this.sp=Math.random()*.2+.06;this.op=Math.random()*.22+.05}draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(233,30,140,${this.op})`;ctx.fill()}update(){this.x+=Math.cos(this.a)*this.sp;this.y+=Math.sin(this.a)*this.sp;this.a+=.006;if(this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset()}}
+  for(let i=0;i<45;i++)pts.push(new P());
+  const orbs=[{x:.8,y:.15,r:280,c:'rgba(233,30,140,0.045)'},{x:.1,y:.85,r:220,c:'rgba(136,14,79,0.034)'},{x:.5,y:.5,r:180,c:'rgba(233,30,140,0.023)'}];
+  function frame(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,o.r);g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(frame)}
+  frame();
+})();
+
+// Fix tab display
+document.querySelectorAll('.adm-tc').forEach((t,i)=>{t.style.display=i===0?'block':'none'});
+document.querySelector('#adm-dash').style.display='none';
+
+function switchAdmTab(n){
+  document.querySelectorAll('.adm-tab').forEach((t,i)=>t.classList.toggle('on',i===n));
+  document.querySelectorAll('.adm-tc').forEach((t,i)=>t.style.display=i===n?'block':'none');
+  if(n===0){renderPeopleList();if(selectedPerson)renderPersonCalendar();}
+  if(n===1)renderWeekOverview();
+  if(n===2)renderAllHistory();
+}
+
+function showAdmPage(id){
+  document.getElementById('adm-login').classList.remove('on');document.getElementById('adm-login').style.display='none';
+  document.getElementById('adm-dash').classList.add('on');document.getElementById('adm-dash').style.display='flex';
+  if(id==='adm-login'){document.getElementById('adm-login').style.display='flex';document.getElementById('adm-dash').style.display='none';}
+}
+
+initAdmin();
+</script>
+</body>
+</html>
