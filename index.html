@@ -389,7 +389,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       </div>
       <div class="divider"></div>
       <div id="admin-portal-btn-wrap" style="display:none;margin-bottom:12px">
-        <a id="admin-portal-btn" href="admin.html" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
+        <a id="admin-portal-btn" href="admin.html" onclick="event.preventDefault();openAdminPortal()" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
           ⚙️ Open Admin Portal
         </a>
       </div>
@@ -403,8 +403,8 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 // ═══════════════════════════════════════════════════════
 // JANES DATA LAYER v3 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
-const DB_VERSION = 4;
-const DB_KEY = 'janes_db_v4';
+const DB_VERSION = 5;
+const DB_KEY = 'janes_db_v5';
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
@@ -609,7 +609,7 @@ function buildDash(){
   switchTab(0);showPage('pg-dash');
   // Show admin button for admins immediately on login
   const aw=document.getElementById('admin-portal-btn-wrap');
-  if(aw)aw.style.display=(db.staff[me]&&db.staff[me].admin)?'block':'none';
+  if(aw)aw.style.display=(db.staff[me]&&db.staff[me].admin===true)?'block':'none';
   toast(`Welcome back, ${me}! 💕`);
 }
 
@@ -907,16 +907,16 @@ function renderProfile(){
   const mon=getMon(0);
   const sc=db.defaultSched[me].filter(x=>x).length;
   const hrs=Array(7).fill(0).reduce((a,_,i)=>{const sh=resolveShift(db,me,mon,i);return a+(sh?hDiff(sh.s,sh.e):0)},0);
-  const roleLabel=s.owner?s.role||'Owner':s.admin?`${s.role||'Staff'} · Admin`:(s.role||'Staff');
+  const roleLabel=s.role||'Staff';
   document.getElementById('prof-role').textContent=roleLabel;
   document.getElementById('prof-name').textContent=me;
   document.getElementById('prof-stats-grid').innerHTML=`
     <div class="info-item"><div class="iv">${sc}</div><div class="il">Shifts / Week</div></div>
     <div class="info-item"><div class="iv">${hrs}h</div><div class="il">Hours / Week</div></div>`;
   setAv('prof-av',me);document.getElementById('hdr-nm').textContent=me;
-  // Show admin portal button for admins only
+  // Admin portal button — only for admins, never visible to regular staff
   const adminWrap=document.getElementById('admin-portal-btn-wrap');
-  if(adminWrap)adminWrap.style.display=s.admin?'block':'none';
+  if(adminWrap)adminWrap.style.display=(s&&s.admin===true)?'block':'none';
   renderHistory();
 }
 function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
@@ -949,6 +949,13 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
   function frame(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{const g=ctx.createRadialGradient(o.x*W,o.y*H,0,o.x*W,o.y*H,o.r);g.addColorStop(0,o.c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)});pts.forEach(p=>{p.update();p.draw()});requestAnimationFrame(frame)}
   frame();
 })();
+
+function openAdminPortal(){
+  // Navigate to admin.html relative to current page
+  const base=window.location.href.replace(/index\.html.*$/,'').replace(/janes-portal\.html.*$/,'');
+  window.location.href=base+'admin.html';
+}
+
 init();
 </script>
 </body>
