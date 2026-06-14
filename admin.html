@@ -332,7 +332,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
       <div class="err" id="adm-err" style="display:none"></div>
       <div style="text-align:center;margin-top:16px">
-        <button onclick="goBackToPortal()" style="font-size:12px;color:var(--ts);background:none;border:none;cursor:pointer">← Back to staff portal</button>
+        <button onclick="window.location.href='janes-portal.html'" style="font-size:12px;color:var(--ts);background:none;border:none;cursor:pointer">← Back to staff portal</button>
       </div>
     </div>
   </div>
@@ -346,7 +346,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <div class="adm-title">Jane's <em>Admin</em></div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button onclick="goBackToPortal()" class="btn ghost xs">← Portal</button>
+      <button onclick="window.location.href='janes-portal.html'" class="btn ghost xs">← Portal</button>
       <button class="btn danger xs" onclick="adminLogout()">Sign Out</button>
     </div>
   </div>
@@ -479,17 +479,17 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 <script>
 
 // ═══════════════════════════════════════════════════════
-// JANES DATA LAYER v3 — localStorage backed, future-safe
+// JANES DATA LAYER v6 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
-const DB_VERSION = 5;
-const DB_KEY = 'janes_db_v5';
+const DB_VERSION = 6;
+const DB_KEY = 'janes_db_v6';
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
   Kate:   {pin:'2222',role:'Budtender',admin:false,owner:false},
   Jamal:  {pin:'1111',role:'Budtender',admin:true, owner:false},
   JP:     {pin:'4444',role:'Chef',     admin:false,owner:false},
-  Josh:   {pin:'5555',role:'Owner',    admin:true, owner:true},
+  Josh:   {pin:'5555',role:'Manager',  admin:true, owner:true},
   Eva:    {pin:'6666',role:'Owner',    admin:true, owner:true},
   Charlet:{pin:'7777',role:'Owner',    admin:true, owner:true}
 };
@@ -519,6 +519,11 @@ function getShiftTimes(wt, type, di) {
 
 // ── DB init / load ──
 function loadDB() {
+  // Clear ALL old version keys so stale data never loads
+  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
+   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
+    try{localStorage.removeItem(k);}catch(e){}
+  });
   try {
     const raw = localStorage.getItem(DB_KEY);
     if(raw) {
@@ -617,6 +622,11 @@ let draftSched = {}; // draftSched[di] = {type,station} or null
 let draftWT = 5; // draft week type
 
 function initAdmin(){
+  // Nuke stale data from old versions
+  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
+   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
+    try{localStorage.removeItem(k);}catch(e){}
+  });
   db=loadDB();
   tryAdminAutoLogin();
 }
@@ -729,9 +739,8 @@ function removeEmployee(nm){
 }
 
 function goBackToPortal(){
-  // Works on GitHub Pages and any host — just go to janes-portal.html in same folder
-  const base=window.location.href.replace(/[^/]*$/, '');
-  window.location.href=base+'janes-portal.html';
+  // Simplest possible — relative link, works everywhere
+  window.location.href='janes-portal.html';
 }
 
 function buildAdminDash(){
