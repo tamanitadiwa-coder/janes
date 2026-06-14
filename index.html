@@ -400,10 +400,10 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 <script>
 
 // ═══════════════════════════════════════════════════════
-// JANES DATA LAYER v3 — localStorage backed, future-safe
+// JANES DATA LAYER v6 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
-const DB_VERSION = 5;
-const DB_KEY = 'janes_db_v5';
+const DB_VERSION = 6;
+const DB_KEY = 'janes_db_v6';
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
@@ -440,6 +440,11 @@ function getShiftTimes(wt, type, di) {
 
 // ── DB init / load ──
 function loadDB() {
+  // Clear ALL old version keys so stale data never loads
+  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
+   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
+    try{localStorage.removeItem(k);}catch(e){}
+  });
   try {
     const raw = localStorage.getItem(DB_KEY);
     if(raw) {
@@ -536,6 +541,11 @@ let db, me=null, pinVal='', myWk=0, teamWk=0, lockPin='', lockClockInterval=null
 let calOff=0, activeEvFilter='all';
 
 function init(){
+  // Clear ALL stale data from old DB versions
+  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
+   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
+    try{localStorage.removeItem(k);}catch(e){}
+  });
   db=loadDB();
   tryAutoLogin();
   populateStaffSelect();
