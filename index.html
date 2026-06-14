@@ -270,8 +270,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <label class="lbl">Your name</label>
         <select id="sel-nm">
           <option value="">— Select —</option>
-          <option>Panashe</option><option>Kate</option><option>Jamal</option>
-          <option>JP</option><option>Josh</option><option>Eva</option><option>Charlet</option>
+          <!-- populated dynamically by populateStaffSelect() -->
         </select>
         <label class="lbl">PIN</label>
         <div class="pin-dots"><div class="pdot" id="p0"></div><div class="pdot" id="p1"></div><div class="pdot" id="p2"></div><div class="pdot" id="p3"></div></div>
@@ -539,6 +538,27 @@ let calOff=0, activeEvFilter='all';
 function init(){
   db=loadDB();
   tryAutoLogin();
+  populateStaffSelect();
+  // Listen for admin saves — update db in real time
+  window.addEventListener('storage', function(e){
+    if(e.key===DB_KEY){
+      db=loadDB();
+      populateStaffSelect();
+      // Re-render current visible tab
+      const activeTab=document.querySelector('.tab.on');
+      if(activeTab){
+        const tabs=Array.from(document.querySelectorAll('.tab'));
+        const n=tabs.indexOf(activeTab);
+        if(n>=0){
+          if(n===0)renderMyShifts();
+          if(n===1)renderTeam();
+          if(n===2)renderCalendar();
+          if(n===3)renderPlanner();
+          if(n===4)renderProfile();
+        }
+      }
+    }
+  });
 }
 
 function tryAutoLogin(){
@@ -561,6 +581,14 @@ function doUnlock(){
   if(!me){showPage('pg-login');return}
   if(db.staff[me].pin!==lockPin){lockPin='';ldots();const lc=document.querySelector('.lock-content');lc.classList.remove('shake');void lc.offsetWidth;lc.classList.add('shake');return;}
   lockPin='';ldots();showPage('pg-dash');
+}
+
+function populateStaffSelect(){
+  const sel=document.getElementById('sel-nm');
+  if(!sel)return;
+  const current=sel.value;
+  const names=Object.keys(db.staff).sort();
+  sel.innerHTML='<option value="">— Select —</option>'+names.map(n=>`<option${n===current?' selected':''}>${n}</option>`).join('');
 }
 
 function doLogin(){
