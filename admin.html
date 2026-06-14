@@ -360,11 +360,63 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 
     <!-- SCHEDULE EDITOR -->
     <div class="adm-tc on" id="adm-tc-0">
-      <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Select Staff Member</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ts)">Staff Members</div>
+        <button class="btn primary xs" onclick="openAddEmployee()">+ Add Employee</button>
+      </div>
       <div id="people-list"></div>
+      <!-- Add Employee Form -->
+      <div id="add-employee-form" style="display:none;background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="font-family:'Fredoka One',cursive;font-size:16px;margin-bottom:14px">New Employee</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <input type="text" id="new-emp-name" placeholder="Full name" style="background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;width:100%" onfocus="this.style.borderColor='var(--pk)'" onblur="this.style.borderColor='var(--bd)'">
+          <select id="new-emp-role" style="background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;width:100%;appearance:none">
+            <option value="Budtender">Budtender</option>
+            <option value="Chef">Chef</option>
+            <option value="Manager">Manager</option>
+            <option value="Owner">Owner</option>
+          </select>
+          <input type="password" id="new-emp-pin" placeholder="4-digit PIN" maxlength="4" style="background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;width:100%" onfocus="this.style.borderColor='var(--pk)'" onblur="this.style.borderColor='var(--bd)'">
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn primary sm-btn full" onclick="saveNewEmployee()">Save Employee</button>
+            <button class="btn ghost sm-btn" onclick="closeAddEmployee()">Cancel</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Person Editor Panel -->
       <div id="person-editor-panel" style="display:none;margin-top:4px">
+        <!-- Person Actions Bar -->
+        <div id="person-actions-bar" style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px 14px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div style="flex:1">
+              <div id="editor-person-name" style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--t)">--</div>
+              <div id="editor-person-role" style="font-size:11px;color:var(--ts);margin-top:2px">--</div>
+            </div>
+            <button class="btn ghost xs" onclick="openChangePosition(selPerson)" style="white-space:nowrap">✏️ Position</button>
+            <button class="btn danger xs" onclick="removeEmployee(selPerson)" style="white-space:nowrap">🗑 Remove</button>
+          </div>
+          <!-- Change Position Panel (hidden by default) -->
+          <div id="change-position-panel" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--bd)">
+            <div style="font-size:11px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Change Position</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <select id="pos-select" style="background:var(--s1);border:1px solid var(--bd);border-radius:8px;color:var(--t);font-family:'Inter',sans-serif;font-size:13px;padding:10px 14px;outline:none;width:100%;appearance:none">
+                <option value="Budtender">Budtender</option>
+                <option value="Chef">Chef</option>
+                <option value="Manager">Manager</option>
+                <option value="Owner">Owner</option>
+              </select>
+              <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ts);cursor:pointer">
+                <input type="checkbox" id="pos-admin-check" style="accent-color:var(--pk);width:16px;height:16px">
+                Has admin / schedule editing access
+              </label>
+              <div style="display:flex;gap:8px">
+                <button class="btn primary sm-btn" onclick="savePosition(selPerson)">Save Position</button>
+                <button class="btn ghost sm-btn" onclick="document.getElementById('change-position-panel').style.display='none'">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Week Navigator -->
         <div class="week-nav">
           <button onclick="admWkNav(-1)">‹</button>
@@ -591,10 +643,95 @@ function doAdminLogin(){
 function showAErr(m){const e=document.getElementById('adm-err');e.textContent=m;e.style.display='block'}
 function adminLogout(){adminUser=null;adminPin='';aDots();document.getElementById('adm-sel-nm').value='';document.getElementById('adm-err').style.display='none';localStorage.removeItem('janes_session_admin');showAdmPage('adm-login')}
 
+
+// ═══════════════════════════════
+// ADD EMPLOYEE
+// ═══════════════════════════════
+function openAddEmployee(){
+  document.getElementById('add-employee-form').style.display='block';
+  document.getElementById('new-emp-name').focus();
+}
+function closeAddEmployee(){
+  document.getElementById('add-employee-form').style.display='none';
+  document.getElementById('new-emp-name').value='';
+  document.getElementById('new-emp-pin').value='';
+}
+function saveNewEmployee(){
+  const name=document.getElementById('new-emp-name').value.trim();
+  const role=document.getElementById('new-emp-role').value;
+  const pin=document.getElementById('new-emp-pin').value.trim();
+  if(!name){toast('Enter a name');return;}
+  if(!/^\d{4}$/.test(pin)){toast('PIN must be exactly 4 digits');return;}
+  if(db.staff[name]){toast('A person with that name already exists');return;}
+  const isAdmin=role==='Manager'||role==='Owner';
+  const isOwner=role==='Owner';
+  db.staff[name]={pin,role,admin:isAdmin,owner:isOwner,pic:null,weekType:5};
+  db.defaultSched[name]=Array(7).fill(null);
+  db.schedules[name]={};
+  db.personalTasks[name]={};
+  db.shiftHistory[name]=[];
+  saveDB(db);
+  // Also update portal select list — portal will pick up via storage listener
+  try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
+  closeAddEmployee();
+  renderPeopleList();
+  selectPerson(name);
+  toast(`${name} added as ${role} ✓`);
+}
+
+// ═══════════════════════════════
+// CHANGE POSITION
+// ═══════════════════════════════
+function openChangePosition(nm){
+  const v=db.staff[nm];
+  // Create inline editor
+  const el=document.getElementById('change-position-panel');
+  if(el){
+    const isVisible=el.style.display!=='none';
+    el.style.display=isVisible?'none':'block';
+    if(!isVisible){
+      document.getElementById('pos-select').value=v.role||'Budtender';
+      document.getElementById('pos-admin-check').checked=v.admin;
+    }
+    return;
+  }
+}
+function savePosition(nm){
+  const role=document.getElementById('pos-select').value;
+  const isAdmin=document.getElementById('pos-admin-check').checked||(role==='Manager'||role==='Owner');
+  const isOwner=role==='Owner';
+  db.staff[nm].role=role;
+  db.staff[nm].admin=isAdmin;
+  db.staff[nm].owner=isOwner;
+  // Update all sched entries for this person
+  if(db.defaultSched[nm]){
+    db.defaultSched[nm]=db.defaultSched[nm].map(e=>e?{...e,role}:null);
+  }
+  saveDB(db);
+  try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
+  document.getElementById('change-position-panel').style.display='none';
+  renderPeopleList();
+  renderPersonEditor();
+  toast(`${nm} updated to ${role} ✓`);
+}
+function removeEmployee(nm){
+  if(!confirm(`Remove ${nm} from the system? This cannot be undone.`))return;
+  delete db.staff[nm];
+  delete db.defaultSched[nm];
+  delete db.schedules[nm];
+  if(db.personalTasks)delete db.personalTasks[nm];
+  if(db.shiftHistory)delete db.shiftHistory[nm];
+  saveDB(db);
+  try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
+  if(selPerson===nm){selPerson=null;document.getElementById('person-editor-panel').style.display='none';}
+  renderPeopleList();
+  toast(`${nm} removed`);
+}
+
 function goBackToPortal(){
-  const base=window.location.href.replace(/admin\.html.*$/,'').replace(/admin\/?$/,'');
-  // Try index.html first (GitHub Pages default), fallback to janes-portal.html
-  window.location.href=base+'index.html';
+  // Works on GitHub Pages and any host — just go to janes-portal.html in same folder
+  const base=window.location.href.replace(/[^/]*$/, '');
+  window.location.href=base+'janes-portal.html';
 }
 
 function buildAdminDash(){
@@ -629,8 +766,8 @@ function renderPeopleList(){
   const el=document.getElementById('people-list');
   el.innerHTML=Object.entries(db.staff).map(([nm,v])=>{
     const pic=v.pic;
-    const bc=v.owner?'badge owner':v.admin?'badge admin':(v.role==='Chef'?'badge chef':'badge budtender');
-    const bl=v.role||'Staff'; // show ROLE not admin status
+    const bc=v.owner?'badge owner':(v.role==='Chef'?'badge chef':(v.role==='Manager'?'badge admin':'badge budtender'));
+    const bl=v.role||'Staff';
     const shifts=db.defaultSched[nm].filter(x=>x).length;
     return `<button class="person-btn${selPerson===nm?' active':''}" onclick="selectPerson('${nm}')">
       <div class="person-btn-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>
@@ -674,6 +811,12 @@ function renderPersonEditor(){
   const v=db.staff[nm];
   const mon=getAdmMon();
   const today=new Date();
+
+  // Person name + role in actions bar
+  const nameEl=document.getElementById('editor-person-name');
+  const roleEl=document.getElementById('editor-person-role');
+  if(nameEl)nameEl.textContent=nm;
+  if(roleEl)roleEl.textContent=`${v.role||'Staff'} · ${v.weekType||5}-day week`;
 
   // Week label
   const wkEnd=new Date(mon);wkEnd.setDate(mon.getDate()+6);
@@ -827,7 +970,9 @@ function saveWeekSchedule(){
   for(let i=0;i<7;i++) sched.push(draftSched[i]?{...draftSched[i]}:null);
   setWeekSched(db,nm,mon,sched);
   saveDB(db);
-  toast(`${nm} — week saved ✓`);
+  // Trigger storage event so portal updates in real time (works across tabs)
+  try{localStorage.setItem(DB_KEY+'_ping', Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
+  toast(`${nm} — week saved ✓ Schedule updated for all staff`);
   renderPersonEditor();
   renderPeopleList();
 }
