@@ -131,16 +131,20 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .info-item{background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:11px;text-align:center}
 .info-item .iv{font-family:'Fredoka One',cursive;font-size:22px;color:var(--pk)}.info-item .il{font-size:10px;color:var(--ts);letter-spacing:.08em;text-transform:uppercase;margin-top:2px;font-weight:700}
 /* CALENDAR */
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:16px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
 .cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
-.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;transition:all .15s;min-height:54px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:5px 3px;text-align:left;cursor:pointer;transition:all .15s;min-height:80px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
 .cal-day:hover{border-color:var(--pk);background:var(--s2)}
 .cal-day.today{border-color:var(--pk);background:rgba(233,30,140,.06)}
 .cal-day.has-shift{border-color:rgba(0,230,118,.3)}
-.cal-day.empty{opacity:.2;cursor:default}
-.cal-day-num{font-family:'Fredoka One',cursive;font-size:16px;color:var(--t);line-height:1}
-.cal-dot-row{display:flex;gap:3px;justify-content:center;flex-wrap:wrap}
-.cal-dot{width:5px;height:5px;border-radius:50%}
+.cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
+.cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1)}
+.cal-day-num{font-family:'Fredoka One',cursive;font-size:13px;color:var(--t);line-height:1;text-align:center;width:100%}
+.cal-names-open{font-size:7.5px;font-weight:700;color:var(--y);line-height:1.4;padding:0 2px;min-height:11px;word-break:break-all}
+.cal-names-close{font-size:7.5px;font-weight:700;color:#c084fc;line-height:1.4;padding:0 2px;min-height:11px;word-break:break-all}
+.cal-task-row{font-size:7px;color:var(--pk);padding:0 2px;font-weight:700}
+.cal-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:1px}
+.cal-dot{width:4px;height:4px;border-radius:50%}
 .cal-dot.open{background:var(--y)}.cal-dot.close{background:#c084fc}.cal-dot.task{background:var(--pk)}
 .cal-dot.cafe{background:var(--cafe)}.cal-dot.bakery{background:var(--bakery)}
 .cal-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -357,12 +361,11 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <button onclick="calNav(1)">›</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot open"></div>Opening</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot close"></div>Closing</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot cafe"></div>Cafe</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot bakery"></div>Bakery</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><div class="cal-dot task"></div>Task</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:8px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--y)">■ Top row = Opening</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#c084fc">■ Bottom row = Closing</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><span style="background:var(--pk);color:#fff;padding:0 3px;border-radius:2px;font-size:9px;font-weight:700">You</span> = highlighted</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--pk)">● = your task</div>
       </div>
     </div>
     <!-- PLANNER -->
@@ -388,7 +391,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       </div>
       <div class="divider"></div>
       <div id="admin-portal-btn-wrap" style="display:none;margin-bottom:12px">
-        <a id="admin-portal-btn" href="admin.html" onclick="event.preventDefault();openAdminPortal()" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
+        <a id="admin-portal-btn" href="admin.html" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
           ⚙️ Open Admin Portal
         </a>
       </div>
@@ -440,19 +443,49 @@ function getShiftTimes(wt, type, di) {
 
 // ── DB init / load ──
 function loadDB() {
-  // Clear ALL old version keys so stale data never loads
-  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
-   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
-    try{localStorage.removeItem(k);}catch(e){}
-  });
+  // Wipe ALL old janes keys no matter what version
+  try {
+    Object.keys(localStorage).filter(k=>k.startsWith('janes_')||k.startsWith('janes-')).forEach(k=>{
+      if(k!==DB_KEY) localStorage.removeItem(k);
+    });
+  } catch(e){}
+
+  let db;
   try {
     const raw = localStorage.getItem(DB_KEY);
     if(raw) {
-      const db = JSON.parse(raw);
-      if(db.version === DB_VERSION) return db;
+      const parsed = JSON.parse(raw);
+      if(parsed.version === DB_VERSION) {
+        db = parsed;
+      }
     }
   } catch(e) {}
-  return initDB();
+
+  if(!db) db = initDB();
+
+  // ALWAYS enforce DEFAULT_STAFF values for roles, pins, admin flags
+  // This ensures any cached stale values are overwritten
+  Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
+    if(!db.staff[nm]) {
+      db.staff[nm]={...def, weekType:5, pic:null};
+      db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+      db.schedules[nm]={};
+      if(!db.personalTasks) db.personalTasks={};
+      db.personalTasks[nm]={};
+      if(!db.shiftHistory) db.shiftHistory={};
+      db.shiftHistory[nm]=[];
+    } else {
+      // Reset core identity fields — never trust cache for these
+      db.staff[nm].pin = def.pin;
+      db.staff[nm].role = def.role;
+      db.staff[nm].admin = def.admin;
+      db.staff[nm].owner = def.owner;
+      // Keep weekType and pic from cache (user may have changed these)
+    }
+  });
+
+  saveDB(db);
+  return db;
 }
 
 function initDB() {
@@ -640,7 +673,7 @@ function buildDash(){
   const s=db.staff[me];
   const mon=getMon(0);
   const shifts=db.defaultSched[me].filter(x=>x).length;
-  document.getElementById('greet-sub').textContent=s.owner?`Owner · ${shifts} shifts · ${s.weekType}-day week`:(s.admin?`Admin · ${shifts} shifts · ${s.weekType}-day week`:`${shifts} shifts this week`);
+  document.getElementById('greet-sub').textContent=`${s.role||'Staff'} · ${shifts} shifts this week`;
   document.getElementById('greet-date').textContent=new Date().toLocaleDateString('en-ZA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   setAv('hdr-av',me);
   document.getElementById('hdr-nm').textContent=me;
@@ -772,30 +805,47 @@ function renderCalendar(){
   const d=new Date(today.getFullYear(),today.getMonth()+calOff,1);
   const yr=d.getFullYear(),mo=d.getMonth();
   document.getElementById('cal-month-label').textContent=`${MO[mo]} ${yr}`;
-  const firstDow=(new Date(yr,mo,1).getDay()+6)%7; // Mon=0
+  const firstDow=(new Date(yr,mo,1).getDay()+6)%7;
   const daysInMonth=new Date(yr,mo+1,0).getDate();
   let html='';
-  // day headers
-  ['M','T','W','T','F','S','S'].forEach(d=>{html+=`<div class="cal-head">${d}</div>`});
-  // empty cells
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>{html+=`<div class="cal-head">${d}</div>`});
   for(let i=0;i<firstDow;i++)html+=`<div class="cal-day empty"></div>`;
   for(let day=1;day<=daysInMonth;day++){
     const cellDate=new Date(yr,mo,day);
     const di=(cellDate.getDay()+6)%7;
-    const mon=getMon(0); // use default sched for calendar visual
-    // Find the Monday of this week
     const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
-    const shift=resolveShift(db,me,cellMon,di);
     const ds=dateStr(cellDate);
     const isToday=cellDate.toDateString()===today.toDateString();
+    // Collect ALL staff shifts for this day
+    const opening=[], closing=[];
+    Object.keys(db.staff).forEach(nm=>{
+      const s=resolveShift(db,nm,cellMon,di);
+      if(!s)return;
+      // Shorten name: first 3 chars
+      const short=nm.slice(0,3);
+      if(s.tag==='open')opening.push(short);
+      else closing.push(short);
+    });
+    const myShift=resolveShift(db,me,cellMon,di);
     const tasks=db.personalTasks[me]&&db.personalTasks[me][ds]||[];
-    let dots='';
-    if(shift)dots+=`<div class="cal-dot ${shift.tag}"></div>`;
-    if(shift&&shift.station)dots+=`<div class="cal-dot ${shift.station}"></div>`;
-    if(tasks.length)dots+=`<div class="cal-dot task"></div>`;
-    html+=`<div class="cal-day${isToday?' today':''}${shift?' has-shift':''}" onclick="openCalDay('${ds}','${DAYS[di]} ${day} ${MO[mo]}',${!!shift})">
-      <div class="cal-day-num">${day}</div>
-      <div class="cal-dot-row">${dots}</div>
+    const hasTask=tasks.length>0;
+    // Highlight MY name in each row
+    const openHtml=opening.length
+      ? opening.map(n=>n.toLowerCase()===me.slice(0,3).toLowerCase()
+          ?`<span style="color:#fff;background:var(--pk);padding:0 2px;border-radius:2px">${n}</span>`
+          :`<span>${n}</span>`).join(' ')
+      : '';
+    const closeHtml=closing.length
+      ? closing.map(n=>n.toLowerCase()===me.slice(0,3).toLowerCase()
+          ?`<span style="color:#fff;background:#7c3aed;padding:0 2px;border-radius:2px">${n}</span>`
+          :`<span>${n}</span>`).join(' ')
+      : '';
+    html+=`<div class="cal-day${isToday?' today':''}${myShift?' has-shift':''}" onclick="openCalDay('${ds}','${DAYS[di]} ${day} ${MO[mo]}',${!!myShift})">
+      <div class="cal-day-num">${day}${isToday?'<span style="display:inline-block;width:5px;height:5px;background:var(--pk);border-radius:50%;vertical-align:middle;margin-left:2px"></span>':''}</div>
+      <div class="cal-names-open">${openHtml}</div>
+      <div style="height:1px;background:rgba(255,255,255,.06);margin:1px 2px"></div>
+      <div class="cal-names-close">${closeHtml}</div>
+      ${hasTask?`<div class="cal-task-row">● ${tasks.length} task${tasks.length>1?'s':''}</div>`:''}
     </div>`;
   }
   document.getElementById('cal-grid').innerHTML=html;
@@ -860,7 +910,7 @@ function openPersonSheet(nm){
   const wt=v.weekType||5;
   let html=`<div class="person-sheet-av">${pic?`<img src="${pic}" alt="${nm}">`:`${nm[0]}`}</div>`;
   html+=`<div style="text-align:center;margin-bottom:18px">
-    <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">${v.owner?'Owner':v.admin?'Admin':v.role}</div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">${v.role||'Staff'}</div>
     <div style="font-family:'Fredoka One',cursive;font-size:26px;color:var(--t)">${nm}</div>
     <div style="font-size:11px;color:var(--ts);margin-top:4px">${wt}-day week</div>
   </div>`;
@@ -989,9 +1039,7 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 })();
 
 function openAdminPortal(){
-  // Navigate to admin.html relative to current page
-  const base=window.location.href.replace(/index\.html.*$/,'').replace(/janes-portal\.html.*$/,'');
-  window.location.href=base+'admin.html';
+  window.location.href='admin.html';
 }
 
 init();
