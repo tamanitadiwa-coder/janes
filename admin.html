@@ -332,7 +332,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <button class="btn primary full" onclick="doAdminLogin()">Enter Admin →</button>
       <div class="err" id="adm-err" style="display:none"></div>
       <div style="text-align:center;margin-top:16px">
-        <button onclick="window.location.href='janes-portal.html'" style="font-size:12px;color:var(--ts);background:none;border:none;cursor:pointer">← Back to staff portal</button>
+        <button onclick="window.location.href='index.html'" style="font-size:12px;color:var(--ts);text-decoration:none" href="index.html">← Back to Staff Portal</a>
       </div>
     </div>
   </div>
@@ -346,7 +346,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <div class="adm-title">Jane's <em>Admin</em></div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <button onclick="window.location.href='janes-portal.html'" class="btn ghost xs">← Portal</button>
+      <a href="index.html" class="btn ghost xs" style="text-decoration:none">← Portal</a>
       <button class="btn danger xs" onclick="adminLogout()">Sign Out</button>
     </div>
   </div>
@@ -768,10 +768,7 @@ function removeEmployee(nm){
   toast(`${nm} removed`);
 }
 
-function goBackToPortal(){
-  // Simplest possible — relative link, works everywhere
-  window.location.href='janes-portal.html';
-}
+function goBackToPortal(){ window.location.href='index.html'; }
 
 function buildAdminDash(){
   showAdmPage('adm-dash');
