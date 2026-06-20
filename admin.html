@@ -519,19 +519,49 @@ function getShiftTimes(wt, type, di) {
 
 // ── DB init / load ──
 function loadDB() {
-  // Clear ALL old version keys so stale data never loads
-  ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
-   'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
-    try{localStorage.removeItem(k);}catch(e){}
-  });
+  // Wipe ALL old janes keys no matter what version
+  try {
+    Object.keys(localStorage).filter(k=>k.startsWith('janes_')||k.startsWith('janes-')).forEach(k=>{
+      if(k!==DB_KEY) localStorage.removeItem(k);
+    });
+  } catch(e){}
+
+  let db;
   try {
     const raw = localStorage.getItem(DB_KEY);
     if(raw) {
-      const db = JSON.parse(raw);
-      if(db.version === DB_VERSION) return db;
+      const parsed = JSON.parse(raw);
+      if(parsed.version === DB_VERSION) {
+        db = parsed;
+      }
     }
   } catch(e) {}
-  return initDB();
+
+  if(!db) db = initDB();
+
+  // ALWAYS enforce DEFAULT_STAFF values for roles, pins, admin flags
+  // This ensures any cached stale values are overwritten
+  Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
+    if(!db.staff[nm]) {
+      db.staff[nm]={...def, weekType:5, pic:null};
+      db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+      db.schedules[nm]={};
+      if(!db.personalTasks) db.personalTasks={};
+      db.personalTasks[nm]={};
+      if(!db.shiftHistory) db.shiftHistory={};
+      db.shiftHistory[nm]=[];
+    } else {
+      // Reset core identity fields — never trust cache for these
+      db.staff[nm].pin = def.pin;
+      db.staff[nm].role = def.role;
+      db.staff[nm].admin = def.admin;
+      db.staff[nm].owner = def.owner;
+      // Keep weekType and pic from cache (user may have changed these)
+    }
+  });
+
+  saveDB(db);
+  return db;
 }
 
 function initDB() {
