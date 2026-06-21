@@ -133,17 +133,23 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 /* CALENDAR */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
 .cal-head{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;padding:6px 0}
-.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:5px 3px;text-align:left;cursor:pointer;transition:all .15s;min-height:80px;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.cal-day{background:var(--s1);border:1px solid var(--bd);border-radius:8px;padding:5px 3px;text-align:left;cursor:pointer;transition:all .15s;min-height:90px;display:flex;flex-direction:column;gap:1px;overflow:hidden}
 .cal-day:hover{border-color:var(--pk);background:var(--s2)}
 .cal-day.today{border-color:var(--pk);background:rgba(233,30,140,.06)}
 .cal-day.has-shift{border-color:rgba(0,230,118,.3)}
 .cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
 .cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1)}
-.cal-day-num{font-family:'Fredoka One',cursive;font-size:13px;color:var(--t);line-height:1;text-align:center;width:100%}
-.cal-names-open{font-size:7.5px;font-weight:700;color:var(--y);line-height:1.4;padding:0 2px;min-height:11px;word-break:break-all}
-.cal-names-close{font-size:7.5px;font-weight:700;color:#c084fc;line-height:1.4;padding:0 2px;min-height:11px;word-break:break-all}
-.cal-task-row{font-size:7px;color:var(--pk);padding:0 2px;font-weight:700}
-.cal-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap;margin-top:1px}
+.cal-day-num{font-family:'Fredoka One',cursive;font-size:13px;color:var(--t);line-height:1;text-align:center;width:100%;margin-bottom:2px}
+.cal-today-dot{display:inline-block;width:5px;height:5px;background:var(--pk);border-radius:50%;vertical-align:middle;margin-left:2px}
+.cal-station-block{margin-bottom:2px}
+.cal-station-label{font-size:8px;line-height:1;margin-bottom:1px;opacity:.8}
+.cafe-label{color:var(--cafe)}
+.bak-label{color:var(--bakery)}
+.cal-names-open{font-size:7px;font-weight:700;color:var(--y);line-height:1.3;padding:0 2px;word-break:break-word}
+.cal-names-close{font-size:7px;font-weight:700;color:#c084fc;line-height:1.3;padding:0 2px;word-break:break-word}
+.cal-divider{height:1px;background:rgba(255,255,255,.06);margin:1px 2px}
+.cal-task-row{font-size:7px;color:var(--pk);padding:0 2px;font-weight:800;margin-top:1px}
+.cal-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
 .cal-dot{width:4px;height:4px;border-radius:50%}
 .cal-dot.open{background:var(--y)}.cal-dot.close{background:#c084fc}.cal-dot.task{background:var(--pk)}
 .cal-dot.cafe{background:var(--cafe)}.cal-dot.bakery{background:var(--bakery)}
@@ -362,11 +368,15 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <button onclick="calNav(1)">›</button>
       </div>
       <div class="cal-grid" id="cal-grid"></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding:8px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:8px">
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--y)">■ Top row = Opening</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:#c084fc">■ Bottom row = Closing</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--ts)"><span style="background:var(--pk);color:#fff;padding:0 3px;border-radius:2px;font-size:9px;font-weight:700">You</span> = highlighted</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--pk)">● = your task</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:10px">
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--cafe)">☕ Cafe</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--bakery)">🥐 Bakery</div>
+        <div style="width:1px;background:var(--bd);margin:0 2px"></div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--y)">■ Opening</div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#c084fc">■ Closing</div>
+        <div style="width:1px;background:var(--bd);margin:0 2px"></div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--ts)"><span style="background:var(--pk);color:#fff;padding:0 3px;border-radius:2px;font-size:9px;font-weight:800">You</span></div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--pk)">● task</div>
       </div>
     </div>
     <!-- PLANNER -->
@@ -845,36 +855,54 @@ function renderCalendar(){
     const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
     const ds=dateStr(cellDate);
     const isToday=cellDate.toDateString()===today.toDateString();
-    // Collect ALL staff shifts for this day
-    const opening=[], closing=[];
+
+    // Collect ALL staff shifts split by station+type
+    // cafe opening, cafe closing, bakery opening, bakery closing
+    const cafeOpen=[], cafeClose=[], bakOpen=[], bakClose=[];
     Object.keys(db.staff).forEach(nm=>{
       const s=resolveShift(db,nm,cellMon,di);
-      if(!s)return;
-      // Shorten name: first 3 chars
+      if(!s) return;
       const short=nm.slice(0,3);
-      if(s.tag==='open')opening.push(short);
-      else closing.push(short);
+      const isMe=nm.toLowerCase()===me.toLowerCase();
+      const nameHtml=isMe
+        ?`<b style="color:#fff;background:var(--pk);padding:0 2px;border-radius:2px;font-weight:800">${short}</b>`
+        :`<span style="color:rgba(255,255,255,.75)">${short}</span>`;
+      if(s.station==='cafe' && s.tag==='open') cafeOpen.push(nameHtml);
+      else if(s.station==='cafe' && s.tag==='close') cafeClose.push(nameHtml);
+      else if(s.station==='bakery' && s.tag==='open') bakOpen.push(nameHtml);
+      else if(s.station==='bakery' && s.tag==='close') bakClose.push(nameHtml);
+      else if(s.tag==='open') cafeOpen.push(nameHtml); // fallback
+      else cafeClose.push(nameHtml);
     });
+
     const myShift=resolveShift(db,me,cellMon,di);
     const tasks=db.personalTasks[me]&&db.personalTasks[me][ds]||[];
-    const hasTask=tasks.length>0;
-    // Highlight MY name in each row
-    const openHtml=opening.length
-      ? opening.map(n=>n.toLowerCase()===me.slice(0,3).toLowerCase()
-          ?`<span style="color:#fff;background:var(--pk);padding:0 2px;border-radius:2px">${n}</span>`
-          :`<span>${n}</span>`).join(' ')
-      : '';
-    const closeHtml=closing.length
-      ? closing.map(n=>n.toLowerCase()===me.slice(0,3).toLowerCase()
-          ?`<span style="color:#fff;background:#7c3aed;padding:0 2px;border-radius:2px">${n}</span>`
-          :`<span>${n}</span>`).join(' ')
-      : '';
+
+    // Build station blocks
+    let stationHtml='';
+    // Cafe section
+    if(cafeOpen.length||cafeClose.length){
+      stationHtml+=`<div class="cal-station-block">`;
+      stationHtml+=`<div class="cal-station-label cafe-label">☕</div>`;
+      if(cafeOpen.length) stationHtml+=`<div class="cal-names-open">${cafeOpen.join(' ')}</div>`;
+      if(cafeOpen.length&&cafeClose.length) stationHtml+=`<div class="cal-divider"></div>`;
+      if(cafeClose.length) stationHtml+=`<div class="cal-names-close">${cafeClose.join(' ')}</div>`;
+      stationHtml+=`</div>`;
+    }
+    // Bakery section
+    if(bakOpen.length||bakClose.length){
+      stationHtml+=`<div class="cal-station-block">`;
+      stationHtml+=`<div class="cal-station-label bak-label">🥐</div>`;
+      if(bakOpen.length) stationHtml+=`<div class="cal-names-open">${bakOpen.join(' ')}</div>`;
+      if(bakOpen.length&&bakClose.length) stationHtml+=`<div class="cal-divider"></div>`;
+      if(bakClose.length) stationHtml+=`<div class="cal-names-close">${bakClose.join(' ')}</div>`;
+      stationHtml+=`</div>`;
+    }
+
     html+=`<div class="cal-day${isToday?' today':''}${myShift?' has-shift':''}" onclick="openCalDay('${ds}','${DAYS[di]} ${day} ${MO[mo]}',${!!myShift})">
-      <div class="cal-day-num">${day}${isToday?'<span style="display:inline-block;width:5px;height:5px;background:var(--pk);border-radius:50%;vertical-align:middle;margin-left:2px"></span>':''}</div>
-      <div class="cal-names-open">${openHtml}</div>
-      <div style="height:1px;background:rgba(255,255,255,.06);margin:1px 2px"></div>
-      <div class="cal-names-close">${closeHtml}</div>
-      ${hasTask?`<div class="cal-task-row">● ${tasks.length} task${tasks.length>1?'s':''}</div>`:''}
+      <div class="cal-day-num">${day}${isToday?'<span class="cal-today-dot"></span>':''}</div>
+      ${stationHtml}
+      ${tasks.length?`<div class="cal-task-row">● ${tasks.length}t</div>`:''}
     </div>`;
   }
   document.getElementById('cal-grid').innerHTML=html;
