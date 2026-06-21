@@ -539,24 +539,24 @@ function loadDB() {
 
   if(!db) db = initDB();
 
-  // ALWAYS enforce DEFAULT_STAFF values for roles, pins, admin flags
-  // This ensures any cached stale values are overwritten
+  // Enforce DEFAULT_STAFF identity fields only — NEVER wipe schedules or tasks
   Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
     if(!db.staff[nm]) {
+      // New person — seed everything fresh
       db.staff[nm]={...def, weekType:5, pic:null};
-      db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
-      db.schedules[nm]={};
+      if(!db.defaultSched[nm]) db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+      if(!db.schedules[nm]) db.schedules[nm]={};
       if(!db.personalTasks) db.personalTasks={};
-      db.personalTasks[nm]={};
+      if(!db.personalTasks[nm]) db.personalTasks[nm]={};
       if(!db.shiftHistory) db.shiftHistory={};
-      db.shiftHistory[nm]=[];
+      if(!db.shiftHistory[nm]) db.shiftHistory[nm]=[];
     } else {
-      // Reset core identity fields — never trust cache for these
+      // Existing person — reset ONLY identity, keep everything else
       db.staff[nm].pin = def.pin;
       db.staff[nm].role = def.role;
       db.staff[nm].admin = def.admin;
       db.staff[nm].owner = def.owner;
-      // Keep weekType and pic from cache (user may have changed these)
+      // NEVER touch: weekType, pic, schedules, defaultSched, tasks, history
     }
   });
 
