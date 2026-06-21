@@ -329,6 +329,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <div class="greet-hi" id="greet-hi">Hey <em id="greet-nm">there</em>!</div>
       <div class="greet-sub" id="greet-sub">Your schedule is ready.</div>
       <div class="greet-date" id="greet-date"></div>
+      <div id="today-station-banner" style="display:none;margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"></div>
     </div>
     <div class="stats">
       <div class="stat"><div class="stat-v" id="st-s">-</div><div class="stat-l">Shifts</div></div>
@@ -391,7 +392,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       </div>
       <div class="divider"></div>
       <div id="admin-portal-btn-wrap" style="display:none;margin-bottom:12px">
-        <a id="admin-portal-btn" href="admin.html" class="btn full" style="background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(233,30,140,.4);color:var(--pk);box-shadow:0 4px 20px rgba(233,30,140,.2);text-decoration:none">
+        <a id="admin-portal-btn" href="admin.html" class="btn primary full" style="text-decoration:none;font-size:14px;letter-spacing:.03em;color:#fff">
           ⚙️ Open Admin Portal
         </a>
       </div>
@@ -673,7 +674,35 @@ function buildDash(){
   const s=db.staff[me];
   const mon=getMon(0);
   const shifts=db.defaultSched[me].filter(x=>x).length;
+  // Show today's station and shift
+  const todayDi=(new Date().getDay()+6)%7;
+  const todayMon=getMon(0);
+  const todayShift=resolveShift(db,me,todayMon,todayDi);
   document.getElementById('greet-sub').textContent=`${s.role||'Staff'} · ${shifts} shifts this week`;
+  // Today banner
+  const banner=document.getElementById('today-station-banner');
+  if(banner){
+    if(todayShift){
+      const shiftColor=todayShift.tag==='open'?'rgba(255,229,0,.15)':'rgba(150,80,255,.15)';
+      const shiftBorder=todayShift.tag==='open'?'rgba(255,229,0,.35)':'rgba(150,80,255,.35)';
+      const shiftTextColor=todayShift.tag==='open'?'#FFE500':'#c084fc';
+      const stColor=todayShift.station==='cafe'?'rgba(126,212,255,.15)':'rgba(255,179,71,.15)';
+      const stBorder=todayShift.station==='cafe'?'rgba(126,212,255,.35)':'rgba(255,179,71,.35)';
+      const stTextColor=todayShift.station==='cafe'?'var(--cafe)':'var(--bakery)';
+      const stIcon=todayShift.station==='cafe'?'☕':'🥐';
+      const stName=todayShift.station==='cafe'?'Cafe':'Bakery';
+      banner.style.display='flex';
+      banner.innerHTML=`
+        <span style="padding:5px 14px;border-radius:100px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:${shiftColor};border:1px solid ${shiftBorder};color:${shiftTextColor}">
+          ${todayShift.tag==='open'?'🌅 Opening':'🌙 Closing'} · ${fmt12(todayShift.s)}–${fmt12(todayShift.e)}
+        </span>
+        ${todayShift.station?`<span style="padding:5px 14px;border-radius:100px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:${stColor};border:1px solid ${stBorder};color:${stTextColor}">${stIcon} ${stName}</span>`:''}
+      `;
+    } else {
+      banner.style.display='flex';
+      banner.innerHTML=`<span style="padding:5px 14px;border-radius:100px;font-size:11px;font-weight:700;background:rgba(255,255,255,.05);border:1px solid var(--bd);color:var(--ts)">😴 Day off today</span>`;
+    }
+  }
   document.getElementById('greet-date').textContent=new Date().toLocaleDateString('en-ZA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   setAv('hdr-av',me);
   document.getElementById('hdr-nm').textContent=me;
