@@ -139,20 +139,18 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .cal-day.has-shift{border-color:rgba(0,230,118,.3)}
 .cal-day.empty{opacity:.15;cursor:default;pointer-events:none}
 .cal-day.selected{border-color:var(--pk);background:rgba(233,30,140,.1)}
-.cal-day-num{font-family:'Fredoka One',cursive;font-size:13px;color:var(--t);line-height:1;text-align:center;width:100%;margin-bottom:2px}
-.cal-today-dot{display:inline-block;width:5px;height:5px;background:var(--pk);border-radius:50%;vertical-align:middle;margin-left:2px}
-.cal-station-block{margin-bottom:2px}
-.cal-station-label{font-size:8px;line-height:1;margin-bottom:1px;opacity:.8}
-.cafe-label{color:#6ee76e;font-size:8px}
-.bak-label{color:#2dd4d4;font-size:8px}
-.cal-names-open{font-size:7px;font-weight:700;line-height:1.4;padding:0 2px;word-break:break-word;display:flex;flex-wrap:wrap;gap:2px}
-.cal-names-close{font-size:7px;font-weight:700;line-height:1.4;padding:0 2px;word-break:break-word;display:flex;flex-wrap:wrap;gap:2px}
-.cal-divider{height:1px;background:rgba(255,255,255,.06);margin:1px 2px}
-.cal-task-row{font-size:7px;color:var(--pk);padding:0 2px;font-weight:800;margin-top:1px}
-.cal-dot-row{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
-.cal-dot{width:4px;height:4px;border-radius:50%}
-.cal-dot.open{background:var(--y)}.cal-dot.close{background:#c084fc}.cal-dot.task{background:var(--pk)}
-.cal-dot.cafe{background:var(--cafe)}.cal-dot.bakery{background:var(--bakery)}
+.cal-closed{opacity:.4;cursor:default;background:rgba(255,255,255,.02)!important}
+.cal-day-num{font-family:'Fredoka One',cursive;font-size:13px;color:var(--t);line-height:1;text-align:left;width:100%;margin-bottom:3px;display:flex;align-items:center;gap:3px}
+.cal-today-dot{display:inline-block;width:5px;height:5px;background:var(--pk);border-radius:50%;flex-shrink:0}
+.cal-my-dot{display:inline-block;width:5px;height:5px;background:#00E676;border-radius:50%;flex-shrink:0}
+.cal-task-badge{background:var(--pk);color:#fff;border-radius:3px;font-size:6px;font-weight:800;padding:0 3px;margin-left:auto}
+.cal-section{margin-bottom:3px}
+.cal-section-hdr{font-size:7px;font-weight:800;letter-spacing:.04em;margin-bottom:1px}
+.cafe-hdr{color:#4ade80}
+.bak-hdr{color:#2dd4bf}
+.cal-row-label{font-size:6.5px;font-weight:700;line-height:1.5;display:flex;flex-wrap:wrap;gap:2px;align-items:center}
+.open-lbl{color:var(--y)}
+.close-lbl{color:#c084fc}
 .cal-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-month-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 12px;border-radius:7px;transition:all .15s;line-height:1}
 .cal-month-nav button:hover{color:var(--pk);border-color:var(--pk)}
@@ -369,13 +367,14 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       </div>
       <div class="cal-grid" id="cal-grid"></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;background:var(--s1);border:1px solid var(--bd);border-radius:10px;align-items:center">
-        <span style="background:#1a3a1a;color:#6ee76e;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:800">☕ Cafe</span>
-        <span style="background:#0d3035;color:#2dd4d4;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:800">🥐 Bakery</span>
-        <div style="width:1px;background:var(--bd);margin:0 2px;height:14px"></div>
-        <span style="font-size:10px;font-weight:700;color:var(--y)">■ Open</span>
-        <span style="font-size:10px;font-weight:700;color:#c084fc">■ Close</span>
-        <div style="width:1px;background:var(--bd);margin:0 2px;height:14px"></div>
-        <span style="font-size:10px;color:var(--pk)">● task</span>
+        <span style="background:#0d2e12;color:#4ade80;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800">☕ Cafe</span>
+        <span style="background:#082828;color:#2dd4bf;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800">🥐 Bakery</span>
+        <div style="width:1px;background:var(--bd);height:16px"></div>
+        <span style="font-size:10px;font-weight:800;color:var(--y)">▲ Opening</span>
+        <span style="font-size:10px;font-weight:800;color:#c084fc">▼ Closing</span>
+        <div style="width:1px;background:var(--bd);height:16px"></div>
+        <span style="font-size:10px;color:#00E676">● you</span>
+        <span style="font-size:10px;color:var(--pk)">■ task</span>
       </div>
     </div>
     <!-- PLANNER -->
@@ -543,6 +542,7 @@ function setWeekSched(db, nm, mon, sched) {
 }
 
 function resolveShift(db, nm, mon, di) {
+  if(di===6) return null; // Sunday — closed
   const sched = getWeekSched(db, nm, mon);
   const entry = sched[di];
   if(!entry||!entry.type) return null;
@@ -846,65 +846,75 @@ function renderCalendar(){
   const firstDow=(new Date(yr,mo,1).getDay()+6)%7;
   const daysInMonth=new Date(yr,mo+1,0).getDate();
   let html='';
-  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(d=>{html+=`<div class="cal-head">${d}</div>`});
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(h=>{html+=`<div class="cal-head">${h}</div>`});
   for(let i=0;i<firstDow;i++)html+=`<div class="cal-day empty"></div>`;
+
   for(let day=1;day<=daysInMonth;day++){
     const cellDate=new Date(yr,mo,day);
-    const di=(cellDate.getDay()+6)%7;
+    const di=(cellDate.getDay()+6)%7; // 0=Mon 6=Sun
     const cellMon=new Date(cellDate);cellMon.setDate(cellDate.getDate()-di);
     const ds=dateStr(cellDate);
     const isToday=cellDate.toDateString()===today.toDateString();
+    const isSun=di===6;
+    const tasks=db.personalTasks[me]&&db.personalTasks[me][ds]||[];
 
-    // Collect ALL staff shifts split by station+type
-    // cafe opening, cafe closing, bakery opening, bakery closing
-    const cafeOpen=[], cafeClose=[], bakOpen=[], bakClose=[];
+    if(isSun){
+      // Sunday — closed
+      html+=`<div class="cal-day cal-closed${isToday?' today':''}">
+        <div class="cal-day-num">${day}${isToday?'<span class="cal-today-dot"></span>':''}</div>
+        <div style="font-size:7px;color:var(--tm);text-align:center;margin-top:4px;font-weight:700">CLOSED</div>
+      </div>`;
+      continue;
+    }
+
+    // Build cafe and bakery open/close name lists
+    const groups={cafeOpen:[],cafeClose:[],bakOpen:[],bakClose:[]};
     Object.keys(db.staff).forEach(nm=>{
       const s=resolveShift(db,nm,cellMon,di);
-      if(!s) return;
-      const short=nm.slice(0,3);
-      // Cafe = light green bg, Bakery = teal bg — same for everyone, no personal highlight
-      const cafeStyle='background:#1a3a1a;color:#6ee76e;padding:0 3px;border-radius:2px;font-weight:700;font-size:7px';
-      const bakStyle='background:#0d3035;color:#2dd4d4;padding:0 3px;border-radius:2px;font-weight:700;font-size:7px';
-      if(s.station==='cafe' && s.tag==='open') cafeOpen.push(`<span style="${cafeStyle}">${short}</span>`);
-      else if(s.station==='cafe' && s.tag==='close') cafeClose.push(`<span style="${cafeStyle}">${short}</span>`);
-      else if(s.station==='bakery' && s.tag==='open') bakOpen.push(`<span style="${bakStyle}">${short}</span>`);
-      else if(s.station==='bakery' && s.tag==='close') bakClose.push(`<span style="${bakStyle}">${short}</span>`);
-      else if(s.tag==='open') cafeOpen.push(`<span style="${cafeStyle}">${short}</span>`);
-      else cafeClose.push(`<span style="${cafeStyle}">${short}</span>`);
+      if(!s)return;
+      const short=nm.slice(0,3).toUpperCase();
+      const station=s.station||'cafe';
+      const type=s.tag==='open'?'Open':'Close';
+      const key=`${station==='cafe'?'cafe':'bak'}${type}`;
+      // colour by station
+      const bg=station==='cafe'?'#0d2e12':'#082828';
+      const col=station==='cafe'?'#4ade80':'#2dd4bf';
+      groups[key].push(`<span style="background:${bg};color:${col};padding:1px 3px;border-radius:3px;font-size:6.5px;font-weight:800;white-space:nowrap">${short}</span>`);
     });
 
     const myShift=resolveShift(db,me,cellMon,di);
-    const tasks=db.personalTasks[me]&&db.personalTasks[me][ds]||[];
+    let inner='';
 
-    // Build station blocks
-    let stationHtml='';
     // Cafe section
-    if(cafeOpen.length||cafeClose.length){
-      stationHtml+=`<div class="cal-station-block">`;
-      stationHtml+=`<div class="cal-station-label cafe-label">☕</div>`;
-      if(cafeOpen.length) stationHtml+=`<div class="cal-names-open">${cafeOpen.join(' ')}</div>`;
-      if(cafeOpen.length&&cafeClose.length) stationHtml+=`<div class="cal-divider"></div>`;
-      if(cafeClose.length) stationHtml+=`<div class="cal-names-close">${cafeClose.join(' ')}</div>`;
-      stationHtml+=`</div>`;
+    const hasCafe=groups.cafeOpen.length||groups.cafeClose.length;
+    const hasBak=groups.bakOpen.length||groups.bakClose.length;
+
+    if(hasCafe){
+      inner+=`<div class="cal-section">`;
+      inner+=`<div class="cal-section-hdr cafe-hdr">☕ CAFE</div>`;
+      if(groups.cafeOpen.length) inner+=`<div class="cal-row-label open-lbl">▲ ${groups.cafeOpen.join(' ')}</div>`;
+      if(groups.cafeClose.length) inner+=`<div class="cal-row-label close-lbl">▼ ${groups.cafeClose.join(' ')}</div>`;
+      inner+=`</div>`;
     }
-    // Bakery section
-    if(bakOpen.length||bakClose.length){
-      stationHtml+=`<div class="cal-station-block">`;
-      stationHtml+=`<div class="cal-station-label bak-label">🥐</div>`;
-      if(bakOpen.length) stationHtml+=`<div class="cal-names-open">${bakOpen.join(' ')}</div>`;
-      if(bakOpen.length&&bakClose.length) stationHtml+=`<div class="cal-divider"></div>`;
-      if(bakClose.length) stationHtml+=`<div class="cal-names-close">${bakClose.join(' ')}</div>`;
-      stationHtml+=`</div>`;
+    if(hasBak){
+      inner+=`<div class="cal-section">`;
+      inner+=`<div class="cal-section-hdr bak-hdr">🥐 BAKERY</div>`;
+      if(groups.bakOpen.length) inner+=`<div class="cal-row-label open-lbl">▲ ${groups.bakOpen.join(' ')}</div>`;
+      if(groups.bakClose.length) inner+=`<div class="cal-row-label close-lbl">▼ ${groups.bakClose.join(' ')}</div>`;
+      inner+=`</div>`;
+    }
+    if(!hasCafe&&!hasBak){
+      inner+=`<div style="font-size:7px;color:var(--tm);text-align:center;padding:4px 0;font-weight:700">No staff</div>`;
     }
 
     html+=`<div class="cal-day${isToday?' today':''}${myShift?' has-shift':''}" onclick="openCalDay('${ds}','${DAYS[di]} ${day} ${MO[mo]}',${!!myShift})">
-      <div class="cal-day-num">${day}${isToday?'<span class="cal-today-dot"></span>':''}</div>
-      ${stationHtml}
-      ${tasks.length?`<div class="cal-task-row">● ${tasks.length}t</div>`:''}
+      <div class="cal-day-num">${day}${isToday?'<span class="cal-today-dot"></span>':''}${tasks.length?`<span class="cal-task-badge">${tasks.length}</span>`:''}${myShift?`<span class="cal-my-dot"></span>`:''}</div>
+      ${inner}
     </div>`;
   }
   document.getElementById('cal-grid').innerHTML=html;
 }
+
 function calNav(d){calOff+=d;renderCalendar()}
 function openCalDay(ds,label,hasShift){
   currentDayStr=ds;currentDayLabel=label;
