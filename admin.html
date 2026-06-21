@@ -609,6 +609,7 @@ function setWeekSched(db, nm, mon, sched) {
 }
 
 function resolveShift(db, nm, mon, di) {
+  if(di===6) return null; // Sunday — closed
   const sched = getWeekSched(db, nm, mon);
   const entry = sched[di];
   if(!entry||!entry.type) return null;
