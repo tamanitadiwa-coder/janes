@@ -149,8 +149,8 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .cafe-hdr{color:#4ade80}
 .bak-hdr{color:#2dd4bf}
 .cal-row-label{font-size:6.5px;font-weight:700;line-height:1.5;display:flex;flex-wrap:wrap;gap:2px;align-items:center}
-.open-lbl{color:var(--y)}
-.close-lbl{color:#c084fc}
+.open-lbl{}
+.close-lbl{opacity:1}
 .cal-month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .cal-month-nav button{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--ts);font-size:18px;cursor:pointer;padding:4px 12px;border-radius:7px;transition:all .15s;line-height:1}
 .cal-month-nav button:hover{color:var(--pk);border-color:var(--pk)}
@@ -370,8 +370,8 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <span style="background:#0d2e12;color:#4ade80;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800">☕ Cafe</span>
         <span style="background:#082828;color:#2dd4bf;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:800">🥐 Bakery</span>
         <div style="width:1px;background:var(--bd);height:16px"></div>
-        <span style="font-size:10px;font-weight:800;color:var(--y)">▲ Opening</span>
-        <span style="font-size:10px;font-weight:800;color:#c084fc">▼ Closing</span>
+        <span style="font-size:10px;font-weight:800;color:#fff">Bright = Opening</span>
+        <span style="font-size:10px;color:rgba(255,255,255,.45);font-style:italic">Dim = Closing</span>
         <div style="width:1px;background:var(--bd);height:16px"></div>
         <span style="font-size:10px;color:#00E676">● you</span>
         <span style="font-size:10px;color:var(--pk)">■ task</span>
@@ -472,24 +472,24 @@ function loadDB() {
 
   if(!db) db = initDB();
 
-  // ALWAYS enforce DEFAULT_STAFF values for roles, pins, admin flags
-  // This ensures any cached stale values are overwritten
+  // Enforce DEFAULT_STAFF identity fields only — NEVER wipe schedules or tasks
   Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
     if(!db.staff[nm]) {
+      // New person — seed everything fresh
       db.staff[nm]={...def, weekType:5, pic:null};
-      db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
-      db.schedules[nm]={};
+      if(!db.defaultSched[nm]) db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+      if(!db.schedules[nm]) db.schedules[nm]={};
       if(!db.personalTasks) db.personalTasks={};
-      db.personalTasks[nm]={};
+      if(!db.personalTasks[nm]) db.personalTasks[nm]={};
       if(!db.shiftHistory) db.shiftHistory={};
-      db.shiftHistory[nm]=[];
+      if(!db.shiftHistory[nm]) db.shiftHistory[nm]=[];
     } else {
-      // Reset core identity fields — never trust cache for these
+      // Existing person — reset ONLY identity, keep everything else
       db.staff[nm].pin = def.pin;
       db.staff[nm].role = def.role;
       db.staff[nm].admin = def.admin;
       db.staff[nm].owner = def.owner;
-      // Keep weekType and pic from cache (user may have changed these)
+      // NEVER touch: weekType, pic, schedules, defaultSched, tasks, history
     }
   });
 
@@ -593,25 +593,31 @@ function init(){
   tryAutoLogin();
   populateStaffSelect();
   // Listen for admin saves — update db in real time
-  window.addEventListener('storage', function(e){
-    if(e.key===DB_KEY){
-      db=loadDB();
-      populateStaffSelect();
-      // Re-render current visible tab
-      const activeTab=document.querySelector('.tab.on');
-      if(activeTab){
-        const tabs=Array.from(document.querySelectorAll('.tab'));
-        const n=tabs.indexOf(activeTab);
-        if(n>=0){
-          if(n===0)renderMyShifts();
-          if(n===1)renderTeam();
-          if(n===2)renderCalendar();
-          if(n===3)renderPlanner();
-          if(n===4)renderProfile();
-        }
-      }
+  // Re-read DB when admin saves (cross-tab) OR when user returns to this tab from admin
+  function refreshFromDB(){
+    db=loadDB();
+    populateStaffSelect();
+    const tabs=Array.from(document.querySelectorAll('.tab'));
+    const activeTab=document.querySelector('.tab.on');
+    if(activeTab){
+      const n=tabs.indexOf(activeTab);
+      if(n===0)renderMyShifts();
+      else if(n===1)renderTeam();
+      else if(n===2)renderCalendar();
+      else if(n===3)renderPlanner();
+      else if(n===4)renderProfile();
     }
+  }
+  // Cross-tab: storage event fires when another tab writes to localStorage
+  window.addEventListener('storage', function(e){
+    if(e.key===DB_KEY||e.key===DB_KEY+'_ping') refreshFromDB();
   });
+  // Same-tab: when user comes back from admin portal tab
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState==='visible') refreshFromDB();
+  });
+  // Also on focus
+  window.addEventListener('focus', function(){ refreshFromDB(); });
 }
 
 function tryAutoLogin(){
@@ -876,10 +882,12 @@ function renderCalendar(){
       const station=s.station||'cafe';
       const type=s.tag==='open'?'Open':'Close';
       const key=`${station==='cafe'?'cafe':'bak'}${type}`;
-      // colour by station
-      const bg=station==='cafe'?'#0d2e12':'#082828';
-      const col=station==='cafe'?'#4ade80':'#2dd4bf';
-      groups[key].push(`<span style="background:${bg};color:${col};padding:1px 3px;border-radius:3px;font-size:6.5px;font-weight:800;white-space:nowrap">${short}</span>`);
+      // Opening = bright white bold, Closing = dimmer italic — station shown by section emoji
+      const isOpen=s.tag==='open';
+      const nameStyle=isOpen
+        ?'color:#fff;font-weight:900;font-size:7px'
+        :'color:rgba(255,255,255,.45);font-weight:600;font-style:italic;font-size:7px';
+      groups[key].push(`<span style="${nameStyle}">${short}</span>`);
     });
 
     const myShift=resolveShift(db,me,cellMon,di);
@@ -892,15 +900,15 @@ function renderCalendar(){
     if(hasCafe){
       inner+=`<div class="cal-section">`;
       inner+=`<div class="cal-section-hdr cafe-hdr">☕ CAFE</div>`;
-      if(groups.cafeOpen.length) inner+=`<div class="cal-row-label open-lbl">▲ ${groups.cafeOpen.join(' ')}</div>`;
-      if(groups.cafeClose.length) inner+=`<div class="cal-row-label close-lbl">▼ ${groups.cafeClose.join(' ')}</div>`;
+      if(groups.cafeOpen.length) inner+=`<div class="cal-row-label open-lbl">${groups.cafeOpen.join(' ')}</div>`;
+      if(groups.cafeClose.length) inner+=`<div class="cal-row-label close-lbl">${groups.cafeClose.join(' ')}</div>`;
       inner+=`</div>`;
     }
     if(hasBak){
       inner+=`<div class="cal-section">`;
       inner+=`<div class="cal-section-hdr bak-hdr">🥐 BAKERY</div>`;
-      if(groups.bakOpen.length) inner+=`<div class="cal-row-label open-lbl">▲ ${groups.bakOpen.join(' ')}</div>`;
-      if(groups.bakClose.length) inner+=`<div class="cal-row-label close-lbl">▼ ${groups.bakClose.join(' ')}</div>`;
+      if(groups.bakOpen.length) inner+=`<div class="cal-row-label open-lbl">${groups.bakOpen.join(' ')}</div>`;
+      if(groups.bakClose.length) inner+=`<div class="cal-row-label close-lbl">${groups.bakClose.join(' ')}</div>`;
       inner+=`</div>`;
     }
     if(!hasCafe&&!hasBak){
