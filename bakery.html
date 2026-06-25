@@ -17,6 +17,33 @@ html,body{height:100%;background:#050508;color:#fff;font-family:'Inter',sans-ser
   --glow:rgba(233,30,140,0.18);
 }
 canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+@media(min-width:768px){
+  .sec-title{font-size:22px !important}
+  .sec-sub{font-size:13px !important}
+  .crew-name{font-size:17px !important}
+  .crew-badge{font-size:11px !important;padding:4px 12px !important}
+  .crew-elapsed{font-size:12px !important}
+  .crew-today{font-size:12px !important}
+  .shift-entry{padding:14px 18px !important}
+  .shift-name{font-size:15px !important}
+  .shift-times{font-size:13px !important}
+  .shift-hrs{font-size:24px !important}
+  .in-entry{padding:14px 18px !important}
+  .hist-person-name{font-size:17px !important}
+  .hist-person-total{font-size:22px !important}
+  .hist-person-count{font-size:12px !important}
+  .hdr-title{font-size:24px !important}
+  .hdr-sub{font-size:12px !important}
+  .tab{font-size:14px !important;padding:11px 16px !important}
+  .brand{font-size:34px !important}
+  .pb{font-size:20px !important;padding:18px !important}
+  .btn{font-size:15px !important;padding:15px 26px !important}
+  .btn.xs{font-size:12px !important;padding:9px 16px !important}
+  .lbl{font-size:12px !important}
+  .sheet-person{font-size:26px !important}
+  .sheet-hint{font-size:14px !important}
+  .sec{padding:24px !important}
+}
 .z1{position:relative;z-index:1}
 .pg{display:none;min-height:100vh;flex-direction:column}.pg.on{display:flex}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:none;text-decoration:none;gap:6px}
@@ -28,7 +55,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 
 /* LOGIN */
 #pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
-.login-wrap{width:100%;max-width:360px;text-align:center}
+.login-wrap{width:100%;max-width:420px;text-align:center}
 .logo-ring{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45);overflow:hidden}
 .logo-ring img{width:86%;height:86%;object-fit:contain}
 .brand{font-family:'Fredoka One',cursive;font-size:28px;color:var(--pk);margin-bottom:3px;text-shadow:0 0 24px rgba(233,30,140,.5)}
@@ -45,7 +72,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .err{color:#ff7080;font-size:12px;text-align:center;margin-top:10px;font-weight:700;display:none;background:rgba(255,60,80,.07);border:1px solid rgba(255,60,80,.15);border-radius:8px;padding:8px}
 
 /* HEADER */
-.hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
 .hdr-left{display:flex;align-items:center;gap:10px}
 .hdr-logo{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;display:flex;align-items:center;justify-content:center}
 .hdr-logo img{width:90%;height:90%;object-fit:contain}
@@ -53,7 +80,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .hdr-sub{font-size:10px;color:var(--ts);font-weight:600;margin-top:1px}
 
 /* BODY */
-.body{flex:1;overflow-y:auto;padding:18px;max-width:520px;width:100%;margin:0 auto;padding-bottom:80px}
+.body{flex:1;overflow-y:auto;padding:24px;max-width:900px;width:100%;margin:0 auto;padding-bottom:80px}
 
 /* TABS */
 .tabs-wrap{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:4px;margin-bottom:16px;display:flex;gap:2px}
@@ -67,7 +94,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .sec-sub{font-size:11px;color:var(--ts);margin-bottom:14px}
 
 /* CREW GRID */
-.crew-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.crew-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
 .crew-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
 .crew-card:hover{border-color:rgba(233,30,140,.45);transform:translateY(-2px);box-shadow:0 8px 24px rgba(233,30,140,.12)}
 .crew-card:active{transform:scale(.96)}
@@ -205,8 +232,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="font-family:'Fredoka One',cursive;font-size:20px;margin-bottom:16px">Add Employee</div>
     <input class="form-input" id="new-emp-name" type="text" placeholder="Full name" maxlength="24">
-    <input class="form-input" id="new-emp-pin" type="password" placeholder="6-digit PIN" maxlength="6" inputmode="numeric">
-    <div class="sheet-err" id="emp-err" style="margin-bottom:10px">Enter a name and a 6-digit PIN.</div>
+    <input class="form-input" id="new-emp-pin" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
+    <div class="sheet-err" id="emp-err" style="margin-bottom:10px">Enter a name and a 4-digit PIN.</div>
     <div style="display:flex;gap:8px">
       <button class="btn primary full" onclick="saveNewEmp()">Add Employee</button>
       <button class="btn ghost sm" onclick="closeAddEmp()">Cancel</button>
@@ -700,7 +727,7 @@ function saveNewEmp() {
   const name = document.getElementById('new-emp-name').value.trim();
   const pin = document.getElementById('new-emp-pin').value.trim();
   const err = document.getElementById('emp-err');
-  if (!name || !/^\d{6}$/.test(pin)) { err.style.display = 'block'; return; }
+  if (!name || !/^\d{4}$/.test(pin)) { err.style.display = 'block'; return; }
   if (bk.staff[name]) { err.textContent = 'Name already exists.'; err.style.display = 'block'; return; }
   bk.staff[name] = { pin, pic: null };
   saveBK(bk);
