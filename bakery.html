@@ -1,3 +1,15 @@
+
+(no subject)
+Spam
+Tadiwa Tamani <tamanitadiwa@gmail.com>
+Attachments
+5:11 PM (8 minutes ago)
+to me
+
+Why is this message in spam? This message is similar to messages that were identified as spam in the past.
+Report not spam
+ One attachment
+  •  Scanned by Gmail
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,6 +134,9 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .hist-person-count{font-size:10px;color:var(--ts);font-weight:700}
 .hist-chevron{color:var(--ts);font-size:16px;transition:transform .2s}
 .hist-chevron.open{transform:rotate(90deg)}
+.hist-person-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.hist-person-card:hover{border-color:rgba(233,30,140,.45);transform:translateY(-1px);box-shadow:0 6px 20px rgba(233,30,140,.1)}
+.hist-person-card:active{transform:scale(.97)}
 .hist-person-body{display:none;border-top:1px solid var(--bd)}
 .hist-person-body.open{display:block}
 /* Summary row at top of each person */
@@ -257,7 +272,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       <div class="tab on" onclick="switchTab(0)">👥 Team</div>
       <div class="tab" onclick="switchTab(1)">📋 Today</div>
       <div class="tab" onclick="switchTab(2)">📊 History</div>
-      <div class="tab" onclick="switchTab(3)">💰 Payment</div>
     </div>
 
     <!-- TAB 0: TEAM / CLOCK -->
@@ -293,14 +307,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       </div>
     </div>
 
-    <!-- TAB 3: PAYMENT SUMMARY -->
-    <div class="tab-content" id="tc-3">
-      <div class="sec">
-        <div class="sec-title">💰 Payment Summary</div>
-        <div class="sec-sub">Total hours per employee — for payroll</div>
-        <div id="payment-content"></div>
-      </div>
-    </div>
+
   </div>
 </div>
 
@@ -309,7 +316,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 // DATA LAYER
 // ══════════════════════════════════════════
 const BK_KEY = 'janes_bakery_v4';
-const ADMIN_PIN = '555555'; // 6-digit admin PIN
+const ADMIN_PIN = '765305'; // 6-digit admin PIN
 
 const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FDAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -326,10 +333,10 @@ function initBK() {
   const d = {
     v: 4,
     staff: {
-      Sly:     { pin: '111111', pic: null },
-      Wayne:   { pin: '222222', pic: null },
-      Panashe: { pin: '333333', pic: null },
-      Hilda:   { pin: '444444', pic: null }
+      Sly:     { pin: '1111', pic: null },
+      Wayne:   { pin: '2222', pic: null },
+      Panashe: { pin: '3333', pic: null },
+      Hilda:   { pin: '4444', pic: null }
     },
     sessions: {},
     history: []
@@ -397,9 +404,8 @@ function switchTab(n) {
   if (n === 0) renderCrew();
   if (n === 1) renderToday();
   if (n === 2) renderHistoryTab();
-  if (n === 3) renderPayment();
 }
-function renderAll() { renderCrew(); renderToday(); renderHistoryTab(); renderPayment(); }
+function renderAll() { renderCrew(); renderToday(); renderHistoryTab(); }
 
 // ══════════════════════════════════════════
 // TAB 0 — TEAM
@@ -444,11 +450,11 @@ function openClockSheet(nm) {
 }
 function closeSheet() { document.getElementById('pin-sheet-bg').classList.remove('on'); sheetPin = ''; renderSheetDots(); }
 function renderSheetDots() {
-  document.getElementById('sheet-dots').innerHTML = Array(6).fill(0).map((_, i) =>
+  document.getElementById('sheet-dots').innerHTML = Array(4).fill(0).map((_, i) =>
     `<div class="pdot${i < sheetPin.length ? ' on' : ''}" style="width:12px;height:12px"></div>`
   ).join('');
 }
-function spp(d) { if (sheetPin.length >= 6) return; sheetPin += d; renderSheetDots(); if (sheetPin.length === 6) setTimeout(submitClockPin, 260); }
+function spp(d) { if (sheetPin.length >= 4) return; sheetPin += d; renderSheetDots(); if (sheetPin.length === 4) setTimeout(submitClockPin, 260); }
 function spbk() { sheetPin = sheetPin.slice(0,-1); renderSheetDots(); }
 function spclr() { sheetPin = ''; renderSheetDots(); }
 function submitClockPin() {
@@ -534,7 +540,8 @@ function renderToday() {
 }
 
 // ══════════════════════════════════════════
-// TAB 2 — HISTORY (individual, collapsible)
+// TAB 2 — HISTORY
+// Shows each person as a card — tap → admin PIN required → detail popup
 // ══════════════════════════════════════════
 function renderHistoryTab() {
   const el = document.getElementById('history-content');
@@ -544,39 +551,25 @@ function renderHistoryTab() {
   }
   el.innerHTML = names.map(nm => {
     const entries = bk.history.filter(h => h.name === nm);
-    if (!entries.length) return '';
-    const totalHrs = entries.reduce((a, h) => a + h.hours, 0);
+    const isIn = !!(bk.sessions[nm] && bk.sessions[nm].in);
+    const todayHrs = getTodayHrs(nm);
     const totalShifts = entries.length;
-    const avgHrs = (totalHrs / totalShifts).toFixed(1);
-    return `<div class="hist-person">
-      <div class="hist-person-hdr" onclick="toggleHist('hb-${nm}','hc-${nm}')">
+    return `<div class="hist-person-card" onclick="openHistDetail('${nm}')">
+      <div style="display:flex;align-items:center;gap:12px">
         <div class="hist-person-av">${nm[0]}</div>
-        <div class="hist-person-name">${nm}</div>
-        <div class="hist-person-stats">
-          <div class="hist-person-total">${totalHrs.toFixed(1)}h</div>
-          <div class="hist-person-count">${totalShifts} shift${totalShifts !== 1 ? 's' : ''}</div>
+        <div style="flex:1">
+          <div class="hist-person-name">${nm}</div>
+          <div style="font-size:11px;color:var(--ts);margin-top:2px">${totalShifts} shift${totalShifts !== 1 ? 's' : ''} recorded · Today: ${(todayHrs + (isIn ? Math.round((Date.now()-(bk.sessions[nm]||{}).in||0)/36000)/100 : 0)).toFixed(2)}h</div>
         </div>
-        <div class="hist-chevron" id="hc-${nm}">›</div>
-      </div>
-      <div class="hist-person-body" id="hb-${nm}">
-        <div class="hist-summary-row">
-          <div class="hist-sum-chip"><div class="hist-sum-val">${totalHrs.toFixed(1)}h</div><div class="hist-sum-lbl">Total Hours</div></div>
-          <div class="hist-sum-chip"><div class="hist-sum-val">${totalShifts}</div><div class="hist-sum-lbl">Shifts</div></div>
-          <div class="hist-sum-chip"><div class="hist-sum-val">${avgHrs}h</div><div class="hist-sum-lbl">Avg / Shift</div></div>
+        <div style="text-align:right">
+          <div style="font-size:10px;color:var(--ts);font-weight:700;letter-spacing:.06em;text-transform:uppercase">Admin only</div>
+          <div style="font-size:11px;color:var(--pk);margin-top:2px;font-weight:700">🔒 View →</div>
         </div>
-        ${entries.map(h => {
-          const d = new Date(h.date + 'T12:00:00'), dow = (d.getDay() + 6) % 7;
-          return `<div class="hist-shift-row">
-            <div class="hist-shift-date">${SDAYS[dow]} ${d.getDate()} ${MO[d.getMonth()]}</div>
-            <div class="hist-shift-in">▶ ${fmtTime(new Date(h.in))}</div>
-            <div class="hist-shift-out">⏹ ${h.out ? fmtTime(new Date(h.out)) : '–'}</div>
-            <div class="hist-shift-hrs">${h.hours}h</div>
-          </div>`;
-        }).join('')}
       </div>
     </div>`;
   }).join('');
 }
+
 function toggleHist(bodyId, chevId) {
   const body = document.getElementById(bodyId), chev = document.getElementById(chevId);
   if (!body) return;
@@ -584,48 +577,126 @@ function toggleHist(bodyId, chevId) {
   if (chev) { chev.textContent = open ? '∨' : '›'; chev.classList.toggle('open', open); }
 }
 
-// ══════════════════════════════════════════
-// TAB 3 — PAYMENT SUMMARY
-// ══════════════════════════════════════════
-function renderPayment() {
-  const el = document.getElementById('payment-content');
-  const names = Object.keys(bk.staff);
-  if (!bk.history.length) {
-    el.innerHTML = '<div class="empty"><div class="ei">💰</div>No hours recorded yet</div>'; return;
+// ── ADMIN PIN for history detail ──
+let histDetailTarget = '', adminPinVal = '';
+
+function openHistDetail(nm) {
+  histDetailTarget = nm;
+  adminPinVal = '';
+  renderAdminPinDots();
+  document.getElementById('admin-pin-err').style.display = 'none';
+  document.getElementById('admin-pin-person').textContent = nm;
+  document.getElementById('admin-pin-bg').classList.add('on');
+}
+function closeAdminPin() {
+  document.getElementById('admin-pin-bg').classList.remove('on');
+  adminPinVal = ''; renderAdminPinDots();
+}
+function renderAdminPinDots() {
+  document.getElementById('admin-pin-dots').innerHTML =
+    Array(6).fill(0).map((_, i) =>
+      `<div class="pdot${i < adminPinVal.length ? ' on' : ''}" style="width:12px;height:12px"></div>`
+    ).join('');
+}
+function app(d) { if (adminPinVal.length >= 6) return; adminPinVal += d; renderAdminPinDots(); if (adminPinVal.length === 6) setTimeout(submitAdminPin, 260); }
+function apbk() { adminPinVal = adminPinVal.slice(0,-1); renderAdminPinDots(); }
+function apclr() { adminPinVal = ''; renderAdminPinDots(); }
+
+function submitAdminPin() {
+  if (adminPinVal !== ADMIN_PIN) {
+    adminPinVal = ''; renderAdminPinDots();
+    document.getElementById('admin-pin-err').style.display = 'block';
+    const s = document.querySelector('.admin-pin-sheet'); s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    return;
   }
-  // Group history by week
-  el.innerHTML = names.map(nm => {
-    const entries = bk.history.filter(h => h.name === nm);
-    if (!entries.length) return '';
-    // Group by week (Mon–Sun)
-    const byWeek = {};
-    entries.forEach(h => {
-      const d = new Date(h.date + 'T12:00:00');
-      const di = (d.getDay() + 6) % 7;
-      const mon = new Date(d); mon.setDate(d.getDate() - di);
-      const wk = dateStr(mon);
-      if (!byWeek[wk]) byWeek[wk] = { hrs: 0, shifts: 0, label: `${mon.getDate()} ${MO[mon.getMonth()]} – ${new Date(mon.getTime()+6*86400000).getDate()} ${MO[new Date(mon.getTime()+6*86400000).getMonth()]}` };
-      byWeek[wk].hrs += h.hours; byWeek[wk].shifts++;
-    });
-    const totalHrs = entries.reduce((a, h) => a + h.hours, 0);
-    const weeks = Object.entries(byWeek).sort((a,b) => b[0].localeCompare(a[0]));
-    return `<div class="pay-card">
-      <div class="pay-name"><div class="crew-av" style="width:32px;height:32px;font-size:13px;margin:0;flex-shrink:0">${nm[0]}</div>${nm}</div>
-      ${weeks.map(([, w]) => `
-        <div class="pay-row">
-          <span class="pay-label">${w.label}</span>
-          <span style="display:flex;gap:12px;align-items:center">
-            <span style="font-size:11px;color:var(--ts)">${w.shifts} shift${w.shifts!==1?'s':''}</span>
-            <span class="pay-hrs">${w.hrs.toFixed(1)}h</span>
-          </span>
-        </div>`).join('')}
-      <div class="pay-row total">
-        <span>Total All Time</span>
-        <span class="pay-hrs">${totalHrs.toFixed(1)}h</span>
+  closeAdminPin();
+  openDetailModal(histDetailTarget);
+}
+
+// ── DETAIL MODAL (admin only) ──
+function openDetailModal(nm) {
+  const entries = bk.history.filter(h => h.name === nm);
+  const totalHrs = entries.reduce((a, h) => a + h.hours, 0);
+  const totalShifts = entries.length;
+  const avgHrs = totalShifts ? (totalHrs / totalShifts).toFixed(2) : '0';
+
+  // Group by week for payment
+  const byWeek = {};
+  entries.forEach(h => {
+    const d = new Date(h.date + 'T12:00:00');
+    const di = (d.getDay() + 6) % 7;
+    const mon = new Date(d); mon.setDate(d.getDate() - di);
+    const wk = dateStr(mon);
+    const wkEnd = new Date(mon.getTime() + 6 * 86400000);
+    if (!byWeek[wk]) byWeek[wk] = {
+      hrs: 0, shifts: 0,
+      label: `${mon.getDate()} ${MO[mon.getMonth()]} – ${wkEnd.getDate()} ${MO[wkEnd.getMonth()]}`
+    };
+    byWeek[wk].hrs += h.hours; byWeek[wk].shifts++;
+  });
+
+  const weeksHtml = Object.entries(byWeek).sort((a,b)=>b[0].localeCompare(a[0])).map(([,w]) =>
+    `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd2)">
+      <span style="font-size:12px;color:var(--ts)">${w.label}</span>
+      <span style="display:flex;gap:12px">
+        <span style="font-size:11px;color:var(--ts)">${w.shifts} shift${w.shifts!==1?'s':''}</span>
+        <span style="font-size:13px;font-weight:800;color:var(--y)">${w.hrs.toFixed(1)}h</span>
+      </span>
+    </div>`
+  ).join('');
+
+  const shiftsHtml = entries.map(h => {
+    const d = new Date(h.date + 'T12:00:00'), dow = (d.getDay() + 6) % 7;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--bd2)">
+      <div style="font-size:11px;color:var(--ts);min-width:80px;font-weight:600">${SDAYS[dow]} ${d.getDate()} ${MO[d.getMonth()]}</div>
+      <div style="flex:1;font-size:11px">
+        <span style="color:var(--g)">▶ ${fmtTime(new Date(h.in))}</span>
+        <span style="color:var(--ts)"> → </span>
+        <span style="color:var(--r)">⏹ ${h.out ? fmtTime(new Date(h.out)) : 'Still in'}</span>
       </div>
+      <div style="font-size:13px;font-weight:800;color:var(--y);min-width:36px;text-align:right">${h.hours}h</div>
     </div>`;
   }).join('');
+
+  document.getElementById('detail-modal-content').innerHTML = `
+    <!-- Summary chips -->
+    <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap">
+      <div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--pk)">${totalHrs.toFixed(1)}h</div>
+        <div style="font-size:9px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:3px">Total Hours</div>
+      </div>
+      <div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--t)">${totalShifts}</div>
+        <div style="font-size:9px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:3px">Shifts</div>
+      </div>
+      <div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;text-align:center">
+        <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--y)">${avgHrs}h</div>
+        <div style="font-size:9px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:3px">Avg/Shift</div>
+      </div>
+    </div>
+
+    <!-- Weekly payment breakdown -->
+    <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:8px">💰 Weekly Hours (for payment)</div>
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:12px;margin-bottom:18px">
+      ${weeksHtml || '<div style="font-size:12px;color:var(--ts);text-align:center;padding:10px">No weekly data yet</div>'}
+      <div style="display:flex;justify-content:space-between;padding-top:10px;margin-top:4px;border-top:2px solid var(--bd)">
+        <span style="font-size:13px;font-weight:800;color:var(--t)">Total All Time</span>
+        <span style="font-size:16px;font-weight:800;color:var(--y)">${totalHrs.toFixed(1)}h</span>
+      </div>
+    </div>
+
+    <!-- Individual shift log -->
+    <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:8px">📋 Individual Shift Log</div>
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:4px 12px">
+      ${shiftsHtml || '<div style="font-size:12px;color:var(--ts);text-align:center;padding:14px">No shifts yet</div>'}
+    </div>
+  `;
+
+  document.getElementById('detail-modal-name').textContent = nm;
+  document.getElementById('detail-modal-bg').classList.add('on');
 }
+function closeDetailModal() { document.getElementById('detail-modal-bg').classList.remove('on'); }
+
 
 // ══════════════════════════════════════════
 // ADD EMPLOYEE
@@ -671,5 +742,40 @@ function toast(m) { const t=document.getElementById('toast'); t.textContent=m; t
 
 tryAutoLogin();
 </script>
+
+<!-- ADMIN PIN SHEET (for history detail) -->
+<div class="sheet-bg" id="admin-pin-bg" onclick="if(event.target===this)closeAdminPin()">
+  <div class="sheet admin-pin-sheet">
+    <div class="sheet-handle"></div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;margin-bottom:6px">Admin Access Required</div>
+    <div class="sheet-person" id="admin-pin-person">–</div>
+    <div class="sheet-hint">Enter 6-digit admin PIN to view details</div>
+    <div class="pin-dots" id="admin-pin-dots"></div>
+    <div class="pin-grid">
+      <button class="pb" onclick="app('1')">1</button><button class="pb" onclick="app('2')">2</button><button class="pb" onclick="app('3')">3</button>
+      <button class="pb" onclick="app('4')">4</button><button class="pb" onclick="app('5')">5</button><button class="pb" onclick="app('6')">6</button>
+      <button class="pb" onclick="app('7')">7</button><button class="pb" onclick="app('8')">8</button><button class="pb" onclick="app('9')">9</button>
+      <button class="pb sm" onclick="apclr()">Clear</button><button class="pb z" onclick="app('0')">0</button><button class="pb" onclick="apbk()">⌫</button>
+    </div>
+    <div class="sheet-err" id="admin-pin-err">Incorrect admin PIN.</div>
+    <button class="btn ghost full" style="margin-top:10px" onclick="closeAdminPin()">Cancel</button>
+  </div>
+</div>
+
+<!-- DETAIL MODAL (admin view per person) -->
+<div class="sheet-bg" id="detail-modal-bg" onclick="if(event.target===this)closeDetailModal()">
+  <div class="sheet" style="max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">🔒 Admin View</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)" id="detail-modal-name">–</div>
+      </div>
+      <button class="btn ghost xs" onclick="closeDetailModal()">Close</button>
+    </div>
+    <div id="detail-modal-content"></div>
+  </div>
+</div>
+
 </body>
 </html>
