@@ -53,7 +53,7 @@ html,body{height:100%;margin:0;padding:0;background:#050508!important;color:#fff
 input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var(--ts);display:none}
 @media(min-width:400px){.hdr-name{display:block}}
 /* BODY */
-.body{flex:1;overflow-y:auto;overflow-x:hidden;padding:18px;max-width:740px;width:100%;margin:0 auto;padding-bottom:80px}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;padding:24px;max-width:1100px;width:100%;margin:0 auto;padding-bottom:80px}
 .greet{border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px;background:var(--s1);position:relative;overflow:hidden}
 .greet::before{content:'';position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(233,30,140,.18),transparent 70%);top:-120px;right:-60px;pointer-events:none}
 .greet-hi{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:3px}.greet-hi em{color:var(--pk);font-style:normal}
@@ -219,6 +219,45 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .swipe-hint{font-size:11px;color:var(--tm);margin-top:18px;display:flex;align-items:center;justify-content:center;gap:6px}
 .swipe-arrow{animation:sw 2s infinite}@keyframes sw{0%,100%{transform:translateX(0);opacity:.4}50%{transform:translateX(8px);opacity:1}}
 
+@media(min-width:768px){
+  .body{padding:28px 40px !important}
+  .greet{padding:28px !important}
+  .greet-hi{font-size:32px !important}
+  .greet-sub{font-size:15px !important}
+  .greet-date{font-size:13px !important}
+  .stat-v{font-size:34px !important}
+  .stat-l{font-size:11px !important}
+  .stat{padding:18px 14px !important}
+  .tab{font-size:14px !important;padding:11px 20px !important}
+  .shift-row{padding:16px 20px !important}
+  .sr-day-num{font-size:30px !important}
+  .sr-time{font-size:16px !important}
+  .sr-role{font-size:12px !important}
+  .sr-h{font-size:13px !important}
+  .chip{font-size:11px !important;padding:5px 13px !important}
+  .station-chip{font-size:11px !important;padding:5px 13px !important}
+  .tv-row{padding:14px 18px !important}
+  .tv-name{font-size:15px !important}
+  .tv-role{font-size:13px !important}
+  .tv-time{font-size:14px !important}
+  .tv-av{width:42px !important;height:42px !important;font-size:18px !important}
+  .wk-label{font-size:15px !important}
+  .hdr{padding:14px 28px !important}
+  .hdr-brand{font-size:24px !important}
+  .cal-day{min-height:110px !important}
+  .cal-day-num{font-size:15px !important}
+  .cal-names-open,.cal-names-close{font-size:9px !important}
+  .cal-section-hdr{font-size:9px !important}
+  .hs-title{font-size:12px !important}
+  .av-lg{width:96px !important;height:96px !important;font-size:38px !important}
+  .profile-name-big{font-size:34px !important}
+  .profile-role{font-size:13px !important}
+  .info-item .iv{font-size:28px !important}
+  .hours-summary{padding:18px !important}
+  .today-badge{font-size:11px !important;padding:4px 12px !important}
+  .stats{gap:12px !important}
+  .tabs-wrap{padding:6px !important}
+}
 </style>
 </head>
 <body>
