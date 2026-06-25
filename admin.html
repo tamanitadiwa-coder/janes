@@ -215,7 +215,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .adm-logo img{width:90%;height:90%;object-fit:contain}
 .adm-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pk);text-shadow:0 0 20px rgba(233,30,140,.4)}
 .adm-title em{color:var(--t);font-style:normal}
-.adm-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;max-width:860px;width:100%;margin:0 auto;padding-bottom:80px}
+.adm-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px;max-width:1100px;width:100%;margin:0 auto;padding-bottom:80px}
 #adm-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
 /* PEOPLE BUTTONS */
 .person-btn{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--bd);border-radius:12px;cursor:pointer;transition:all .15s;width:100%;margin-bottom:8px;text-align:left}
@@ -303,6 +303,32 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 .hist-table td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--t)}
 .hist-table tr:hover td{background:rgba(255,255,255,.02)}
 
+@media(min-width:768px){
+  .adm-body{padding:28px 40px !important}
+  .adm-hdr{padding:14px 28px !important}
+  .adm-title{font-size:24px !important}
+  .adm-tab{font-size:14px !important;padding:11px 20px !important}
+  .person-btn{padding:18px 20px !important}
+  .person-btn-name{font-size:17px !important}
+  .person-btn-role{font-size:12px !important}
+  .person-btn-av{width:50px !important;height:50px !important;font-size:20px !important}
+  .person-btn-meta{font-size:13px !important}
+  .adm-cal-label{font-size:26px !important}
+  .adm-cal-day{min-height:72px !important}
+  .adm-day-num{font-size:18px !important}
+  .adm-day-info{font-size:10px !important}
+  .shift-editor-title{font-size:22px !important}
+  .shift-type-btn{font-size:15px !important;padding:14px 22px !important}
+  .shift-detail-label{font-size:13px !important}
+  .shift-detail-val{font-size:16px !important}
+  .wt-btn{font-size:15px !important;padding:14px !important}
+  .overview-row{grid-template-columns:150px repeat(7,1fr) !important}
+  .ov-name{font-size:14px !important}
+  .ov-day-head{font-size:11px !important}
+  .hist-table th{font-size:12px !important;padding:10px 14px !important}
+  .hist-table td{font-size:13px !important;padding:11px 14px !important}
+  .badge{font-size:12px !important;padding:4px 12px !important}
+}
 </style>
 </head>
 <body>
