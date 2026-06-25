@@ -291,6 +291,10 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <button class="btn primary full" onclick="doLogin()">Sign In →</button>
         <div class="err" id="err"></div>
       </div>
+      <!-- Bakery corner link -->
+      <a href="bakery.html" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:8px 18px;background:linear-gradient(135deg,#E91E8C,#C2185B);border-radius:100px;text-decoration:none;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;box-shadow:0 4px 18px rgba(233,30,140,.4);letter-spacing:.04em">
+        🥐 Bakery
+      </a>
     </div>
   </div>
 </div>
@@ -325,7 +329,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
     <div class="hdr-r">
       <div class="av" id="hdr-av" onclick="switchTab(4)"><div class="av-upload">📷</div></div>
       <div class="hdr-name" id="hdr-nm">--</div>
-      <a href="admin.html" class="btn ghost xs" style="text-decoration:none">⌂</a><button class="btn ghost xs" onclick="goLock()">🔒</button>
+      <button class="btn ghost xs" onclick="goLock()">🔒</button>
     </div>
   </div>
   <div class="body">
@@ -404,9 +408,11 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
           ⚙️ Open Admin Portal
         </a>
       </div>
+      <a href="bakery.html" class="btn full" style="background:linear-gradient(135deg,#150515,#250a25);border:1px solid rgba(233,30,140,.35);color:var(--pk);text-decoration:none;margin-bottom:10px">🥐 Bakery Portal</a>
       <button class="btn danger full" onclick="logout()">Sign Out</button>
     </div>
   </div>
+
 </div>
 
 <script>
