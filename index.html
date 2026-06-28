@@ -259,6 +259,39 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   .tabs-wrap{padding:6px !important}
 }
 </style>
+
+  <!-- Firebase SDK (real-time sync across devices) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ╔══════════════════════════════════════════════════════════╗
+    // ║  PASTE YOUR FIREBASE CONFIG HERE (same project as bakery) ║
+    // ╚══════════════════════════════════════════════════════════╝
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjgFTU8CLaL8cTB533T1QzdTSNGJvneBk",
+      authDomain: "janes-ff714.firebaseapp.com",
+      projectId: "janes-ff714",
+      storageBucket: "janes-ff714.appspot.com",
+      messagingSenderId: "887885411191",
+      appId: "1:887885411191:web:012ee760f1dd09f3876772"
+    };
+
+    let fbApp, fbDB;
+    try {
+      fbApp = initializeApp(firebaseConfig, 'portal');
+      fbDB = getFirestore(fbApp);
+      window._portalFbDB = fbDB;
+      window._portalFbDoc = doc;
+      window._portalFbSetDoc = setDoc;
+      window._portalFbOnSnapshot = onSnapshot;
+      window.dispatchEvent(new Event('portal-firebase-ready'));
+    } catch(e) {
+      console.warn('Firebase init failed — offline mode', e);
+      window.dispatchEvent(new Event('portal-firebase-ready'));
+    }
+  </script>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -567,7 +600,25 @@ function initDB() {
 }
 
 function saveDB(db) {
-  try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) { console.warn('DB save failed',e); }
+  // Save locally
+  try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
+  // Save to Firebase for cross-device sync
+  if (window._portalFbDB) {
+    try {
+      const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
+      window._portalFbSetDoc(ref, {
+        version: db.version,
+        staff: db.staff || {},
+        schedules: db.schedules || {},
+        defaultSched: db.defaultSched || {},
+        events: db.events || [],
+        duties: db.duties || [],
+        personalTasks: db.personalTasks || {},
+        shiftHistory: db.shiftHistory || {},
+        weekTypeOverrides: db.weekTypeOverrides || {}
+      }).catch(e => console.warn('Firebase save failed:', e));
+    } catch(e) { console.warn('Firebase save error:', e); }
+  }
 }
 
 // ── Schedule helpers ──
@@ -629,7 +680,7 @@ let db, me=null, pinVal='', myWk=0, teamWk=0, lockPin='', lockClockInterval=null
 let calOff=0, activeEvFilter='all';
 
 function init(){
-  // Clear ALL stale data from old DB versions
+  // Clear stale old keys
   ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
    'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
     try{localStorage.removeItem(k);}catch(e){}
@@ -637,6 +688,39 @@ function init(){
   db=loadDB();
   tryAutoLogin();
   populateStaffSelect();
+  // Connect Firebase real-time listener
+  function connectFirebase() {
+    if (!window._portalFbDB) return;
+    const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
+    window._portalFbOnSnapshot(ref, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        if (data.version === DB_VERSION) {
+          // Merge cloud data into local db — keep identity fields from defaults
+          db.schedules = data.schedules || db.schedules;
+          db.defaultSched = data.defaultSched || db.defaultSched;
+          db.events = data.events || db.events;
+          db.duties = data.duties || db.duties;
+          db.personalTasks = data.personalTasks || db.personalTasks;
+          db.shiftHistory = data.shiftHistory || db.shiftHistory;
+          db.weekTypeOverrides = data.weekTypeOverrides || db.weekTypeOverrides;
+          // Preserve pic from cloud
+          Object.keys(data.staff||{}).forEach(nm => {
+            if (db.staff[nm] && data.staff[nm] && data.staff[nm].pic) {
+              db.staff[nm].pic = data.staff[nm].pic;
+            }
+            if (db.staff[nm] && data.staff[nm] && data.staff[nm].weekType) {
+              db.staff[nm].weekType = data.staff[nm].weekType;
+            }
+          });
+          try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
+          refreshFromDB();
+        }
+      }
+    }, err => console.warn('Portal Firebase sync error:', err));
+  }
+  if (window._portalFbDB) { connectFirebase(); }
+  else { window.addEventListener('portal-firebase-ready', connectFirebase); }
   // Listen for admin saves — update db in real time
   // Re-read DB when admin saves (cross-tab) OR when user returns to this tab from admin
   function refreshFromDB(){
