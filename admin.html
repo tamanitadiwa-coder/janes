@@ -330,6 +330,39 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   .badge{font-size:12px !important;padding:4px 12px !important}
 }
 </style>
+
+  <!-- Firebase SDK (real-time sync across devices) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ╔══════════════════════════════════════════════════════════╗
+    // ║  PASTE YOUR FIREBASE CONFIG HERE (same project as bakery) ║
+    // ╚══════════════════════════════════════════════════════════╝
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjgFTU8CLaL8cTB533T1QzdTSNGJvneBk",
+      authDomain: "janes-ff714.firebaseapp.com",
+      projectId: "janes-ff714",
+      storageBucket: "janes-ff714.appspot.com",
+      messagingSenderId: "887885411191",
+      appId: "1:887885411191:web:012ee760f1dd09f3876772"
+    };
+
+    let fbApp, fbDB;
+    try {
+      fbApp = initializeApp(firebaseConfig, 'admin');
+      fbDB = getFirestore(fbApp);
+      window._portalFbDB = fbDB;
+      window._portalFbDoc = doc;
+      window._portalFbSetDoc = setDoc;
+      window._portalFbOnSnapshot = onSnapshot;
+      window.dispatchEvent(new Event('portal-firebase-ready'));
+    } catch(e) {
+      console.warn('Firebase init failed — offline mode', e);
+      window.dispatchEvent(new Event('portal-firebase-ready'));
+    }
+  </script>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -615,7 +648,25 @@ function initDB() {
 }
 
 function saveDB(db) {
-  try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) { console.warn('DB save failed',e); }
+  // Save locally
+  try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
+  // Save to Firebase for cross-device sync
+  if (window._portalFbDB) {
+    try {
+      const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
+      window._portalFbSetDoc(ref, {
+        version: db.version,
+        staff: db.staff || {},
+        schedules: db.schedules || {},
+        defaultSched: db.defaultSched || {},
+        events: db.events || [],
+        duties: db.duties || [],
+        personalTasks: db.personalTasks || {},
+        shiftHistory: db.shiftHistory || {},
+        weekTypeOverrides: db.weekTypeOverrides || {}
+      }).catch(e => console.warn('Firebase save failed:', e));
+    } catch(e) { console.warn('Firebase save error:', e); }
+  }
 }
 
 // ── Schedule helpers ──
