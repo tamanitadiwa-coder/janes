@@ -130,6 +130,53 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
   .brand{font-size:36px}.pb{font-size:22px;padding:18px}
   .btn{font-size:14px;padding:14px 24px}.btn.xs{font-size:12px;padding:9px 16px}
 }
+
+/* MODIFY SHIFT MODAL */
+.modify-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:700;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modify-modal-bg.on{display:flex}
+.modify-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;color:#111;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:fadeUp .3s ease}
+.modify-modal h2{font-size:22px;font-weight:800;margin-bottom:4px;color:#111}
+.modify-modal .msub{font-size:13px;color:#666;margin-bottom:20px}
+.mfield{margin-bottom:14px}
+.mfield label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:6px}
+.mfield input{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;font-weight:600;color:#111;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+.mfield input:focus{border-color:#E91E8C}
+.mduration{background:#fff5f0;border:1px solid #ffd0c0;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.mduration-label{font-size:14px;font-weight:700;color:#333}
+.mduration-val{font-size:18px;font-weight:800;color:#E91E8C}
+.mfield textarea{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:13px;color:#111;outline:none;font-family:'Inter',sans-serif;resize:none;height:70px;transition:border-color .2s}
+.mfield textarea:focus{border-color:#E91E8C}
+.modify-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.mbtn{padding:12px 24px;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;transition:all .15s}
+.mbtn.save{background:#E91E8C;color:#fff;box-shadow:0 4px 16px rgba(233,30,140,.35)}
+.mbtn.save:hover{background:#C2185B}.mbtn.save:active{transform:scale(.97)}
+.mbtn.cancel{background:#f5f5f5;color:#666}.mbtn.cancel:hover{background:#eee}
+/* SHIFT LOG ROW (like image 2) */
+.shift-log-row{display:flex;align-items:center;gap:12px;padding:16px 18px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin-bottom:6px;flex-wrap:wrap}
+.shift-log-row:hover{border-color:var(--bd2)}
+.slog-date{font-size:14px;font-weight:800;color:var(--t);min-width:100px}
+.slog-time{font-size:14px;font-weight:700;color:var(--pk);min-width:130px}
+.slog-clocked{text-align:center;min-width:70px}
+.slog-final{text-align:center;min-width:70px}
+.slog-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);margin-bottom:2px}
+.slog-val{font-size:13px;font-weight:700;color:var(--t)}
+.slog-status{padding:4px 12px;border-radius:100px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;flex-shrink:0}
+.status-complete{background:rgba(0,230,118,.12);color:var(--g);border:1px solid rgba(0,230,118,.25)}
+.status-inprogress{background:rgba(255,229,0,.1);color:var(--y);border:1px solid rgba(255,229,0,.2)}
+.slog-actions{display:flex;gap:6px;margin-left:auto;flex-shrink:0}
+.slog-btn{padding:7px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;transition:all .15s;font-family:'Inter',sans-serif}
+.slog-btn.modify{background:transparent;border-color:var(--pk);color:var(--pk)}
+.slog-btn.modify:hover{background:var(--pk);color:#fff}
+/* DOWNLOAD BTN */
+.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,#00b856,var(--g));color:#000;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:800;cursor:pointer;transition:all .15s}
+.dl-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,230,118,.4)}
+.dl-btn:active{transform:scale(.97)}
+@media(min-width:768px){
+  .shift-log-row{flex-wrap:nowrap}
+  .slog-date{min-width:110px}
+  .slog-time{min-width:150px}
+}
+
 </style>
 </head>
 <body>
@@ -615,7 +662,7 @@ function renderHistoryTab(){
         <div class="hist-person-av">${nm[0]}</div>
         <div style="flex:1">
           <div class="hist-person-name">${nm}</div>
-          <div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">${entries.length} shift${entries.length!==1?'s':''} · Today: ${getTodayHrs(nm).toFixed(2)}h</div>
+          <div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">${entries.length} shift${entries.length!==1?'s':''} recorded · Today: ${getTodayHrs(nm).toFixed(2)}h</div>
         </div>
         <div style="text-align:right">
           <div class="hist-person-total">${totalHrs.toFixed(1)}h</div>
@@ -628,6 +675,7 @@ function renderHistoryTab(){
 }
 
 // ── ADMIN PIN FOR HISTORY ──
+let histDetailTarget='',adminPinVal='';
 function openHistDetail(nm){
   histDetailTarget=nm;adminPinVal='';renderAdminPinDots();
   document.getElementById('admin-pin-err').style.display='none';
@@ -652,12 +700,14 @@ function submitAdminPin(){
   closeAdminPin();openDetailModal(histDetailTarget);
 }
 
+// ── DETAIL MODAL ──
 function openDetailModal(nm){
   const entries=bk.history.filter(h=>h.name===nm);
   const totalHrs=entries.reduce((a,h)=>a+h.hours,0);
   const totalShifts=entries.length;
   const avgHrs=totalShifts?(totalHrs/totalShifts).toFixed(2):'0';
-  // Group by week
+
+  // Weekly grouping for payment
   const byWeek={};
   entries.forEach(h=>{
     const d=new Date(h.date+'T12:00:00'),di=(d.getDay()+6)%7;
@@ -667,6 +717,7 @@ function openDetailModal(nm){
     if(!byWeek[wk])byWeek[wk]={hrs:0,shifts:0,label:`${mon.getDate()} ${MO[mon.getMonth()]} – ${wkEnd.getDate()} ${MO[wkEnd.getMonth()]}`};
     byWeek[wk].hrs+=h.hours;byWeek[wk].shifts++;
   });
+
   const weeksHtml=Object.entries(byWeek).sort((a,b)=>b[0].localeCompare(a[0])).map(([,w])=>
     `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">
       <span style="font-size:13px;color:var(--ts);font-weight:600">${w.label}</span>
@@ -675,18 +726,37 @@ function openDetailModal(nm){
         <span style="font-size:15px;font-weight:800;color:var(--y)">${w.hrs.toFixed(1)}h</span>
       </span>
     </div>`).join('');
-  const shiftsHtml=entries.map(h=>{
+
+  // Shift log rows (like image 2)
+  const shiftRows=entries.map(h=>{
     const d=new Date(h.date+'T12:00:00'),dow=(d.getDay()+6)%7;
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd2)">
-      <div style="font-size:12px;color:var(--ts);min-width:88px;font-weight:600">${SDAYS[dow]} ${d.getDate()} ${MO[d.getMonth()]}</div>
-      <div style="flex:1;font-size:12px">
-        <span style="color:var(--g);font-weight:700">▶ ${fmtTime(new Date(h.in))}</span>
-        <span style="color:var(--ts)"> → </span>
-        <span style="color:var(--r);font-weight:700">⏹ ${h.out?fmtTime(new Date(h.out)):'Still in'}</span>
+    const dateLabel=`${h.date.replace(/-/g,'/')}`;
+    const inTime=fmtTime(new Date(h.in));
+    const outTime=h.out?fmtTime(new Date(h.out)):'--:--';
+    const isInProgress=!h.out;
+    const adjustedHrs=h.adjusted||0;
+    const finalHrs=h.hours;
+    const clockedMins=Math.round((h.out?h.out-h.in:Date.now()-h.in)/60000);
+    const ch=Math.floor(clockedMins/60),cm=clockedMins%60;
+    const fh=Math.floor(finalHrs),fm=Math.round((finalHrs-fh)*60);
+    return `<div class="shift-log-row">
+      <div class="slog-date">${dateLabel}</div>
+      <div class="slog-time">${inTime} – ${outTime}</div>
+      <div class="slog-clocked">
+        <div class="slog-lbl">Clocked</div>
+        <div class="slog-val">${ch}h ${cm.toString().padStart(2,'0')}m</div>
       </div>
-      <div style="font-size:14px;font-weight:800;color:var(--y);min-width:40px;text-align:right">${h.hours}h</div>
+      <div class="slog-final">
+        <div class="slog-lbl">Final</div>
+        <div class="slog-val">${fh}h ${fm.toString().padStart(2,'0')}m</div>
+      </div>
+      <span class="slog-status ${isInProgress?'status-inprogress':'status-complete'}">${isInProgress?'In progress':'Complete'}</span>
+      <div class="slog-actions">
+        <button class="slog-btn modify" onclick="openModify('${nm}','${h.id}')">✏️ Modify</button>
+      </div>
     </div>`;
   }).join('');
+
   document.getElementById('detail-modal-content').innerHTML=`
     <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
       ${[['Total Hours',totalHrs.toFixed(1)+'h','var(--pk)'],['Shifts',totalShifts,'var(--t)'],['Avg/Shift',avgHrs+'h','var(--y)']].map(([l,v,c])=>
@@ -695,22 +765,113 @@ function openDetailModal(nm){
           <div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">${l}</div>
         </div>`).join('')}
     </div>
-    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">💰 Weekly Hours (for payment)</div>
+
+    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">💰 Weekly Hours</div>
     <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">
-      ${weeksHtml||'<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No weekly data</div>'}
+      ${weeksHtml||'<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>'}
       <div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)">
         <span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span>
         <span style="font-size:18px;font-weight:800;color:var(--y)">${totalHrs.toFixed(1)}h</span>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">📋 Individual Shift Log</div>
-    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:6px 14px">
-      ${shiftsHtml||'<div style="font-size:13px;color:var(--ts);text-align:center;padding:14px">No shifts yet</div>'}
-    </div>`;
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">📋 Shift Log</div>
+      <button class="dl-btn" onclick="downloadShifts('${nm}')">⬇️ Download CSV</button>
+    </div>
+    <div id="shift-log-rows">${shiftRows||'<div class="empty" style="padding:14px">No shifts yet</div>'}</div>
+  `;
   document.getElementById('detail-modal-name').textContent=nm;
   document.getElementById('detail-modal-bg').classList.add('on');
 }
 function closeDetailModal(){document.getElementById('detail-modal-bg').classList.remove('on')}
+
+// ── MODIFY SHIFT ──
+let modifyTarget={nm:'',id:''};
+function openModify(nm,id){
+  modifyTarget={nm,id};
+  const h=bk.history.find(x=>x.id===id);
+  if(!h)return;
+  document.getElementById('modify-person').value=nm;
+  // Convert timestamps to datetime-local format
+  const toLocal=ts=>{
+    const d=new Date(ts);
+    const pad=n=>n.toString().padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+  document.getElementById('modify-start').value=toLocal(h.in);
+  document.getElementById('modify-end').value=h.out?toLocal(h.out):'';
+  document.getElementById('modify-reason').value=h.reason||'';
+  updateModifyDuration();
+  document.getElementById('modify-modal-bg').classList.add('on');
+}
+function closeModify(){document.getElementById('modify-modal-bg').classList.remove('on')}
+function updateModifyDuration(){
+  const s=document.getElementById('modify-start').value;
+  const e=document.getElementById('modify-end').value;
+  const el=document.getElementById('modify-duration');
+  if(!s||!e){el.textContent='–';return;}
+  const diff=new Date(e)-new Date(s);
+  if(diff<=0){el.textContent='Invalid';return;}
+  const h=Math.floor(diff/3600000),m=Math.round((diff%3600000)/60000);
+  el.textContent=`${h}h ${m.toString().padStart(2,'0')}m`;
+}
+function saveModify(){
+  const s=document.getElementById('modify-start').value;
+  const e=document.getElementById('modify-end').value;
+  const reason=document.getElementById('modify-reason').value.trim();
+  if(!s||!e){toast('Fill in both start and end times');return;}
+  const inTs=new Date(s).getTime();
+  const outTs=new Date(e).getTime();
+  if(outTs<=inTs){toast('End must be after start');return;}
+  const hrs=Math.round((outTs-inTs)/36000)/100;
+  const idx=bk.history.findIndex(x=>x.id===modifyTarget.id);
+  if(idx!==-1){
+    bk.history[idx].in=inTs;
+    bk.history[idx].out=outTs;
+    bk.history[idx].hours=hrs;
+    bk.history[idx].adjusted=true;
+    if(reason)bk.history[idx].reason=reason;
+    bk.history[idx].date=dateStr(new Date(inTs));
+  }
+  pushToCloud();
+  closeModify();
+  // Refresh detail modal
+  openDetailModal(modifyTarget.nm);
+  toast(`${modifyTarget.nm} shift updated ✓`);
+}
+
+// ── DOWNLOAD CSV ──
+function downloadShifts(nm){
+  const entries=bk.history.filter(h=>h.name===nm);
+  if(!entries.length){toast('No shifts to download');return;}
+  const rows=[['Employee','Date','Day','Clock In','Clock Out','Hours','Adjusted','Reason']];
+  entries.forEach(h=>{
+    const d=new Date(h.date+'T12:00:00'),dow=(d.getDay()+6)%7;
+    rows.push([
+      nm,
+      h.date,
+      FDAYS[dow],
+      fmtTime(new Date(h.in)),
+      h.out?fmtTime(new Date(h.out)):'In progress',
+      h.hours.toFixed(2),
+      h.adjusted?'Yes':'No',
+      h.reason||''
+    ]);
+  });
+  // Add total row
+  const total=entries.reduce((a,h)=>a+h.hours,0);
+  rows.push(['','','','','TOTAL',total.toFixed(2),'','']);
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`${nm}_shifts_${dateStr(new Date())}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(`Downloaded ${nm}'s shifts ✓`);
+}
 
 // ── ADD EMPLOYEE ──
 function openAddEmp(){
@@ -751,5 +912,42 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
 tryAutoLogin();
 </script>
+<!-- MODIFY SHIFT MODAL -->
+<div class="modify-modal-bg" id="modify-modal-bg" onclick="if(event.target===this)closeModify()">
+  <div class="modify-modal">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <h2>✏️ Modify Shift</h2>
+        <div class="msub">Set when this person was actually working.</div>
+      </div>
+      <button onclick="closeModify()" style="background:none;border:none;cursor:pointer;font-size:22px;color:#999;padding:0;line-height:1">✕</button>
+    </div>
+    <div class="mfield">
+      <label>Employee</label>
+      <input type="text" id="modify-person" readonly style="background:#f9f9f9;color:#666;cursor:default">
+    </div>
+    <div class="mfield">
+      <label>Shift Start</label>
+      <input type="datetime-local" id="modify-start" oninput="updateModifyDuration()">
+    </div>
+    <div class="mfield">
+      <label>Shift End</label>
+      <input type="datetime-local" id="modify-end" oninput="updateModifyDuration()">
+    </div>
+    <div class="mduration">
+      <span class="mduration-label">Shift duration</span>
+      <span class="mduration-val" id="modify-duration">0h 00m</span>
+    </div>
+    <div class="mfield">
+      <label>Reason (optional)</label>
+      <textarea id="modify-reason" placeholder="e.g. System error, late clock-in..."></textarea>
+    </div>
+    <div class="modify-btns">
+      <button class="mbtn cancel" onclick="closeModify()">Cancel</button>
+      <button class="mbtn save" onclick="saveModify()">Save Shift</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
