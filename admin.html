@@ -334,7 +334,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   <!-- Firebase SDK (real-time sync across devices) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, onSnapshot }
+    import { getFirestore, doc, setDoc, updateDoc, onSnapshot }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ╔══════════════════════════════════════════════════════════╗
@@ -357,6 +357,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       window._portalFbDoc = doc;
       window._portalFbSetDoc = setDoc;
       window._portalFbOnSnapshot = onSnapshot;
+      window._portalFbUpdateDoc = updateDoc;
       window.dispatchEvent(new Event('portal-firebase-ready'));
     } catch(e) {
       console.warn('Firebase init failed — offline mode', e);
@@ -620,7 +621,7 @@ function loadDB() {
     }
   });
 
-  saveDB(db);
+  saveDB(db, ['staff']);
   return db;
 }
 
@@ -644,30 +645,36 @@ function initDB() {
     db.personalTasks[nm] = {};
     db.shiftHistory[nm] = [];
   });
-  saveDB(db);
+  saveDB(db, ['staff','schedules','defaultSched','personalTasks','shiftHistory']);
   return db;
 }
 
-function saveDB(db) {
-  // Save locally
+// Only these top-level fields are ever pushed to Firebase, and ONLY the ones
+// that actually changed on THIS call — so one device's save never blows away
+// another device's more-recent changes to unrelated fields (e.g. saving a shift
+// in admin no longer overwrites someone else's newly-added personal task).
+function saveDB(db, changedFields) {
+  // Save full local copy — this device's own complete picture
   try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
-  // Save to Firebase for cross-device sync
-  if (window._portalFbDB) {
-    try {
-      const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
-      window._portalFbSetDoc(ref, {
-        version: db.version,
-        staff: db.staff || {},
-        schedules: db.schedules || {},
-        defaultSched: db.defaultSched || {},
-        events: db.events || [],
-        duties: db.duties || [],
-        personalTasks: db.personalTasks || {},
-        shiftHistory: db.shiftHistory || {},
-        weekTypeOverrides: db.weekTypeOverrides || {}
-      }).catch(e => console.warn('Firebase save failed:', e));
-    } catch(e) { console.warn('Firebase save error:', e); }
-  }
+
+  if (!window._portalFbDB) return;
+
+  const allFields = ['staff','schedules','defaultSched','events','duties','personalTasks','shiftHistory','weekTypeOverrides'];
+  const fields = (changedFields && changedFields.length) ? changedFields : allFields;
+
+  const patch = { version: db.version };
+  fields.forEach(f => { if (db[f] !== undefined) patch[f] = db[f]; });
+
+  const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
+  // updateDoc only touches the given fields — everything else in the cloud doc is untouched
+  window._portalFbUpdateDoc(ref, patch).catch(e => {
+    // Doc may not exist yet on first-ever save — fall back to setDoc with merge
+    if (window._portalFbSetDoc) {
+      window._portalFbSetDoc(ref, patch, { merge: true }).catch(e2 => console.warn('Firebase save failed:', e2));
+    } else {
+      console.warn('Firebase save failed:', e);
+    }
+  });
 }
 
 // ── Schedule helpers ──
@@ -683,7 +690,7 @@ function getWeekSched(db, nm, mon) {
 function setWeekSched(db, nm, mon, sched) {
   const wk = weekKey(mon);
   db.schedules[nm][wk] = sched;
-  saveDB(db);
+  saveDB(db, ['schedules']);
 }
 
 function resolveShift(db, nm, mon, di) {
@@ -721,7 +728,7 @@ function recordShiftHistory(db, nm, date, shift) {
   db.shiftHistory[nm].unshift(entry);
   // keep last 365 entries
   if(db.shiftHistory[nm].length>365) db.shiftHistory[nm]=db.shiftHistory[nm].slice(0,365);
-  saveDB(db);
+  saveDB(db, ['shiftHistory']);
 }
 
 
@@ -831,7 +838,7 @@ function saveNewEmployee(){
   db.schedules[name]={};
   db.personalTasks[name]={};
   db.shiftHistory[name]=[];
-  saveDB(db);
+  saveDB(db, ['staff','schedules','defaultSched','personalTasks','shiftHistory']);
   // Also update portal select list — portal will pick up via storage listener
   try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
   closeAddEmployee();
@@ -868,7 +875,7 @@ function savePosition(nm){
   if(db.defaultSched[nm]){
     db.defaultSched[nm]=db.defaultSched[nm].map(e=>e?{...e,role}:null);
   }
-  saveDB(db);
+  saveDB(db, ['staff','defaultSched']);
   try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
   document.getElementById('change-position-panel').style.display='none';
   renderPeopleList();
@@ -882,7 +889,7 @@ function removeEmployee(nm){
   delete db.schedules[nm];
   if(db.personalTasks)delete db.personalTasks[nm];
   if(db.shiftHistory)delete db.shiftHistory[nm];
-  saveDB(db);
+  saveDB(db, ['staff','schedules','defaultSched','personalTasks','shiftHistory']);
   try{localStorage.setItem(DB_KEY+'_ping',Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
   if(selPerson===nm){selPerson=null;document.getElementById('person-editor-panel').style.display='none';}
   renderPeopleList();
@@ -1126,7 +1133,7 @@ function saveWeekSchedule(){
   const sched=[];
   for(let i=0;i<7;i++) sched.push(draftSched[i]?{...draftSched[i]}:null);
   setWeekSched(db,nm,mon,sched);
-  saveDB(db);
+  saveDB(db, ['schedules']);
   // Trigger storage event so portal updates in real time (works across tabs)
   try{localStorage.setItem(DB_KEY+'_ping', Date.now().toString());localStorage.removeItem(DB_KEY+'_ping');}catch(e){}
   toast(`${nm} — week saved ✓ Schedule updated for all staff`);
