@@ -263,7 +263,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
   <!-- Firebase SDK (real-time sync across devices) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, onSnapshot }
+    import { getFirestore, doc, setDoc, updateDoc, onSnapshot }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     // ╔══════════════════════════════════════════════════════════╗
@@ -286,6 +286,7 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       window._portalFbDoc = doc;
       window._portalFbSetDoc = setDoc;
       window._portalFbOnSnapshot = onSnapshot;
+      window._portalFbUpdateDoc = updateDoc;
       window.dispatchEvent(new Event('portal-firebase-ready'));
     } catch(e) {
       console.warn('Firebase init failed — offline mode', e);
@@ -572,7 +573,7 @@ function loadDB() {
     }
   });
 
-  saveDB(db);
+  saveDB(db, ['staff']);
   return db;
 }
 
@@ -596,30 +597,36 @@ function initDB() {
     db.personalTasks[nm] = {};
     db.shiftHistory[nm] = [];
   });
-  saveDB(db);
+  saveDB(db, ['staff','schedules','defaultSched','personalTasks','shiftHistory']);
   return db;
 }
 
-function saveDB(db) {
-  // Save locally
+// Only these top-level fields are ever pushed to Firebase, and ONLY the ones
+// that actually changed on THIS call — so one device's save never blows away
+// another device's more-recent changes to unrelated fields (e.g. saving a shift
+// in admin no longer overwrites someone else's newly-added personal task).
+function saveDB(db, changedFields) {
+  // Save full local copy — this device's own complete picture
   try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
-  // Save to Firebase for cross-device sync
-  if (window._portalFbDB) {
-    try {
-      const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
-      window._portalFbSetDoc(ref, {
-        version: db.version,
-        staff: db.staff || {},
-        schedules: db.schedules || {},
-        defaultSched: db.defaultSched || {},
-        events: db.events || [],
-        duties: db.duties || [],
-        personalTasks: db.personalTasks || {},
-        shiftHistory: db.shiftHistory || {},
-        weekTypeOverrides: db.weekTypeOverrides || {}
-      }).catch(e => console.warn('Firebase save failed:', e));
-    } catch(e) { console.warn('Firebase save error:', e); }
-  }
+
+  if (!window._portalFbDB) return;
+
+  const allFields = ['staff','schedules','defaultSched','events','duties','personalTasks','shiftHistory','weekTypeOverrides'];
+  const fields = (changedFields && changedFields.length) ? changedFields : allFields;
+
+  const patch = { version: db.version };
+  fields.forEach(f => { if (db[f] !== undefined) patch[f] = db[f]; });
+
+  const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
+  // updateDoc only touches the given fields — everything else in the cloud doc is untouched
+  window._portalFbUpdateDoc(ref, patch).catch(e => {
+    // Doc may not exist yet on first-ever save — fall back to setDoc with merge
+    if (window._portalFbSetDoc) {
+      window._portalFbSetDoc(ref, patch, { merge: true }).catch(e2 => console.warn('Firebase save failed:', e2));
+    } else {
+      console.warn('Firebase save failed:', e);
+    }
+  });
 }
 
 // ── Schedule helpers ──
@@ -635,7 +642,7 @@ function getWeekSched(db, nm, mon) {
 function setWeekSched(db, nm, mon, sched) {
   const wk = weekKey(mon);
   db.schedules[nm][wk] = sched;
-  saveDB(db);
+  saveDB(db, ['schedules']);
 }
 
 function resolveShift(db, nm, mon, di) {
@@ -673,7 +680,7 @@ function recordShiftHistory(db, nm, date, shift) {
   db.shiftHistory[nm].unshift(entry);
   // keep last 365 entries
   if(db.shiftHistory[nm].length>365) db.shiftHistory[nm]=db.shiftHistory[nm].slice(0,365);
-  saveDB(db);
+  saveDB(db, ['shiftHistory']);
 }
 
 
@@ -883,7 +890,7 @@ function handlePic(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
   reader.onload=ev=>{
-    db.staff[me].pic=ev.target.result;saveDB(db);
+    db.staff[me].pic=ev.target.result;saveDB(db, ['staff']);
     setAv('hdr-av',me);setAv('prof-av',me);
     document.querySelectorAll(`.tv-av[data-nm="${me}"]`).forEach(el=>{el.innerHTML=`<img src="${db.staff[me].pic}" alt="${me}">`;});
     const lav=document.getElementById('lock-av');if(lav)lav.innerHTML=`<img src="${db.staff[me].pic}">`;
@@ -975,16 +982,16 @@ function addTask(){
   if(!db.personalTasks[me])db.personalTasks[me]={};
   if(!db.personalTasks[me][currentDayStr])db.personalTasks[me][currentDayStr]=[];
   db.personalTasks[me][currentDayStr].push({id:Date.now().toString(),text:txt,done:false});
-  saveDB(db);inp.value='';renderDayTasks();renderMyShifts();
+  saveDB(db, ['personalTasks']);inp.value='';renderDayTasks();renderMyShifts();
 }
 function toggleTask(id,done){
   if(!db.personalTasks[me]||!db.personalTasks[me][currentDayStr])return;
-  const t=db.personalTasks[me][currentDayStr].find(x=>x.id===id);if(t)t.done=done;saveDB(db);renderDayTasks();
+  const t=db.personalTasks[me][currentDayStr].find(x=>x.id===id);if(t)t.done=done;saveDB(db, ['personalTasks']);renderDayTasks();
 }
 function deleteTask(id){
   if(!db.personalTasks[me]||!db.personalTasks[me][currentDayStr])return;
   db.personalTasks[me][currentDayStr]=db.personalTasks[me][currentDayStr].filter(x=>x.id!==id);
-  saveDB(db);renderDayTasks();renderMyShifts();
+  saveDB(db, ['personalTasks']);renderDayTasks();renderMyShifts();
 }
 
 // CALENDAR TAB
@@ -1186,8 +1193,8 @@ function filterEv(type){
   list.innerHTML=filtered.map(e=>{const d=new Date(e.date+'T12:00:00');const dow=(d.getDay()+6)%7;const dStr=`${FDAYS[dow]}, ${d.getDate()} ${MO[d.getMonth()]} ${d.getFullYear()}`;return `<div class="ev-item"><div class="ev-dot ${e.type}"></div><div class="ev-info"><div class="ev-title">${icons[e.type]||''} ${e.title}</div><div class="ev-meta">${dStr}${e.desc?`<br>${e.desc}`:''}</div></div><span class="ev-tag ${e.type}">${e.type}</span>${db.staff[me].admin?`<button class="ev-del" onclick="deleteEv('${e.id}')">✕</button>`:''}</div>`;}).join('');
 }
 function toggleEvForm(){const f=document.getElementById('ev-form');if(f)f.style.display=f.style.display==='none'?'block':'none'}
-function saveEv(){const title=document.getElementById('ev-title').value.trim(),date=document.getElementById('ev-date').value,type=document.getElementById('ev-type').value,desc=document.getElementById('ev-desc').value.trim();if(!title||!date){toast('Fill in title and date');return}if(!db.events)db.events=[];db.events.push({id:Date.now().toString(),title,date,type,desc});saveDB(db);document.getElementById('ev-title').value='';document.getElementById('ev-desc').value='';document.getElementById('ev-date').value='';toggleEvForm();filterEv(activeEvFilter);toast('Entry added ✓')}
-function deleteEv(id){db.events=(db.events||[]).filter(e=>e.id!==id);saveDB(db);filterEv(activeEvFilter);toast('Removed')}
+function saveEv(){const title=document.getElementById('ev-title').value.trim(),date=document.getElementById('ev-date').value,type=document.getElementById('ev-type').value,desc=document.getElementById('ev-desc').value.trim();if(!title||!date){toast('Fill in title and date');return}if(!db.events)db.events=[];db.events.push({id:Date.now().toString(),title,date,type,desc});saveDB(db, ['events']);document.getElementById('ev-title').value='';document.getElementById('ev-desc').value='';document.getElementById('ev-date').value='';toggleEvForm();filterEv(activeEvFilter);toast('Entry added ✓')}
+function deleteEv(id){db.events=(db.events||[]).filter(e=>e.id!==id);saveDB(db, ['events']);filterEv(activeEvFilter);toast('Removed')}
 
 // DUTY MODAL
 function openDutyModal(){
@@ -1202,9 +1209,9 @@ function renderDuties(){
   if(!db.duties||!db.duties.length){list.innerHTML=`<div class="empty-state"><div class="ei">✅</div>${isAdmin?'No duties — add some':'No duties yet'}</div>`;return}
   list.innerHTML=db.duties.map(d=>`<div class="duty-item"><input type="checkbox" class="duty-check" ${d.done?'checked':''} onchange="toggleDuty('${d.id}',this.checked)"><span class="duty-text${d.done?' done':''}">${d.text}</span>${isAdmin?`<button class="duty-del" onclick="deleteDuty('${d.id}')">✕</button>`:''}</div>`).join('');
 }
-function addDuty(){const inp=document.getElementById('duty-inp');const txt=inp.value.trim();if(!txt)return;if(!db.duties)db.duties=[];db.duties.push({id:Date.now().toString(),text:txt,done:false});saveDB(db);inp.value='';renderDuties();toast('Duty added ✓')}
-function toggleDuty(id,done){const d=(db.duties||[]).find(x=>x.id===id);if(d)d.done=done;saveDB(db);renderDuties()}
-function deleteDuty(id){db.duties=(db.duties||[]).filter(x=>x.id!==id);saveDB(db);renderDuties();toast('Duty removed')}
+function addDuty(){const inp=document.getElementById('duty-inp');const txt=inp.value.trim();if(!txt)return;if(!db.duties)db.duties=[];db.duties.push({id:Date.now().toString(),text:txt,done:false});saveDB(db, ['duties']);inp.value='';renderDuties();toast('Duty added ✓')}
+function toggleDuty(id,done){const d=(db.duties||[]).find(x=>x.id===id);if(d)d.done=done;saveDB(db, ['duties']);renderDuties()}
+function deleteDuty(id){db.duties=(db.duties||[]).filter(x=>x.id!==id);saveDB(db, ['duties']);renderDuties();toast('Duty removed')}
 
 // PROFILE
 function renderProfile(){
@@ -1224,7 +1231,7 @@ function renderProfile(){
   if(adminWrap)adminWrap.style.display=(s&&s.admin===true)?'block':'none';
   renderHistory();
 }
-function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
+function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db, ['staff']);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
 
 function renderHistory(){
   const hist=(db.shiftHistory[me]||[]).slice(0,30);
