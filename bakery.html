@@ -8,7 +8,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:#050508;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
-:root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--g:#00E676;--r:#ff5252;--y:#FFE500;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#fff;--ts:#8888a0;--tm:#444455;--glow:rgba(233,30,140,0.18)}
+:root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--g:#00E676;--r:#ff5252;--y:#FFE500;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#fff;--ts:#8888a0;--tm:#444455}
 canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .z1{position:relative;z-index:1}
 .pg{display:none;min-height:100vh;flex-direction:column}.pg.on{display:flex}
@@ -20,7 +20,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 #pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
 .login-wrap{width:100%;max-width:420px;text-align:center}
 .logo-ring{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45);overflow:hidden}
-.logo-ring img{width:86%;height:86%;object-fit:contain}
+.logo-ring span{font-family:'Fredoka One',cursive;font-size:38px;color:#fff}
 .brand{font-family:'Fredoka One',cursive;font-size:32px;color:var(--pk);margin-bottom:3px;text-shadow:0 0 24px rgba(233,30,140,.5)}
 .sub{font-size:12px;color:var(--ts);margin-bottom:24px;letter-spacing:.08em;text-transform:uppercase}
 .l-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:28px;box-shadow:0 8px 48px rgba(0,0,0,.6)}
@@ -35,8 +35,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .err{color:#ff7080;font-size:13px;text-align:center;margin-top:10px;font-weight:700;display:none;background:rgba(255,60,80,.07);border:1px solid rgba(255,60,80,.15);border-radius:8px;padding:9px}
 .hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
 .hdr-left{display:flex;align-items:center;gap:12px}
-.hdr-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));overflow:hidden;display:flex;align-items:center;justify-content:center}
-.hdr-logo img{width:90%;height:90%;object-fit:contain}
+.hdr-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center}
+.hdr-logo span{font-family:'Fredoka One',cursive;font-size:16px;color:#fff}
 .hdr-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--pk)}
 .hdr-sub{font-size:11px;color:var(--ts);font-weight:600;margin-top:1px}
 .body{flex:1;overflow-y:auto;padding:24px;max-width:1100px;width:100%;margin:0 auto;padding-bottom:80px}
@@ -51,7 +51,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .crew-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
 .crew-card:hover{border-color:rgba(233,30,140,.45);transform:translateY(-2px);box-shadow:0 8px 24px rgba(233,30,140,.12)}.crew-card:active{transform:scale(.96)}
 .crew-card.clocked-in{border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.03)}
-.crew-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:20px;color:#fff;margin:0 auto 10px;overflow:hidden;border:2px solid rgba(233,30,140,.3)}
+.crew-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:20px;color:#fff;margin:0 auto 10px}
 .crew-name{font-family:'Fredoka One',cursive;font-size:16px;color:var(--t);margin-bottom:4px}
 .crew-badge{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:6px}
 .badge-in{background:rgba(0,230,118,.12);color:var(--g);border:1px solid rgba(0,230,118,.25)}
@@ -70,7 +70,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .confirm-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(8px)}
 .confirm-bg.on{display:flex}
 .confirm-card{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:34px 28px;width:100%;max-width:320px;text-align:center}
-.conf-icon{font-size:56px;margin-bottom:14px}
 .conf-name{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);margin-bottom:4px}
 .conf-action{font-size:14px;color:var(--ts);margin-bottom:14px}
 .conf-time{font-family:'Fredoka One',cursive;font-size:46px;margin-bottom:8px}
@@ -85,7 +84,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .hist-card{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
 .hist-card:hover{border-color:rgba(233,30,140,.45);transform:translateY(-1px);box-shadow:0 6px 20px rgba(233,30,140,.1)}
 .hist-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:16px;color:#fff;flex-shrink:0}
-.form-input{width:100%;padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--t);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:10px;transition:border-color .2s}
+.form-input{width:100%;padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--t);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:10px}
 .form-input:focus{border-color:var(--pk)}
 .sync-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.04em}
 .sync-ok{background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.2)}
@@ -109,7 +108,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mod-sub{font-size:13px;color:#666;margin-bottom:20px}
 .mf{margin-bottom:14px}
 .mf label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:6px}
-.mf input,.mf textarea{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;font-weight:600;color:#111;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+.mf input,.mf textarea{width:100%;padding:12px 14px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:14px;font-weight:600;color:#111;outline:none;font-family:'Inter',sans-serif}
 .mf input:focus,.mf textarea:focus{border-color:#E91E8C}
 .mf input[readonly]{background:#f9f9f9;color:#777;cursor:default}
 .mf textarea{resize:none;height:70px;font-weight:400}
@@ -117,11 +116,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mdur-lbl{font-size:14px;font-weight:700;color:#333}
 .mdur-val{font-size:18px;font-weight:800;color:#E91E8C}
 .mod-btns{display:flex;gap:10px;justify-content:flex-end}
-.mod-save{padding:12px 24px;border-radius:10px;background:#E91E8C;color:#fff;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s}
+.mod-save{padding:12px 24px;border-radius:10px;background:#E91E8C;color:#fff;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .mod-save:hover{background:#C2185B}
 .mod-cancel{padding:12px 24px;border-radius:10px;background:#f5f5f5;color:#666;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .mod-cancel:hover{background:#eee}
-.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,#00b856,var(--g));color:#000;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:all .15s}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,#00b856,var(--g));color:#000;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
 .dl-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,230,118,.4)}
 .empty{text-align:center;padding:28px 20px;color:var(--ts);font-size:13px}
 .empty .ei{font-size:36px;margin-bottom:10px}
@@ -129,6 +128,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .shake{animation:sk .32s ease}
+.setup-box{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:20px;text-align:left}
+.setup-box label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:6px}
 @media(min-width:768px){.body{padding:28px 40px}.sec{padding:26px}.tab{font-size:14px;padding:11px 16px}.crew-name{font-size:17px}.hdr-title{font-size:24px}.brand{font-size:36px}.pb{font-size:22px;padding:18px}}
 </style>
 </head>
@@ -140,7 +141,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
   <div class="sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-person" id="clock-name">-</div>
-    <div class="sheet-hint" id="clock-hint">Enter your 4-digit PIN</div>
+    <div class="sheet-hint" id="clock-hint">Enter your PIN</div>
     <div class="pin-dots" id="clock-dots"></div>
     <div class="pin-grid">
       <button class="pb" onclick="cp1('1')" type="button">1</button><button class="pb" onclick="cp1('2')" type="button">2</button><button class="pb" onclick="cp1('3')" type="button">3</button>
@@ -155,7 +156,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 
 <div class="confirm-bg" id="confirm-bg">
   <div class="confirm-card">
-    <div class="conf-icon" id="conf-icon">&#10003;</div>
     <div class="conf-name" id="conf-name">-</div>
     <div class="conf-action" id="conf-action">-</div>
     <div class="conf-time" id="conf-time">-</div>
@@ -167,9 +167,9 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 <div class="sheet-bg" id="admin-sheet-bg" onclick="if(event.target===this)closeAdminSheet()">
   <div class="sheet" id="admin-sheet-inner">
     <div class="sheet-handle"></div>
-    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;margin-bottom:6px">Admin Access Required</div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;margin-bottom:6px">Manager Access Required</div>
     <div class="sheet-person" id="admin-target-name">-</div>
-    <div class="sheet-hint">Enter 6-digit admin PIN to view shifts</div>
+    <div class="sheet-hint">Enter any manager PIN to view shifts</div>
     <div class="pin-dots" id="admin-dots"></div>
     <div class="pin-grid">
       <button class="pb" onclick="ap1('1')" type="button">1</button><button class="pb" onclick="ap1('2')" type="button">2</button><button class="pb" onclick="ap1('3')" type="button">3</button>
@@ -177,7 +177,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       <button class="pb" onclick="ap1('7')" type="button">7</button><button class="pb" onclick="ap1('8')" type="button">8</button><button class="pb" onclick="ap1('9')" type="button">9</button>
       <button class="pb sm" onclick="ap1c()" type="button">Clear</button><button class="pb z" onclick="ap1('0')" type="button">0</button><button class="pb" onclick="ap1b()" type="button">&#9003;</button>
     </div>
-    <div class="sheet-err" id="admin-err">Incorrect admin PIN.</div>
+    <div class="sheet-err" id="admin-err">Incorrect manager PIN.</div>
     <button class="btn ghost full" style="margin-top:12px" onclick="closeAdminSheet()" type="button">Cancel</button>
   </div>
 </div>
@@ -187,7 +187,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
       <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Admin View</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Manager View</div>
         <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--t)" id="detail-name">-</div>
       </div>
       <button class="btn ghost xs" onclick="closeDetail()" type="button">Close</button>
@@ -219,8 +219,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:18px">Add Employee</div>
     <input class="form-input" id="new-name" type="text" placeholder="Full name" maxlength="24">
-    <input class="form-input" id="new-pin" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
-    <div class="sheet-err" id="emp-err" style="margin-bottom:10px">Enter a name and a valid 4-digit PIN.</div>
+    <input class="form-input" id="new-pin" type="password" placeholder="4-digit PIN" maxlength="6" inputmode="numeric">
+    <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ts);margin-bottom:14px;cursor:pointer">
+      <input type="checkbox" id="new-manager" style="width:16px;height:16px;accent-color:var(--pk)"> Give this person manager access
+    </label>
+    <div class="sheet-err" id="emp-err" style="margin-bottom:10px">Enter a name and a valid PIN.</div>
     <div style="display:flex;gap:8px">
       <button class="btn primary full" onclick="saveNewEmp()" type="button">Add Employee</button>
       <button class="btn ghost sm" onclick="closeAddEmp()" type="button">Cancel</button>
@@ -231,11 +234,18 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 <div class="pg on z1" id="pg-login">
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
     <div class="login-wrap">
-      <div class="logo-ring"><img src="data:image/avif;base64,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" alt="Jane's"></div>
+      <div class="logo-ring"><span>J</span></div>
       <div class="brand">Jane's Bakery</div>
-      <p class="sub">Admin Login</p>
-      <div class="l-card">
-        <label class="lbl">Admin 6-digit PIN</label>
+      <p class="sub">Manager Login</p>
+
+      <div class="setup-box" id="setup-box" style="display:none">
+        <label>Backend API URL</label>
+        <input class="form-input" id="api-url-input" type="text" placeholder="https://your-backend.example.com" style="margin-bottom:8px">
+        <button class="btn primary full sm" onclick="saveApiUrl()" type="button">Save & Connect</button>
+      </div>
+
+      <div class="l-card" id="login-card">
+        <label class="lbl">Manager PIN</label>
         <div class="pin-dots" id="login-dots"></div>
         <div class="pin-grid">
           <button class="pb" onclick="lp1('1')" type="button">1</button><button class="pb" onclick="lp1('2')" type="button">2</button><button class="pb" onclick="lp1('3')" type="button">3</button>
@@ -248,6 +258,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       </div>
       <div style="text-align:center;margin-top:20px">
         <a href="index.html" style="font-size:13px;color:var(--ts);text-decoration:none">&#8592; Back to Staff Portal</a>
+        &nbsp;&middot;&nbsp;
+        <a href="#" onclick="toggleSetup();return false;" style="font-size:12px;color:var(--ts);text-decoration:underline">API settings</a>
       </div>
     </div>
   </div>
@@ -256,11 +268,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 <div class="pg z1" id="pg-dash">
   <div class="hdr">
     <div class="hdr-left">
-      <div class="hdr-logo"><img src="data:image/avif;base64,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" alt="J"></div>
+      <div class="hdr-logo"><span>J</span></div>
       <div><div class="hdr-title">Bakery</div><div class="hdr-sub" id="hdr-date">-</div></div>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
-      <div id="sync-ind" class="sync-badge sync-ing">Syncing</div>
+      <div id="sync-ind" class="sync-badge sync-ing">Connecting</div>
       <a href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:700;background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff">&#8592; Portal</a>
       <button class="btn danger xs" onclick="doLogout()" type="button">Sign Out</button>
     </div>
@@ -274,7 +286,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="tab-content on" id="tc0">
       <div class="sec">
         <div class="sec-title">Tap to Clock In / Out<button class="btn ghost xs" onclick="openAddEmp()" type="button">+ Add</button></div>
-        <div class="sec-sub">Each person enters their own 4-digit PIN</div>
+        <div class="sec-sub">Each person enters their own PIN</div>
         <div class="crew-grid" id="crew-grid"></div>
       </div>
     </div>
@@ -285,103 +297,78 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="tab-content" id="tc2">
       <div class="sec">
         <div class="sec-title">Shift History</div>
-        <div class="sec-sub">Tap a name - admin PIN required to view details &amp; download</div>
+        <div class="sec-sub">Tap a name - manager PIN required to view details &amp; download</div>
         <div id="hist-list"></div>
       </div>
     </div>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-var FC = {
-  apiKey:"AIzaSyBjgFTU8CLaL8cTB533T1QzdTSNGJvneBk",
-  authDomain:"janes-ff714.firebaseapp.com",
-  projectId:"janes-ff714",
-  storageBucket:"janes-ff714.appspot.com",
-  messagingSenderId:"887885411191",
-  appId:"1:887885411191:web:012ee760f1dd09f3876772"
-};
-try {
-  var app = initializeApp(FC, 'bakery');
-  var db = getFirestore(app);
-  window._bkDB = db;
-  window._bkDoc = doc;
-  window._bkSet = setDoc;
-  window._bkSnap = onSnapshot;
-} catch(e){ console.warn('Firebase init failed', e); }
-window.dispatchEvent(new Event('bk-fb-ready'));
-</script>
-
 <script>
-var ADMIN_PIN = '765305';
+// ══════════════════════════════════════════
+// CONFIG — set your backend URL once, it's saved in localStorage
+// ══════════════════════════════════════════
+var API_BASE = localStorage.getItem('bk_api_base') || '';
+
 var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var FDAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 var SDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-var DEFAULT_STAFF = {
-  Sly:     { pin: '1111', pic: null },
-  Wayne:   { pin: '2222', pic: null },
-  Panashe: { pin: '3333', pic: null },
-  Hilda:   { pin: '4444', pic: null }
-};
 
-var bk = { staff: {}, sessions: {}, history: [] };
+var employees = [];      // [{id,name,role,manager}]
+var openSessions = {};   // { name: clockInISO }
+var todayShifts = [];    // rows for today
+var histCache = {};      // name -> shift rows (loaded on demand)
+
 var loginP = '', clockP = '', adminP = '', clockTarget = '', histTarget = '', modTarget = null;
+
+// ══════════════════════════════════════════
+// API SETUP
+// ══════════════════════════════════════════
+function toggleSetup(){
+  var box = document.getElementById('setup-box');
+  box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+  document.getElementById('api-url-input').value = API_BASE;
+}
+function saveApiUrl(){
+  var v = document.getElementById('api-url-input').value.trim().replace(/\/$/, '');
+  if (!v) { toast('Enter a URL'); return; }
+  API_BASE = v;
+  localStorage.setItem('bk_api_base', v);
+  toast('API URL saved');
+  document.getElementById('setup-box').style.display = 'none';
+  checkConnection();
+}
+
+function api(path, opts) {
+  opts = opts || {};
+  var headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  return fetch(API_BASE + path, Object.assign({}, opts, { headers: headers }))
+    .then(function(res){
+      return res.json().then(function(data){
+        if (!res.ok) { var e = new Error(data.error || 'Request failed'); e.data = data; e.status = res.status; throw e; }
+        return data;
+      });
+    });
+}
 
 function setSyncStatus(s){
   var el = document.getElementById('sync-ind');
-  if(!el) return;
-  if(s==='ok'){ el.className='sync-badge sync-ok'; el.textContent='Synced'; }
-  else if(s==='err'){ el.className='sync-badge sync-err'; el.textContent='Offline'; }
-  else { el.className='sync-badge sync-ing'; el.textContent='Syncing'; }
+  if (!el) return;
+  if (s === 'ok') { el.className = 'sync-badge sync-ok'; el.textContent = 'Connected'; }
+  else if (s === 'err') { el.className = 'sync-badge sync-err'; el.textContent = 'No connection'; }
+  else { el.className = 'sync-badge sync-ing'; el.textContent = 'Connecting'; }
 }
 
-// ONLY shift/clock data goes to Firebase - staff pins, sessions, history
-function push() {
-  try { localStorage.setItem('janes_bakery_v4', JSON.stringify({ v:4, staff: bk.staff, sessions: bk.sessions, history: bk.history })); } catch(e) {}
-  if (!window._bkDB) { setSyncStatus('err'); return; }
+function checkConnection(){
+  if (!API_BASE) { setSyncStatus('err'); return Promise.resolve(false); }
   setSyncStatus('ing');
-  var ref = window._bkDoc(window._bkDB, 'bakery', 'data');
-  window._bkSet(ref, { staff: bk.staff, sessions: bk.sessions, history: bk.history })
-    .then(function(){ setSyncStatus('ok'); })
-    .catch(function(e){ console.warn('push failed', e); setSyncStatus('err'); });
+  return api('/').then(function(){ setSyncStatus('ok'); return true; })
+    .catch(function(){ setSyncStatus('err'); return false; });
 }
 
-function subscribe() {
-  if (!window._bkDB) return;
-  var ref = window._bkDoc(window._bkDB, 'bakery', 'data');
-  window._bkSnap(ref, function(snap){
-    if (snap.exists()) {
-      var d = snap.data();
-      bk.staff = Object.assign({}, DEFAULT_STAFF, d.staff || {});
-      bk.sessions = d.sessions || {};
-      bk.history = d.history || [];
-      setSyncStatus('ok');
-      renderAll();
-    } else {
-      bk.staff = Object.assign({}, DEFAULT_STAFF);
-      push();
-    }
-  }, function(e){ console.warn('snapshot error', e); setSyncStatus('err'); });
-}
-
-function initData() {
-  try {
-    var raw = localStorage.getItem('janes_bakery_v4');
-    if (raw) {
-      var d = JSON.parse(raw);
-      bk.staff = Object.assign({}, DEFAULT_STAFF, d.staff || {});
-      bk.sessions = d.sessions || {};
-      bk.history = d.history || [];
-    } else {
-      bk.staff = Object.assign({}, DEFAULT_STAFF);
-    }
-  } catch(e) { bk.staff = Object.assign({}, DEFAULT_STAFF); }
-  if (window._bkDB) { subscribe(); }
-  else { window.addEventListener('bk-fb-ready', function(){ if (window._bkDB) subscribe(); }); }
-}
-
+// ══════════════════════════════════════════
+// LOGIN (manager PIN, any manager account)
+// ══════════════════════════════════════════
 function drawDots(id, val, max) {
   var el = document.getElementById(id);
   if (!el) return;
@@ -394,146 +381,77 @@ function drawDots(id, val, max) {
   }
 }
 
-function lp1(d){ if(loginP.length>=6) return; loginP+=d; drawDots('login-dots',loginP,6); if(loginP.length===6) setTimeout(doLogin,260); }
+function lp1(d){ if(loginP.length>=6) return; loginP+=d; drawDots('login-dots',loginP,6); if(loginP.length>=4) setTimeout(function(){ if(loginP.length>=4) tryLogin(); }, 300); }
 function lp1b(){ loginP=loginP.slice(0,-1); drawDots('login-dots',loginP,6); }
 function lp1c(){ loginP=''; drawDots('login-dots',loginP,6); }
 
+function tryLogin(){
+  if (!loginP) return;
+  doLogin();
+}
+
 function doLogin(){
-  if (loginP !== ADMIN_PIN) {
-    document.getElementById('login-err').style.display='block';
-    loginP=''; drawDots('login-dots',loginP,6);
-    var c=document.querySelector('.l-card'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
-    return;
-  }
-  document.getElementById('login-err').style.display='none';
-  localStorage.setItem('bk_session','1');
-  openDash();
+  if (!API_BASE) { toggleSetup(); toast('Set your backend API URL first'); return; }
+  api('/verify-manager-pin', { method: 'POST', body: JSON.stringify({ pin: loginP }) })
+    .then(function(data){
+      document.getElementById('login-err').style.display = 'none';
+      localStorage.setItem('bk_session', data.name);
+      openDash();
+    })
+    .catch(function(){
+      document.getElementById('login-err').style.display = 'block';
+      loginP = ''; drawDots('login-dots', loginP, 6);
+      var c = document.getElementById('login-card');
+      c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+    });
 }
 function doLogout(){
   localStorage.removeItem('bk_session');
-  loginP=''; drawDots('login-dots',loginP,6);
+  loginP = ''; drawDots('login-dots', loginP, 6);
   showPg('pg-login');
 }
 function tryAutoLogin(){
-  if (localStorage.getItem('bk_session')==='1') openDash();
-  else drawDots('login-dots',loginP,6);
+  if (localStorage.getItem('bk_session')) openDash();
+  else { drawDots('login-dots', loginP, 6); checkConnection(); }
 }
 
-function cp1(d){ if(clockP.length>=4) return; clockP+=d; drawDots('clock-dots',clockP,4); if(clockP.length===4) setTimeout(doClockPin,260); }
+// ══════════════════════════════════════════
+// CLOCK SHEET (4-digit staff PIN)
+// ══════════════════════════════════════════
+function cp1(d){ if(clockP.length>=6) return; clockP+=d; drawDots('clock-dots',clockP,4); if(clockP.length>=4) setTimeout(function(){ if(clockP.length>=4) doClockPin(); },300); }
 function cp1b(){ clockP=clockP.slice(0,-1); drawDots('clock-dots',clockP,4); }
 function cp1c(){ clockP=''; drawDots('clock-dots',clockP,4); }
 
 function openClockSheet(nm){
-  clockTarget=nm; clockP=''; drawDots('clock-dots',clockP,4);
-  document.getElementById('clock-err').style.display='none';
-  document.getElementById('clock-name').textContent=nm;
-  var isIn = !!(bk.sessions[nm] && bk.sessions[nm].in);
+  clockTarget = nm; clockP = ''; drawDots('clock-dots', clockP, 4);
+  document.getElementById('clock-err').style.display = 'none';
+  document.getElementById('clock-name').textContent = nm;
+  var isIn = !!openSessions[nm];
   document.getElementById('clock-hint').textContent = isIn ? (nm + ' - PIN to clock out') : (nm + ' - PIN to clock in');
   document.getElementById('clock-sheet-bg').classList.add('on');
 }
 function closeClockSheet(){ document.getElementById('clock-sheet-bg').classList.remove('on'); clockP=''; drawDots('clock-dots',clockP,4); }
+
 function doClockPin(){
-  var v = bk.staff[clockTarget];
-  if (!v || v.pin !== clockP) {
-    clockP=''; drawDots('clock-dots',clockP,4);
-    document.getElementById('clock-err').style.display='block';
-    var s=document.querySelector('#clock-sheet-bg .sheet'); s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
-    return;
-  }
-  closeClockSheet();
-  toggleClock(clockTarget);
-}
-
-function ap1(d){ if(adminP.length>=6) return; adminP+=d; drawDots('admin-dots',adminP,6); if(adminP.length===6) setTimeout(doAdminPin,260); }
-function ap1b(){ adminP=adminP.slice(0,-1); drawDots('admin-dots',adminP,6); }
-function ap1c(){ adminP=''; drawDots('admin-dots',adminP,6); }
-
-function openAdminSheet(nm){
-  histTarget=nm; adminP=''; drawDots('admin-dots',adminP,6);
-  document.getElementById('admin-err').style.display='none';
-  document.getElementById('admin-target-name').textContent=nm;
-  document.getElementById('admin-sheet-bg').classList.add('on');
-}
-function closeAdminSheet(){ document.getElementById('admin-sheet-bg').classList.remove('on'); adminP=''; drawDots('admin-dots',adminP,6); }
-function doAdminPin(){
-  if (adminP !== ADMIN_PIN) {
-    adminP=''; drawDots('admin-dots',adminP,6);
-    document.getElementById('admin-err').style.display='block';
-    var s=document.getElementById('admin-sheet-inner'); s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
-    return;
-  }
-  closeAdminSheet();
-  openDetail(histTarget);
-}
-
-function openDash(){
-  showPg('pg-dash');
-  var now=new Date(), dow=(now.getDay()+6)%7;
-  document.getElementById('hdr-date').textContent = SDAYS[dow] + ' ' + now.getDate() + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
-  initData();
-  renderAll();
-  setInterval(renderAll, 30000);
-}
-
-function goTab(n){
-  var tabs=document.querySelectorAll('.tab');
-  for (var i=0;i<tabs.length;i++) tabs[i].classList.toggle('on', i===n);
-  var contents=document.querySelectorAll('.tab-content');
-  for (var j=0;j<contents.length;j++) contents[j].classList.toggle('on', j===n);
-  if (n===0) renderCrew();
-  if (n===1) renderToday();
-  if (n===2) renderHist();
-}
-
-function renderAll(){ renderCrew(); renderToday(); renderHist(); }
-
-function renderCrew(){
-  var names = Object.keys(bk.staff), now = Date.now(), html = '';
-  for (var i=0;i<names.length;i++) {
-    var nm = names[i];
-    var sess = bk.sessions[nm], isIn = !!(sess && sess.in);
-    var elapsed = isIn ? Math.round((now - sess.in) / 36000) / 100 : 0;
-    var todayDone = getTodayHrs(nm);
-    html += '<div class="crew-card' + (isIn ? ' clocked-in' : '') + '" onclick="openClockSheet(\'' + nm + '\')">';
-    html += '<button class="del-btn" onclick="event.stopPropagation();delEmp(\'' + nm + '\')" type="button">&#10005;</button>';
-    html += '<div class="crew-av">' + nm[0] + '</div>';
-    html += '<div class="crew-name">' + nm + '</div>';
-    html += '<span class="crew-badge ' + (isIn ? 'badge-in' : 'badge-out') + '">' + (isIn ? 'Clocked In' : 'Clocked Out') + '</span>';
-    html += '<div class="crew-elapsed">' + (isIn ? (elapsed + 'h elapsed') : '&nbsp;') + '</div>';
-    html += '<div class="crew-today">Today: ' + (todayDone + (isIn ? elapsed : 0)).toFixed(2) + 'h</div>';
-    html += '</div>';
-  }
-  document.getElementById('crew-grid').innerHTML = html;
-}
-
-function getTodayHrs(nm){
-  var today = dateStr(new Date());
-  var sum = 0;
-  for (var i=0;i<bk.history.length;i++) {
-    var h = bk.history[i];
-    if (h.name===nm && h.date===today) sum += h.hours;
-  }
-  return sum;
-}
-
-function toggleClock(nm){
-  var now = new Date(), ts = now.getTime();
-  var sess = bk.sessions[nm], isIn = !!(sess && sess.in);
-  if (isIn) {
-    var hrs = Math.round((ts - sess.in) / 36000) / 100;
-    bk.history.unshift({ id: String(ts), name: nm, date: dateStr(now), in: sess.in, out: ts, hours: hrs, adjusted: false, reason: '' });
-    delete bk.sessions[nm];
-    showConfirm(false, nm, now, hrs);
-  } else {
-    bk.sessions[nm] = { in: ts };
-    showConfirm(true, nm, now, null);
-  }
-  push();
-  renderAll();
+  if (!clockP) return;
+  var isIn = !!openSessions[clockTarget];
+  var endpoint = isIn ? '/clockout' : '/clockin';
+  api(endpoint, { method: 'POST', body: JSON.stringify({ employee: clockTarget, pin: clockP }) })
+    .then(function(data){
+      closeClockSheet();
+      var now = new Date();
+      showConfirm(!isIn, clockTarget, now, data.hours);
+      refreshAll();
+    })
+    .catch(function(){
+      clockP = ''; drawDots('clock-dots', clockP, 4);
+      document.getElementById('clock-err').style.display = 'block';
+      var s = document.querySelector('#clock-sheet-bg .sheet');
+      s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    });
 }
 
 function showConfirm(clockIn, nm, time, hrs){
-  document.getElementById('conf-icon').textContent = clockIn ? 'Clocked In' : 'Clocked Out';
   document.getElementById('conf-name').textContent = nm;
   document.getElementById('conf-action').textContent = clockIn ? 'Shift started' : 'Shift ended';
   document.getElementById('conf-time').textContent = fmtTime(time);
@@ -543,144 +461,234 @@ function showConfirm(clockIn, nm, time, hrs){
 }
 function closeConfirm(){ document.getElementById('confirm-bg').classList.remove('on'); }
 
+// ══════════════════════════════════════════
+// MANAGER PIN SHEET (history access)
+// ══════════════════════════════════════════
+function ap1(d){ if(adminP.length>=6) return; adminP+=d; drawDots('admin-dots',adminP,6); if(adminP.length>=4) setTimeout(function(){ if(adminP.length>=4) doAdminPin(); },300); }
+function ap1b(){ adminP=adminP.slice(0,-1); drawDots('admin-dots',adminP,6); }
+function ap1c(){ adminP=''; drawDots('admin-dots',adminP,6); }
+
+function openAdminSheet(nm){
+  histTarget = nm; adminP = ''; drawDots('admin-dots', adminP, 6);
+  document.getElementById('admin-err').style.display = 'none';
+  document.getElementById('admin-target-name').textContent = nm;
+  document.getElementById('admin-sheet-bg').classList.add('on');
+}
+function closeAdminSheet(){ document.getElementById('admin-sheet-bg').classList.remove('on'); adminP=''; drawDots('admin-dots',adminP,6); }
+function doAdminPin(){
+  if (!adminP) return;
+  api('/verify-manager-pin', { method: 'POST', body: JSON.stringify({ pin: adminP }) })
+    .then(function(){ closeAdminSheet(); openDetail(histTarget); })
+    .catch(function(){
+      adminP = ''; drawDots('admin-dots', adminP, 6);
+      document.getElementById('admin-err').style.display = 'block';
+      var s = document.getElementById('admin-sheet-inner');
+      s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    });
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function openDash(){
+  showPg('pg-dash');
+  var now = new Date(), dow = (now.getDay()+6)%7;
+  document.getElementById('hdr-date').textContent = SDAYS[dow] + ' ' + now.getDate() + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
+  checkConnection().then(function(ok){ if (ok) refreshAll(); });
+  setInterval(function(){ checkConnection().then(function(ok){ if (ok) refreshAll(); }); }, 15000);
+}
+
+function goTab(n){
+  var tabs = document.querySelectorAll('.tab');
+  for (var i=0;i<tabs.length;i++) tabs[i].classList.toggle('on', i===n);
+  var contents = document.querySelectorAll('.tab-content');
+  for (var j=0;j<contents.length;j++) contents[j].classList.toggle('on', j===n);
+  if (n===0) renderCrew();
+  if (n===1) renderToday();
+  if (n===2) renderHist();
+}
+
+function refreshAll(){
+  Promise.all([
+    api('/employees'),
+    api('/status'),
+    api('/today')
+  ]).then(function(results){
+    employees = results[0];
+    openSessions = {};
+    results[1].forEach(function(s){ openSessions[s.employee] = s.clock_in; });
+    todayShifts = results[2];
+    renderCrew(); renderToday(); renderHist();
+  }).catch(function(e){
+    console.warn('refresh failed', e);
+    setSyncStatus('err');
+  });
+}
+
+// ══════════════════════════════════════════
+// TAB 0: TEAM
+// ══════════════════════════════════════════
+function getTodayHrs(nm){
+  var sum = 0;
+  for (var i=0;i<todayShifts.length;i++) {
+    var h = todayShifts[i];
+    if (h.employee === nm && h.hours) sum += h.hours;
+  }
+  return sum;
+}
+
+function renderCrew(){
+  var html = '';
+  employees.forEach(function(emp){
+    var nm = emp.name;
+    var inTs = openSessions[nm];
+    var isIn = !!inTs;
+    var elapsed = isIn ? Math.round((Date.now() - new Date(inTs).getTime()) / 36000) / 100 : 0;
+    var todayDone = getTodayHrs(nm);
+    html += '<div class="crew-card' + (isIn ? ' clocked-in' : '') + '" onclick="openClockSheet(\'' + nm + '\')">';
+    html += '<button class="del-btn" onclick="event.stopPropagation();delEmp(\'' + nm + '\')" type="button">&#10005;</button>';
+    html += '<div class="crew-av">' + nm[0] + '</div>';
+    html += '<div class="crew-name">' + nm + (emp.manager ? ' &#9733;' : '') + '</div>';
+    html += '<span class="crew-badge ' + (isIn ? 'badge-in' : 'badge-out') + '">' + (isIn ? 'Clocked In' : 'Clocked Out') + '</span>';
+    html += '<div class="crew-elapsed">' + (isIn ? (elapsed + 'h elapsed') : '&nbsp;') + '</div>';
+    html += '<div class="crew-today">Today: ' + (todayDone + (isIn ? elapsed : 0)).toFixed(2) + 'h</div>';
+    html += '</div>';
+  });
+  document.getElementById('crew-grid').innerHTML = html || '<div class="empty"><div class="ei">-</div>No employees yet</div>';
+}
+
+// ══════════════════════════════════════════
+// TAB 1: TODAY
+// ══════════════════════════════════════════
 function renderToday(){
-  var today = dateStr(new Date()), now = Date.now();
-  var entries = Object.keys(bk.sessions);
+  var now = Date.now();
+  var inNow = Object.keys(openSessions);
   var h = '';
-  var anyIn = false;
-  for (var i=0;i<entries.length;i++) {
-    var nm = entries[i], s = bk.sessions[nm];
-    if (!s || !s.in) continue;
-    anyIn = true;
-    var el = Math.round((now - s.in) / 36000) / 100;
+  inNow.forEach(function(nm){
+    var inTs = openSessions[nm];
+    var el = Math.round((now - new Date(inTs).getTime()) / 36000) / 100;
     h += '<div class="in-entry"><div class="shift-av">' + nm[0] + '</div>';
     h += '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--t)">' + nm + '</div>';
-    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px">Since <span style="color:var(--g);font-weight:700">' + fmtTime(new Date(s.in)) + '</span></div></div>';
+    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px">Since <span style="color:var(--g);font-weight:700">' + fmtTime(new Date(inTs)) + '</span></div></div>';
     h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:24px;color:var(--g)">' + el + 'h</div>';
     h += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase">elapsed</div></div></div>';
-  }
-  document.getElementById('cur-in').innerHTML = anyIn ? h : '<div class="empty" style="padding:18px"><div class="ei">-</div>Nobody clocked in right now</div>';
+  });
+  document.getElementById('cur-in').innerHTML = inNow.length ? h : '<div class="empty" style="padding:18px"><div class="ei">-</div>Nobody clocked in right now</div>';
 
-  var done = [];
-  for (var j=0;j<bk.history.length;j++) if (bk.history[j].date===today) done.push(bk.history[j]);
+  var done = todayShifts.filter(function(s){ return s.clock_out; });
   var dh = '';
-  for (var k=0;k<done.length;k++) {
-    var sh = done[k];
-    dh += '<div class="shift-entry"><div class="shift-av">' + sh.name[0] + '</div>';
-    dh += '<div class="shift-name">' + sh.name + '</div>';
-    dh += '<div class="shift-times"><span style="color:var(--g);font-weight:700">In: ' + fmtTime(new Date(sh.in)) + '</span><br>';
-    dh += '<span style="color:var(--r);font-weight:700">Out: ' + fmtTime(new Date(sh.out)) + '</span></div>';
+  done.forEach(function(sh){
+    dh += '<div class="shift-entry"><div class="shift-av">' + sh.employee[0] + '</div>';
+    dh += '<div class="shift-name">' + sh.employee + '</div>';
+    dh += '<div class="shift-times"><span style="color:var(--g);font-weight:700">In: ' + fmtTime(new Date(sh.clock_in)) + '</span><br>';
+    dh += '<span style="color:var(--r);font-weight:700">Out: ' + fmtTime(new Date(sh.clock_out)) + '</span></div>';
     dh += '<div class="shift-hrs">' + sh.hours + 'h</div></div>';
-  }
+  });
   document.getElementById('today-done').innerHTML = done.length ? dh : '<div class="empty" style="padding:18px"><div class="ei">-</div>No completed shifts yet today</div>';
 }
 
+// ══════════════════════════════════════════
+// TAB 2: HISTORY
+// ══════════════════════════════════════════
 function renderHist(){
   var el = document.getElementById('hist-list');
-  var names = Object.keys(bk.staff);
-  if (!bk.history.length) { el.innerHTML = '<div class="empty"><div class="ei">-</div>No shifts recorded yet</div>'; return; }
+  if (!employees.length) { el.innerHTML = '<div class="empty"><div class="ei">-</div>No employees yet</div>'; return; }
   var h = '';
-  for (var i=0;i<names.length;i++) {
-    var nm = names[i];
-    var entries = [];
-    for (var j=0;j<bk.history.length;j++) if (bk.history[j].name===nm) entries.push(bk.history[j]);
-    if (!entries.length) continue;
-    var total = 0;
-    for (var k=0;k<entries.length;k++) total += entries[k].hours;
+  employees.forEach(function(emp){
+    var nm = emp.name;
     h += '<div class="hist-card" onclick="openAdminSheet(\'' + nm + '\')">';
     h += '<div style="display:flex;align-items:center;gap:14px">';
     h += '<div class="hist-av">' + nm[0] + '</div>';
     h += '<div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--t)">' + nm + '</div>';
-    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">' + entries.length + ' shift' + (entries.length!==1?'s':'') + ' - Today: ' + getTodayHrs(nm).toFixed(2) + 'h</div></div>';
-    h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:20px;color:var(--pk)">' + total.toFixed(1) + 'h</div>';
-    h += '<div style="font-size:10px;color:var(--ts);font-weight:700">total hours</div>';
-    h += '<div style="font-size:11px;color:var(--pk);margin-top:4px;font-weight:700">Admin -></div></div></div></div>';
-  }
+    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">Today: ' + getTodayHrs(nm).toFixed(2) + 'h</div></div>';
+    h += '<div style="font-size:11px;color:var(--pk);font-weight:700">View &#8594;</div></div></div>';
+  });
   el.innerHTML = h;
 }
 
 function openDetail(nm){
-  var entries = [];
-  for (var i=0;i<bk.history.length;i++) if (bk.history[i].name===nm) entries.push(bk.history[i]);
-  var total = 0;
-  for (var j=0;j<entries.length;j++) total += entries[j].hours;
-  var avg = entries.length ? (total/entries.length).toFixed(2) : '0';
+  api('/history/' + encodeURIComponent(nm)).then(function(entries){
+    histCache[nm] = entries;
+    var total = entries.reduce(function(a,e){ return a + (e.hours||0); }, 0);
+    var avg = entries.length ? (total/entries.length).toFixed(2) : '0';
 
-  var byWeek = {};
-  for (var k=0;k<entries.length;k++) {
-    var h1 = entries[k];
-    var d = new Date(h1.date + 'T12:00:00'), di = (d.getDay()+6)%7;
-    var mon = new Date(d); mon.setDate(d.getDate()-di);
-    var wk = dateStr(mon);
-    var wkEnd = new Date(mon.getTime() + 6*86400000);
-    if (!byWeek[wk]) byWeek[wk] = { hrs:0, shifts:0, lbl: mon.getDate() + ' ' + MO[mon.getMonth()] + ' - ' + wkEnd.getDate() + ' ' + MO[wkEnd.getMonth()] };
-    byWeek[wk].hrs += h1.hours; byWeek[wk].shifts++;
-  }
+    var byWeek = {};
+    entries.forEach(function(h1){
+      if (!h1.clock_in) return;
+      var d = new Date(h1.clock_in), di = (d.getDay()+6)%7;
+      var mon = new Date(d); mon.setDate(d.getDate()-di); mon.setHours(0,0,0,0);
+      var wk = dateStr(mon);
+      var wkEnd = new Date(mon.getTime() + 6*86400000);
+      if (!byWeek[wk]) byWeek[wk] = { hrs:0, shifts:0, lbl: mon.getDate() + ' ' + MO[mon.getMonth()] + ' - ' + wkEnd.getDate() + ' ' + MO[wkEnd.getMonth()] };
+      byWeek[wk].hrs += (h1.hours||0); byWeek[wk].shifts++;
+    });
 
-  var wkKeys = Object.keys(byWeek).sort().reverse();
-  var wkHtml = '';
-  for (var m=0;m<wkKeys.length;m++) {
-    var w = byWeek[wkKeys[m]];
-    wkHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
-    wkHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + w.lbl + '</span>';
-    wkHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + w.shifts + ' shift' + (w.shifts!==1?'s':'') + '</span>';
-    wkHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + w.hrs.toFixed(1) + 'h</span></span></div>';
-  }
+    var wkKeys = Object.keys(byWeek).sort().reverse();
+    var wkHtml = '';
+    wkKeys.forEach(function(k){
+      var w = byWeek[k];
+      wkHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
+      wkHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + w.lbl + '</span>';
+      wkHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + w.shifts + ' shift' + (w.shifts!==1?'s':'') + '</span>';
+      wkHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + w.hrs.toFixed(1) + 'h</span></span></div>';
+    });
 
-  var logHtml = '';
-  for (var n=0;n<entries.length;n++) {
-    var h2 = entries[n];
-    var inT = fmtTime(new Date(h2.in)), outT = h2.out ? fmtTime(new Date(h2.out)) : '--:--';
-    var isLive = !h2.out;
-    var clockedMins = Math.round((h2.out ? h2.out-h2.in : Date.now()-h2.in) / 60000);
-    var ch = Math.floor(clockedMins/60), cm = clockedMins%60;
-    var fh = Math.floor(h2.hours), fm = Math.round((h2.hours-fh)*60);
-    logHtml += '<div class="slog-row">';
-    logHtml += '<div class="slog-date">' + h2.date + '</div>';
-    logHtml += '<div class="slog-time">' + inT + ' - ' + outT + '</div>';
-    logHtml += '<div class="slog-block"><div class="slog-lbl">Clocked</div><div class="slog-val">' + ch + 'h ' + String(cm).padStart(2,'0') + 'm</div></div>';
-    logHtml += '<div class="slog-block"><div class="slog-lbl">Final</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
-    logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
-    logHtml += '<button class="slog-mod" onclick="openModify(\'' + nm + '\',\'' + h2.id + '\')" type="button">Modify</button>';
-    logHtml += '</div>';
-  }
+    var logHtml = '';
+    entries.forEach(function(h2){
+      var inT = fmtTime(new Date(h2.clock_in)), outT = h2.clock_out ? fmtTime(new Date(h2.clock_out)) : '--:--';
+      var isLive = !h2.clock_out;
+      var dateLbl = new Date(h2.clock_in).toISOString().slice(0,10);
+      var hrs = h2.hours || 0;
+      var fh = Math.floor(hrs), fm = Math.round((hrs-fh)*60);
+      logHtml += '<div class="slog-row">';
+      logHtml += '<div class="slog-date">' + dateLbl + '</div>';
+      logHtml += '<div class="slog-time">' + inT + ' - ' + outT + '</div>';
+      logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
+      logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
+      logHtml += '<button class="slog-mod" onclick="openModify(\'' + nm + '\',' + h2.id + ')" type="button">Modify</button>';
+      logHtml += '</div>';
+    });
 
-  var content = '';
-  content += '<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">';
-  var chips = [['Total Hours', total.toFixed(1)+'h', 'var(--pk)'], ['Shifts', String(entries.length), 'var(--t)'], ['Avg/Shift', avg+'h', 'var(--y)']];
-  for (var p=0;p<chips.length;p++) {
-    content += '<div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center">';
-    content += '<div style="font-family:Fredoka One,cursive;font-size:26px;color:' + chips[p][2] + '">' + chips[p][1] + '</div>';
-    content += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">' + chips[p][0] + '</div></div>';
-  }
-  content += '</div>';
-  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Weekly Hours</div>';
-  content += '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">';
-  content += wkHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
-  content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
-  content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
-  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
-  content += '<button class="dl-btn" onclick="dlCSV(\'' + nm + '\')" type="button">Download CSV</button></div>';
-  content += logHtml || '<div class="empty" style="padding:14px">No shifts yet</div>';
+    var content = '';
+    content += '<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">';
+    var chips = [['Total Hours', total.toFixed(1)+'h', 'var(--pk)'], ['Shifts', String(entries.length), 'var(--t)'], ['Avg/Shift', avg+'h', 'var(--y)']];
+    chips.forEach(function(c){
+      content += '<div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center">';
+      content += '<div style="font-family:Fredoka One,cursive;font-size:26px;color:' + c[2] + '">' + c[1] + '</div>';
+      content += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">' + c[0] + '</div></div>';
+    });
+    content += '</div>';
+    content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Weekly Hours</div>';
+    content += '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">';
+    content += wkHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
+    content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
+    content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
+    content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
+    content += '<button class="dl-btn" onclick="dlCSV(\'' + nm + '\')" type="button">Download CSV</button></div>';
+    content += logHtml || '<div class="empty" style="padding:14px">No shifts yet</div>';
 
-  document.getElementById('detail-name').textContent = nm;
-  document.getElementById('detail-content').innerHTML = content;
-  document.getElementById('detail-bg').classList.add('on');
+    document.getElementById('detail-name').textContent = nm;
+    document.getElementById('detail-content').innerHTML = content;
+    document.getElementById('detail-bg').classList.add('on');
+  }).catch(function(e){ toast('Could not load history'); });
 }
 function closeDetail(){ document.getElementById('detail-bg').classList.remove('on'); }
 
+// ══════════════════════════════════════════
+// MODIFY SHIFT (manager only)
+// ══════════════════════════════════════════
 function openModify(nm, id){
   modTarget = { nm: nm, id: id };
-  var h = null;
-  for (var i=0;i<bk.history.length;i++) if (bk.history[i].id===id) { h = bk.history[i]; break; }
+  var entries = histCache[nm] || [];
+  var h = entries.find(function(x){ return x.id === id; });
   if (!h) return;
   document.getElementById('mod-person').value = nm;
-  function toLocal(ts){
-    var d = new Date(ts), pad = function(n){ return String(n).padStart(2,'0'); };
+  function toLocal(iso){
+    var d = new Date(iso), pad = function(n){ return String(n).padStart(2,'0'); };
     return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
   }
-  document.getElementById('mod-start').value = toLocal(h.in);
-  document.getElementById('mod-end').value = h.out ? toLocal(h.out) : '';
+  document.getElementById('mod-start').value = toLocal(h.clock_in);
+  document.getElementById('mod-end').value = h.clock_out ? toLocal(h.clock_out) : '';
   document.getElementById('mod-reason').value = h.reason || '';
   updateDur();
   document.getElementById('mod-modal-bg').classList.add('on');
@@ -701,40 +709,32 @@ function saveModify(){
   var e = document.getElementById('mod-end').value;
   var reason = document.getElementById('mod-reason').value.trim();
   if (!s || !e) { toast('Fill in both times'); return; }
-  var inTs = new Date(s).getTime(), outTs = new Date(e).getTime();
-  if (outTs <= inTs) { toast('End must be after start'); return; }
-  var hrs = Math.round((outTs-inTs)/36000)/100;
-  var idx = -1;
-  for (var i=0;i<bk.history.length;i++) if (bk.history[i].id===modTarget.id) { idx = i; break; }
-  if (idx !== -1) {
-    bk.history[idx].in = inTs;
-    bk.history[idx].out = outTs;
-    bk.history[idx].hours = hrs;
-    bk.history[idx].adjusted = true;
-    bk.history[idx].reason = reason;
-    bk.history[idx].date = dateStr(new Date(inTs));
-  }
-  push();
-  closeModify();
-  openDetail(modTarget.nm);
-  toast(modTarget.nm + ' shift updated');
+  var inISO = new Date(s).toISOString(), outISO = new Date(e).toISOString();
+  if (new Date(outISO) <= new Date(inISO)) { toast('End must be after start'); return; }
+  api('/shifts/' + modTarget.id, { method: 'PUT', body: JSON.stringify({ clockIn: inISO, clockOut: outISO, reason: reason }) })
+    .then(function(){
+      closeModify();
+      openDetail(modTarget.nm);
+      refreshAll();
+      toast(modTarget.nm + ' shift updated');
+    })
+    .catch(function(){ toast('Could not save — check connection'); });
 }
 
+// ══════════════════════════════════════════
+// DOWNLOAD CSV
+// ══════════════════════════════════════════
 function dlCSV(nm){
-  var entries = [];
-  for (var i=0;i<bk.history.length;i++) if (bk.history[i].name===nm) entries.push(bk.history[i]);
+  var entries = histCache[nm] || [];
   if (!entries.length) { toast('No shifts to download'); return; }
   var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Adjusted,Reason'];
-  for (var j=0;j<entries.length;j++) {
-    var h = entries[j];
-    var d = new Date(h.date + 'T12:00:00'), dow = (d.getDay()+6)%7;
-    var cols = [nm, h.date, FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), h.adjusted ? 'Yes' : 'No', h.reason || ''];
-    var escaped = [];
-    for (var c=0;c<cols.length;c++) escaped.push('"' + String(cols[c]).replace(/"/g,'""') + '"');
+  entries.forEach(function(h){
+    var d = new Date(h.clock_in), dow = (d.getDay()+6)%7;
+    var cols = [nm, d.toISOString().slice(0,10), FDAYS[dow], fmtTime(new Date(h.clock_in)), h.clock_out ? fmtTime(new Date(h.clock_out)) : 'In progress', (h.hours||0).toFixed(2), h.adjusted ? 'Yes' : 'No', h.reason || ''];
+    var escaped = cols.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; });
     lines.push(escaped.join(','));
-  }
-  var total = 0;
-  for (var k=0;k<entries.length;k++) total += entries[k].hours;
+  });
+  var total = entries.reduce(function(a,h){ return a + (h.hours||0); }, 0);
   lines.push('"","","","","TOTAL","' + total.toFixed(2) + '","",""');
   var csv = lines.join('\r\n');
   var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -749,9 +749,13 @@ function dlCSV(nm){
   toast('Downloaded ' + nm + ' shifts');
 }
 
+// ══════════════════════════════════════════
+// ADD / DELETE EMPLOYEE
+// ══════════════════════════════════════════
 function openAddEmp(){
   document.getElementById('new-name').value = '';
   document.getElementById('new-pin').value = '';
+  document.getElementById('new-manager').checked = false;
   document.getElementById('emp-err').style.display = 'none';
   document.getElementById('add-emp-bg').classList.add('on');
 }
@@ -759,24 +763,27 @@ function closeAddEmp(){ document.getElementById('add-emp-bg').classList.remove('
 function saveNewEmp(){
   var name = document.getElementById('new-name').value.trim();
   var pin = document.getElementById('new-pin').value.trim();
+  var isManager = document.getElementById('new-manager').checked;
   var err = document.getElementById('emp-err');
-  if (!name || !/^[0-9]{4}$/.test(pin)) { err.style.display='block'; err.textContent='Enter a name and a valid 4-digit PIN.'; return; }
-  if (bk.staff[name]) { err.style.display='block'; err.textContent='Name already exists.'; return; }
-  bk.staff[name] = { pin: pin, pic: null };
-  push();
-  closeAddEmp();
-  renderAll();
-  toast(name + ' added');
+  if (!name || !/^[0-9]{4,6}$/.test(pin)) { err.style.display='block'; err.textContent='Enter a name and a 4-6 digit PIN.'; return; }
+  api('/employees', { method: 'POST', body: JSON.stringify({ name: name, pin: pin, role: isManager ? 'Manager' : 'Staff', manager: isManager ? 1 : 0 }) })
+    .then(function(){
+      closeAddEmp();
+      refreshAll();
+      toast(name + ' added');
+    })
+    .catch(function(e){ err.style.display='block'; err.textContent = (e.data && e.data.error) || 'Could not add employee'; });
 }
 function delEmp(nm){
   if (!confirm('Remove ' + nm + ' from the bakery team?')) return;
-  delete bk.staff[nm];
-  delete bk.sessions[nm];
-  push();
-  renderAll();
-  toast(nm + ' removed');
+  api('/employees/' + encodeURIComponent(nm), { method: 'DELETE' })
+    .then(function(){ refreshAll(); toast(nm + ' removed'); })
+    .catch(function(){ toast('Could not remove — check connection'); });
 }
 
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
 function fmtTime(d){ var h=d.getHours(), m=d.getMinutes(), ap=h>=12?'pm':'am', hh=h%12||12; return hh + ':' + String(m).padStart(2,'0') + ap; }
 function dateStr(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 function showPg(id){
