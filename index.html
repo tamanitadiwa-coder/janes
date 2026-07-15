@@ -260,39 +260,6 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 }
 </style>
 
-  <!-- Firebase SDK (real-time sync across devices) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, updateDoc, onSnapshot }
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    // ╔══════════════════════════════════════════════════════════╗
-    // ║  PASTE YOUR FIREBASE CONFIG HERE (same project as bakery) ║
-    // ╚══════════════════════════════════════════════════════════╝
-    const firebaseConfig = {
-      apiKey: "AIzaSyBjgFTU8CLaL8cTB533T1QzdTSNGJvneBk",
-      authDomain: "janes-ff714.firebaseapp.com",
-      projectId: "janes-ff714",
-      storageBucket: "janes-ff714.appspot.com",
-      messagingSenderId: "887885411191",
-      appId: "1:887885411191:web:012ee760f1dd09f3876772"
-    };
-
-    let fbApp, fbDB;
-    try {
-      fbApp = initializeApp(firebaseConfig, 'portal');
-      fbDB = getFirestore(fbApp);
-      window._portalFbDB = fbDB;
-      window._portalFbDoc = doc;
-      window._portalFbSetDoc = setDoc;
-      window._portalFbOnSnapshot = onSnapshot;
-      window._portalFbUpdateDoc = updateDoc;
-      window.dispatchEvent(new Event('portal-firebase-ready'));
-    } catch(e) {
-      console.warn('Firebase init failed — offline mode', e);
-      window.dispatchEvent(new Event('portal-firebase-ready'));
-    }
-  </script>
 </head>
 <body>
 <canvas id="bg-canvas"></canvas>
@@ -368,6 +335,14 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
       <a href="bakery.html" style="display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:8px 18px;background:linear-gradient(135deg,#E91E8C,#C2185B);border-radius:100px;text-decoration:none;font-family:'Fredoka One',cursive;font-size:14px;color:#fff;box-shadow:0 4px 18px rgba(233,30,140,.4);letter-spacing:.04em">
         🥐 Bakery
       </a>
+      <div style="margin-top:14px">
+        <a href="#" onclick="toggleApiSetup();return false;" style="font-size:11px;color:var(--ts,#888);text-decoration:underline">API settings</a>
+      </div>
+      <div id="api-setup-box" style="display:none;margin-top:12px;background:var(--s1,#0d0d12);border:1px solid var(--bd,#252530);border-radius:12px;padding:16px;text-align:left">
+        <label style="display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts,#888);margin-bottom:8px">Backend API URL</label>
+        <input id="api-url-input" type="text" placeholder="https://your-backend.example.com" style="width:100%;padding:10px 12px;background:var(--s2,#141419);border:1px solid var(--bd,#252530);border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-size:13px;outline:none;margin-bottom:8px;box-sizing:border-box">
+        <button onclick="saveApiUrlPortal()" style="width:100%;padding:10px;border-radius:8px;background:linear-gradient(135deg,#E91E8C,#C2185B);color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer">Save &amp; Connect</button>
+      </div>
     </div>
   </div>
 </div>
@@ -494,8 +469,24 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
 // ═══════════════════════════════════════════════════════
 // JANES DATA LAYER v6 — localStorage backed, future-safe
 // ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+// JANE'S PORTAL — DATA LAYER
+// Backed by the same Node/Express + SQLite backend as the
+// Bakery clock in/out system. No more Firebase, no more
+// localStorage-as-source-of-truth — the backend is the one
+// place all devices read from and write to.
+// ══════════════════════════════════════════════════════
 const DB_VERSION = 6;
-const DB_KEY = 'janes_db_v6';
+const DB_KEY = 'janes_db_v6'; // still used as an offline cache key
+
+// Change this once you've deployed your backend (see bakery README).
+// Leave blank and the app falls back to local-only mode.
+let API_BASE = localStorage.getItem('janes_api_base') || '';
+
+function setApiBase(url) {
+  API_BASE = (url || '').trim().replace(/\/$/, '');
+  try { localStorage.setItem('janes_api_base', API_BASE); } catch(e) {}
+}
 
 const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
@@ -530,51 +521,14 @@ function getShiftTimes(wt, type, di) {
   return t[type]||t.open;
 }
 
-// ── DB init / load ──
-function loadDB() {
-  // Wipe ALL old janes keys no matter what version
-  try {
-    Object.keys(localStorage).filter(k=>k.startsWith('janes_')||k.startsWith('janes-')).forEach(k=>{
-      if(k!==DB_KEY) localStorage.removeItem(k);
-    });
-  } catch(e){}
-
-  let db;
-  try {
-    const raw = localStorage.getItem(DB_KEY);
-    if(raw) {
-      const parsed = JSON.parse(raw);
-      if(parsed.version === DB_VERSION) {
-        db = parsed;
-      }
-    }
-  } catch(e) {}
-
-  if(!db) db = initDB();
-
-  // Enforce DEFAULT_STAFF identity fields only — NEVER wipe schedules or tasks
-  Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
-    if(!db.staff[nm]) {
-      // New person — seed everything fresh
-      db.staff[nm]={...def, weekType:5, pic:null};
-      if(!db.defaultSched[nm]) db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
-      if(!db.schedules[nm]) db.schedules[nm]={};
-      if(!db.personalTasks) db.personalTasks={};
-      if(!db.personalTasks[nm]) db.personalTasks[nm]={};
-      if(!db.shiftHistory) db.shiftHistory={};
-      if(!db.shiftHistory[nm]) db.shiftHistory[nm]=[];
-    } else {
-      // Existing person — reset ONLY identity, keep everything else
-      db.staff[nm].pin = def.pin;
-      db.staff[nm].role = def.role;
-      db.staff[nm].admin = def.admin;
-      db.staff[nm].owner = def.owner;
-      // NEVER touch: weekType, pic, schedules, defaultSched, tasks, history
-    }
-  });
-
-  saveDB(db, ['staff']);
-  return db;
+function apiFetch(path, opts) {
+  opts = opts || {};
+  const headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
+  return fetch(API_BASE + path, Object.assign({}, opts, { headers }))
+    .then(res => res.json().then(data => {
+      if (!res.ok) { const e = new Error(data.error || 'Request failed'); e.data = data; throw e; }
+      return data;
+    }));
 }
 
 function initDB() {
@@ -587,9 +541,9 @@ function initDB() {
     duties: [],       // duty list
     personalTasks: {},// personalTasks[nm][dateStr] = [{id,text,done}]
     shiftHistory: {}, // shiftHistory[nm] = [{date,type,station,role,hours}]
-    notes: {}         // notes[nm] = [{id,date,text}]
+    weekTypeOverrides: {},
+    notes: {}
   };
-  // Seed staff
   Object.entries(DEFAULT_STAFF).forEach(([nm,info])=>{
     db.staff[nm] = {...info, weekType:info.role==='Chef'||info.owner?6:5, pic:null};
     db.defaultSched[nm] = JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
@@ -597,37 +551,123 @@ function initDB() {
     db.personalTasks[nm] = {};
     db.shiftHistory[nm] = [];
   });
-  saveDB(db, ['staff','schedules','defaultSched','personalTasks','shiftHistory']);
   return db;
 }
 
-// Only these top-level fields are ever pushed to Firebase, and ONLY the ones
-// that actually changed on THIS call — so one device's save never blows away
-// another device's more-recent changes to unrelated fields (e.g. saving a shift
-// in admin no longer overwrites someone else's newly-added personal task).
+function enforceIdentity(db) {
+  // Never trust cached/remote data for pin/role/admin/owner — always match the
+  // hardcoded roster above, but keep everything else (schedules, pics, tasks...)
+  Object.entries(DEFAULT_STAFF).forEach(([nm,def])=>{
+    if(!db.staff[nm]) {
+      db.staff[nm]={...def, weekType:5, pic:null};
+      if(!db.defaultSched[nm]) db.defaultSched[nm]=JSON.parse(JSON.stringify(DEFAULT_SCHEDULES[nm]));
+      if(!db.schedules[nm]) db.schedules[nm]={};
+      if(!db.personalTasks) db.personalTasks={};
+      if(!db.personalTasks[nm]) db.personalTasks[nm]={};
+      if(!db.shiftHistory) db.shiftHistory={};
+      if(!db.shiftHistory[nm]) db.shiftHistory[nm]=[];
+    } else {
+      db.staff[nm].pin = def.pin;
+      db.staff[nm].role = def.role;
+      db.staff[nm].admin = def.admin;
+      db.staff[nm].owner = def.owner;
+    }
+  });
+  if (!db.weekTypeOverrides) db.weekTypeOverrides = {};
+  return db;
+}
+
+// ── Load: try local cache first (instant paint), then backend (source of truth) ──
+function loadDB() {
+  let db;
+  try {
+    const raw = localStorage.getItem(DB_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.version === DB_VERSION) db = parsed;
+    }
+  } catch(e) {}
+  if (!db) db = initDB();
+  return enforceIdentity(db);
+}
+
+// ── Pull the latest from the backend and merge into the live db object ──
+function pullFromBackend() {
+  if (!API_BASE) { setSyncBadge('err'); return Promise.resolve(false); }
+  setSyncBadge('ing');
+  return apiFetch('/portal-data')
+    .then(data => {
+      if (data.version === DB_VERSION || data.version === undefined) {
+        db.schedules = data.schedules || db.schedules;
+        db.defaultSched = data.defaultSched || db.defaultSched;
+        db.events = data.events || db.events;
+        db.duties = data.duties || db.duties;
+        db.personalTasks = data.personalTasks || db.personalTasks;
+        db.shiftHistory = data.shiftHistory || db.shiftHistory;
+        db.weekTypeOverrides = data.weekTypeOverrides || db.weekTypeOverrides;
+        Object.keys(data.staff||{}).forEach(nm => {
+          if (db.staff[nm] && data.staff[nm]) {
+            if (data.staff[nm].pic) db.staff[nm].pic = data.staff[nm].pic;
+            if (data.staff[nm].weekType) db.staff[nm].weekType = data.staff[nm].weekType;
+          }
+        });
+        enforceIdentity(db);
+        try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
+      }
+      setSyncBadge('ok');
+      return true;
+    })
+    .catch(err => {
+      console.warn('Backend pull failed — continuing with locally saved data:', err);
+      setSyncBadge('err');
+      return false;
+    });
+}
+
+// ── Save: write local cache immediately, push only changed fields to backend ──
 function saveDB(db, changedFields) {
-  // Save full local copy — this device's own complete picture
   try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
 
-  if (!window._portalFbDB) return;
+  if (!API_BASE) { setSyncBadge('err'); return; }
 
   const allFields = ['staff','schedules','defaultSched','events','duties','personalTasks','shiftHistory','weekTypeOverrides'];
   const fields = (changedFields && changedFields.length) ? changedFields : allFields;
 
-  const patch = { version: db.version };
+  const patch = {};
   fields.forEach(f => { if (db[f] !== undefined) patch[f] = db[f]; });
 
-  const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
-  // updateDoc only touches the given fields — everything else in the cloud doc is untouched
-  window._portalFbUpdateDoc(ref, patch).catch(e => {
-    // Doc may not exist yet on first-ever save — fall back to setDoc with merge
-    if (window._portalFbSetDoc) {
-      window._portalFbSetDoc(ref, patch, { merge: true }).catch(e2 => console.warn('Firebase save failed:', e2));
-    } else {
-      console.warn('Firebase save failed:', e);
-    }
+  setSyncBadge('ing');
+  apiFetch('/portal-data', { method: 'PUT', body: JSON.stringify(patch) })
+    .then(() => setSyncBadge('ok'))
+    .catch(err => { console.warn('Backend save failed:', err); setSyncBadge('err'); });
+}
+
+function setSyncBadge(status) {
+  const el = document.getElementById('cloud-sync-badge');
+  if (!el) return;
+  if (status === 'ok') { el.textContent = 'Synced'; el.style.color = '#00E676'; el.style.opacity = '0.85'; }
+  else if (status === 'err') { el.textContent = 'Offline — using saved data'; el.style.color = '#ff7070'; el.style.opacity = '0.85'; }
+  else { el.textContent = 'Syncing...'; el.style.color = '#FFE500'; el.style.opacity = '0.85'; }
+}
+
+function toggleApiSetup(){
+  const box = document.getElementById('api-setup-box');
+  if(!box) return;
+  box.style.display = (box.style.display === 'none') ? 'block' : 'none';
+  const input = document.getElementById('api-url-input');
+  if(input) input.value = API_BASE;
+}
+function saveApiUrlPortal(){
+  const v = document.getElementById('api-url-input').value.trim();
+  if(!v){ alert('Enter a URL'); return; }
+  setApiBase(v);
+  toggleApiSetup();
+  pullFromBackend().then(() => {
+    populateStaffSelect();
+    alert('Connected! You can log in now.');
   });
 }
+
 
 // ── Schedule helpers ──
 function weekKey(mon) {
@@ -688,7 +728,7 @@ let db, me=null, pinVal='', myWk=0, teamWk=0, lockPin='', lockClockInterval=null
 let calOff=0, activeEvFilter='all';
 
 function init(){
-  // Clear stale old keys
+  // Clear stale old keys from earlier versions
   ['janes_db_v1','janes_db_v2','janes_db_v3','janes_db_v4','janes_db_v5',
    'janes_events','janes_duties','janes_pics','janes_weektypes'].forEach(k=>{
     try{localStorage.removeItem(k);}catch(e){}
@@ -696,57 +736,13 @@ function init(){
   db=loadDB();
   tryAutoLogin();
   populateStaffSelect();
-  // Connect Firebase real-time listener
-  function setSyncBadge(status) {
-    const el = document.getElementById('cloud-sync-badge');
-    if (!el) return;
-    if (status === 'ok') { el.textContent = 'Synced'; el.style.color = 'var(--g, #00E676)'; el.style.opacity = '0.85'; }
-    else if (status === 'err') { el.textContent = 'Offline — using saved data'; el.style.color = '#ff7070'; el.style.opacity = '0.85'; }
-    else { el.textContent = 'Syncing...'; el.style.color = 'var(--y, #FFE500)'; el.style.opacity = '0.85'; }
-  }
-  function connectFirebase() {
-    if (!window._portalFbDB) { setSyncBadge('err'); return; }
-    setSyncBadge('ing');
-    const ref = window._portalFbDoc(window._portalFbDB, 'portal', 'data');
-    window._portalFbOnSnapshot(ref, (snap) => {
-      if (snap.exists()) {
-        const data = snap.data();
-        if (data.version === DB_VERSION) {
-          // Merge cloud data into local db — keep identity fields from defaults
-          db.schedules = data.schedules || db.schedules;
-          db.defaultSched = data.defaultSched || db.defaultSched;
-          db.events = data.events || db.events;
-          db.duties = data.duties || db.duties;
-          db.personalTasks = data.personalTasks || db.personalTasks;
-          db.shiftHistory = data.shiftHistory || db.shiftHistory;
-          db.weekTypeOverrides = data.weekTypeOverrides || db.weekTypeOverrides;
-          // Preserve pic from cloud
-          Object.keys(data.staff||{}).forEach(nm => {
-            if (db.staff[nm] && data.staff[nm] && data.staff[nm].pic) {
-              db.staff[nm].pic = data.staff[nm].pic;
-            }
-            if (db.staff[nm] && data.staff[nm] && data.staff[nm].weekType) {
-              db.staff[nm].weekType = data.staff[nm].weekType;
-            }
-          });
-          // ALWAYS save the merged result to localStorage — this is the offline backup
-          try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch(e) {}
-          setSyncBadge('ok');
-          refreshFromDB();
-        }
-      }
-    }, err => {
-      console.warn('Portal Firebase sync error — continuing with locally saved data:', err);
-      setSyncBadge('err');
-      // db already holds whatever was loaded from localStorage — nothing lost
+
+  function refreshFromBackend(){
+    pullFromBackend().then(changed => {
+      if (changed) refreshFromDB();
     });
   }
-  if (window._portalFbDB) { connectFirebase(); }
-  else { window.addEventListener('portal-firebase-ready', connectFirebase); }
-  // Listen for admin saves — update db in real time
-  // Re-read DB when admin saves (cross-tab) OR when user returns to this tab from admin
   function refreshFromDB(){
-    db=loadDB();
     populateStaffSelect();
     const tabs=Array.from(document.querySelectorAll('.tab'));
     const activeTab=document.querySelector('.tab.on');
@@ -759,16 +755,14 @@ function init(){
       else if(n===4)renderProfile();
     }
   }
-  // Cross-tab: storage event fires when another tab writes to localStorage
-  window.addEventListener('storage', function(e){
-    if(e.key===DB_KEY||e.key===DB_KEY+'_ping') refreshFromDB();
-  });
-  // Same-tab: when user comes back from admin portal tab
+
+  // Pull fresh data on load, then poll every 10s and whenever the tab regains focus
+  refreshFromBackend();
+  setInterval(refreshFromBackend, 10000);
   document.addEventListener('visibilitychange', function(){
-    if(document.visibilityState==='visible') refreshFromDB();
+    if(document.visibilityState==='visible') refreshFromBackend();
   });
-  // Also on focus
-  window.addEventListener('focus', function(){ refreshFromDB(); });
+  window.addEventListener('focus', refreshFromBackend);
 }
 
 function tryAutoLogin(){
