@@ -380,7 +380,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 // ══════════════════════════════════════════
 // CONFIG — set your backend URL once, it's saved in localStorage
 // ══════════════════════════════════════════
-var API_BASE = localStorage.getItem('bk_api_base') || '';
+var API_BASE = localStorage.getItem('bk_api_base') || 'https://janes-backend-lr0r.onrender.com';
 
 var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var FDAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -416,10 +416,24 @@ function api(path, opts) {
   var headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
   return fetch(API_BASE + path, Object.assign({}, opts, { headers: headers }))
     .then(function(res){
-      return res.json().then(function(data){
-        if (!res.ok) { var e = new Error(data.error || 'Request failed'); e.data = data; e.status = res.status; throw e; }
+      return res.text().then(function(text){
+        var data;
+        try { data = text ? JSON.parse(text) : {}; }
+        catch(parseErr) {
+          var e = new Error('Server did not return valid JSON (status ' + res.status + '). Response: ' + text.slice(0,200));
+          e.status = res.status;
+          throw e;
+        }
+        if (!res.ok) { var e2 = new Error(data.error || ('Request failed with status ' + res.status)); e2.data = data; e2.status = res.status; throw e2; }
         return data;
       });
+    })
+    .catch(function(err){
+      if (err instanceof TypeError) {
+        // fetch itself failed — network/CORS/DNS issue, never reached the server
+        throw new Error('Could not reach ' + API_BASE + ' — check the URL is correct and the server is running (network/CORS error)');
+      }
+      throw err;
     });
 }
 
@@ -470,7 +484,9 @@ function doLogin(){
       localStorage.setItem('bk_session', data.name);
       openDash();
     })
-    .catch(function(){
+    .catch(function(err){
+      console.error('Login failed:', err, err && err.data);
+      document.getElementById('login-err').textContent = 'Login failed: ' + (err && err.message ? err.message : 'unknown error') + ' (check console for details)';
       document.getElementById('login-err').style.display = 'block';
       loginP = ''; drawDots('login-dots', loginP, 6);
       var c = document.getElementById('login-card');
@@ -551,8 +567,10 @@ function doAdminPin(){
   if (!adminP) return;
   api('/verify-manager-pin', { method: 'POST', body: JSON.stringify({ pin: adminP }) })
     .then(function(){ closeAdminSheet(); openDetail(histTarget); })
-    .catch(function(){
+    .catch(function(err){
+      console.error('Admin PIN check failed:', err, err && err.data);
       adminP = ''; drawDots('admin-dots', adminP, 6);
+      document.getElementById('admin-err').textContent = err && err.message ? err.message : 'Incorrect admin PIN.';
       document.getElementById('admin-err').style.display = 'block';
       var s = document.getElementById('admin-sheet-inner');
       s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
