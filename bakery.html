@@ -105,6 +105,34 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mod-modal-bg.on{display:flex}
 .mod-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;color:#111;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .mod-modal h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.quick-adj{display:flex;gap:6px;margin-top:6px}
+.quick-adj button{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid #e0e0e0;background:#f7f7f7;color:#555;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .12s}
+.quick-adj button:hover{background:#E91E8C;color:#fff;border-color:#E91E8C}
+.mod-apply-hrs{padding:11px 16px;border-radius:9px;background:#111;color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mod-apply-hrs:hover{background:#333}
+.dl-sheet-wide{max-width:560px}
+.dl-summary{display:flex;gap:10px;margin-bottom:18px}
+.dl-sum-item{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center}
+.dl-sum-val{font-family:'Fredoka One',cursive;font-size:24px;color:var(--pk)}
+.dl-sum-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);margin-top:4px}
+.dl-table{border:1px solid var(--bd);border-radius:12px;overflow:hidden;max-height:340px;overflow-y:auto}
+.dl-row{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--bd)}
+.dl-row:last-child{border-bottom:none}
+.dl-row.alt{background:rgba(255,255,255,.02)}
+.dl-row.dl-head{background:var(--s2);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);padding:10px 14px}
+.dl-col{font-size:13px;color:var(--t)}
+.dl-col-date{flex:0 0 110px;font-weight:700}
+.dl-col-time{flex:1;color:var(--ts)}
+.dl-col-hrs{flex:0 0 60px;font-weight:800;color:var(--y);text-align:right}
+.dl-col-badge{flex:0 0 70px;text-align:right}
+.dl-adj-badge{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,229,0,.12);color:var(--y);border:1px solid rgba(255,229,0,.25);padding:2px 8px;border-radius:100px}
+.dl-actions{display:flex;gap:10px;margin-top:18px}
+.dl-actions .dl-btn{flex:1}
+@media print{
+  body *{visibility:hidden}
+  #dl-sheet-content, #dl-sheet-content *{visibility:visible}
+  #dl-sheet-content{position:absolute;left:0;top:0;width:100%}
+}
 .mod-sub{font-size:13px;color:#666;margin-bottom:20px}
 .mf{margin-bottom:14px}
 .mf label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:6px}
@@ -203,13 +231,57 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       <button onclick="closeModify()" type="button" style="background:none;border:none;cursor:pointer;font-size:22px;color:#999;line-height:1">&#10005;</button>
     </div>
     <div class="mf"><label>Employee</label><input type="text" id="mod-person" readonly></div>
-    <div class="mf"><label>Shift Start</label><input type="datetime-local" id="mod-start" oninput="updateDur()"></div>
-    <div class="mf"><label>Shift End</label><input type="datetime-local" id="mod-end" oninput="updateDur()"></div>
+    <div class="mf">
+      <label>Shift Start</label>
+      <input type="datetime-local" id="mod-start" oninput="updateDur()">
+      <div class="quick-adj">
+        <button type="button" onclick="nudge('mod-start',-15)">&minus;15m</button>
+        <button type="button" onclick="nudge('mod-start',-5)">&minus;5m</button>
+        <button type="button" onclick="nudge('mod-start',5)">+5m</button>
+        <button type="button" onclick="nudge('mod-start',15)">+15m</button>
+      </div>
+    </div>
+    <div class="mf">
+      <label>Shift End</label>
+      <input type="datetime-local" id="mod-end" oninput="updateDur()">
+      <div class="quick-adj">
+        <button type="button" onclick="nudge('mod-end',-15)">&minus;15m</button>
+        <button type="button" onclick="nudge('mod-end',-5)">&minus;5m</button>
+        <button type="button" onclick="nudge('mod-end',5)">+5m</button>
+        <button type="button" onclick="nudge('mod-end',15)">+15m</button>
+      </div>
+    </div>
     <div class="mdur"><span class="mdur-lbl">Shift duration</span><span class="mdur-val" id="mod-dur">-</span></div>
+    <div class="mf">
+      <label>Or just set total hours worked</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" id="mod-total-hours" step="0.25" min="0" placeholder="e.g. 8.5" style="flex:1">
+        <button type="button" class="mod-apply-hrs" onclick="applyTotalHours()">Apply</button>
+      </div>
+      <div style="font-size:11px;color:#999;margin-top:6px">Keeps the start time, moves the end time to match.</div>
+    </div>
     <div class="mf"><label>Reason (optional)</label><textarea id="mod-reason" placeholder="e.g. forgot to clock out"></textarea></div>
     <div class="mod-btns">
       <button class="mod-cancel" onclick="closeModify()" type="button">Cancel</button>
       <button class="mod-save" onclick="saveModify()" type="button">Save Shift</button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet-bg" id="dl-sheet-bg" onclick="if(event.target===this)closeDownloadSheet()">
+  <div class="sheet dl-sheet-wide">
+    <div class="sheet-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Shift Report</div>
+        <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)" id="dl-sheet-name">-</div>
+      </div>
+      <button class="btn ghost xs" onclick="closeDownloadSheet()" type="button">Close</button>
+    </div>
+    <div id="dl-sheet-content"></div>
+    <div class="dl-actions">
+      <button class="dl-btn" onclick="confirmDownloadCSV()" type="button">Download CSV</button>
+      <button class="btn ghost sm" onclick="window.print()" type="button">Print</button>
     </div>
   </div>
 </div>
@@ -381,7 +453,7 @@ function drawDots(id, val, max) {
   }
 }
 
-function lp1(d){ if(loginP.length>=6) return; loginP+=d; drawDots('login-dots',loginP,6); if(loginP.length>=4) setTimeout(function(){ if(loginP.length>=4) tryLogin(); }, 300); }
+function lp1(d){ if(loginP.length>=6) return; loginP+=d; drawDots('login-dots',loginP,6); if(loginP.length===6) setTimeout(tryLogin, 200); }
 function lp1b(){ loginP=loginP.slice(0,-1); drawDots('login-dots',loginP,6); }
 function lp1c(){ loginP=''; drawDots('login-dots',loginP,6); }
 
@@ -418,7 +490,7 @@ function tryAutoLogin(){
 // ══════════════════════════════════════════
 // CLOCK SHEET (4-digit staff PIN)
 // ══════════════════════════════════════════
-function cp1(d){ if(clockP.length>=6) return; clockP+=d; drawDots('clock-dots',clockP,4); if(clockP.length>=4) setTimeout(function(){ if(clockP.length>=4) doClockPin(); },300); }
+function cp1(d){ if(clockP.length>=4) return; clockP+=d; drawDots('clock-dots',clockP,4); if(clockP.length===4) setTimeout(doClockPin,200); }
 function cp1b(){ clockP=clockP.slice(0,-1); drawDots('clock-dots',clockP,4); }
 function cp1c(){ clockP=''; drawDots('clock-dots',clockP,4); }
 
@@ -464,7 +536,7 @@ function closeConfirm(){ document.getElementById('confirm-bg').classList.remove(
 // ══════════════════════════════════════════
 // MANAGER PIN SHEET (history access)
 // ══════════════════════════════════════════
-function ap1(d){ if(adminP.length>=6) return; adminP+=d; drawDots('admin-dots',adminP,6); if(adminP.length>=4) setTimeout(function(){ if(adminP.length>=4) doAdminPin(); },300); }
+function ap1(d){ if(adminP.length>=6) return; adminP+=d; drawDots('admin-dots',adminP,6); if(adminP.length===6) setTimeout(doAdminPin,200); }
 function ap1b(){ adminP=adminP.slice(0,-1); drawDots('admin-dots',adminP,6); }
 function ap1c(){ adminP=''; drawDots('admin-dots',adminP,6); }
 
@@ -690,6 +762,7 @@ function openModify(nm, id){
   document.getElementById('mod-start').value = toLocal(h.clock_in);
   document.getElementById('mod-end').value = h.clock_out ? toLocal(h.clock_out) : '';
   document.getElementById('mod-reason').value = h.reason || '';
+  document.getElementById('mod-total-hours').value = h.hours ? h.hours.toFixed(2) : '';
   updateDur();
   document.getElementById('mod-modal-bg').classList.add('on');
 }
@@ -698,11 +771,34 @@ function updateDur(){
   var s = document.getElementById('mod-start').value;
   var e = document.getElementById('mod-end').value;
   var el = document.getElementById('mod-dur');
+  var hrsInput = document.getElementById('mod-total-hours');
   if (!s || !e) { el.textContent = '-'; return; }
   var diff = new Date(e).getTime() - new Date(s).getTime();
   if (diff <= 0) { el.textContent = 'Invalid'; return; }
   var h = Math.floor(diff/3600000), m = Math.round((diff%3600000)/60000);
   el.textContent = h + 'h ' + String(m).padStart(2,'0') + 'm';
+  if (hrsInput) hrsInput.value = (diff/3600000).toFixed(2);
+}
+function nudge(fieldId, minutes){
+  var el = document.getElementById(fieldId);
+  if (!el.value) return;
+  var d = new Date(el.value);
+  d.setMinutes(d.getMinutes() + minutes);
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  el.value = d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+  updateDur();
+}
+function applyTotalHours(){
+  var s = document.getElementById('mod-start').value;
+  var hrs = parseFloat(document.getElementById('mod-total-hours').value);
+  if (!s) { toast('Set a start time first'); return; }
+  if (!hrs || hrs <= 0) { toast('Enter a valid number of hours'); return; }
+  var start = new Date(s);
+  var end = new Date(start.getTime() + hrs*3600000);
+  var pad = function(n){ return String(n).padStart(2,'0'); };
+  document.getElementById('mod-end').value = end.getFullYear() + '-' + pad(end.getMonth()+1) + '-' + pad(end.getDate()) + 'T' + pad(end.getHours()) + ':' + pad(end.getMinutes());
+  updateDur();
+  toast('End time set to match ' + hrs + 'h');
 }
 function saveModify(){
   var s = document.getElementById('mod-start').value;
@@ -725,8 +821,52 @@ function saveModify(){
 // DOWNLOAD CSV
 // ══════════════════════════════════════════
 function dlCSV(nm){
-  var entries = histCache[nm] || [];
+  var entries = (histCache[nm] || []).slice().sort(function(a,b){ return new Date(b.clock_in) - new Date(a.clock_in); });
   if (!entries.length) { toast('No shifts to download'); return; }
+  openDownloadSheet(nm, entries);
+}
+
+function openDownloadSheet(nm, entries){
+  var total = entries.reduce(function(a,h){ return a + (h.hours||0); }, 0);
+  var completeCount = entries.filter(function(h){ return h.clock_out; }).length;
+
+  var rows = '';
+  entries.forEach(function(h, i){
+    var d = new Date(h.clock_in), dow = (d.getDay()+6)%7;
+    var dateLbl = SDAYS[dow] + ', ' + d.getDate() + ' ' + MO[d.getMonth()];
+    var inT = fmtTime(new Date(h.clock_in));
+    var outT = h.clock_out ? fmtTime(new Date(h.clock_out)) : 'In progress';
+    var hrs = (h.hours||0).toFixed(2);
+    var adjBadge = h.adjusted ? '<span class="dl-adj-badge">Adjusted</span>' : '';
+    rows += '<div class="dl-row' + (i % 2 === 0 ? ' alt' : '') + '">';
+    rows += '<div class="dl-col dl-col-date">' + dateLbl + '</div>';
+    rows += '<div class="dl-col dl-col-time">' + inT + ' &rarr; ' + outT + '</div>';
+    rows += '<div class="dl-col dl-col-hrs">' + hrs + 'h</div>';
+    rows += '<div class="dl-col dl-col-badge">' + adjBadge + '</div>';
+    rows += '</div>';
+  });
+
+  var html = '';
+  html += '<div class="dl-summary">';
+  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + total.toFixed(1) + 'h</div><div class="dl-sum-lbl">Total Hours</div></div>';
+  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + entries.length + '</div><div class="dl-sum-lbl">Shifts</div></div>';
+  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + completeCount + '</div><div class="dl-sum-lbl">Complete</div></div>';
+  html += '</div>';
+  html += '<div class="dl-table">';
+  html += '  <div class="dl-row dl-head"><div class="dl-col dl-col-date">Date</div><div class="dl-col dl-col-time">Clock In &rarr; Out</div><div class="dl-col dl-col-hrs">Hours</div><div class="dl-col dl-col-badge"></div></div>';
+  html += rows;
+  html += '</div>';
+
+  document.getElementById('dl-sheet-name').textContent = nm;
+  document.getElementById('dl-sheet-content').innerHTML = html;
+  document.getElementById('dl-sheet-bg').dataset.name = nm;
+  document.getElementById('dl-sheet-bg').classList.add('on');
+}
+function closeDownloadSheet(){ document.getElementById('dl-sheet-bg').classList.remove('on'); }
+
+function confirmDownloadCSV(){
+  var nm = document.getElementById('dl-sheet-bg').dataset.name;
+  var entries = (histCache[nm] || []).slice().sort(function(a,b){ return new Date(b.clock_in) - new Date(a.clock_in); });
   var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Adjusted,Reason'];
   entries.forEach(function(h){
     var d = new Date(h.clock_in), dow = (d.getDay()+6)%7;
@@ -748,6 +888,7 @@ function dlCSV(nm){
   URL.revokeObjectURL(url);
   toast('Downloaded ' + nm + ' shifts');
 }
+
 
 // ══════════════════════════════════════════
 // ADD / DELETE EMPLOYEE
