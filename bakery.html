@@ -228,7 +228,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 <div class="mod-modal-bg" id="mod-modal-bg" onclick="if(event.target===this)closeModify()">
   <div class="mod-modal">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px">
-      <div><h2>Modify Shift</h2><div class="mod-sub">Set when this person was actually working.</div></div>
+      <div><h2 id="mod-title">Modify Shift</h2><div class="mod-sub" id="mod-subtitle">Set when this person was actually working.</div></div>
       <button onclick="closeModify()" type="button" style="background:none;border:none;cursor:pointer;font-size:22px;color:#999;line-height:1">&#10005;</button>
     </div>
     <div class="mf"><label>Employee</label><input type="text" id="mod-person" readonly></div>
@@ -405,7 +405,7 @@ function loadState(){
   try { primary = safeParse(localStorage.getItem(STORE_KEY)); } catch(e) {}
   try { backup = safeParse(localStorage.getItem(BACKUP_KEY)); } catch(e) {}
   if (primary) return primary;
-  if (backup) { console.warn('Primary save missing/corrupt - recovered from backup copy'); return backup; }
+  if (backup) { console.warn('Primary save missing/corrupt - recovered from backup copy'); recoveredFromBackup = true; return backup; }
   return JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
 
@@ -421,9 +421,11 @@ function saveState(){
   }
 }
 
-state = loadState();
+var loginP = '', clockP = '', adminP = '', clockTarget = '', dlTarget = '', modTarget = null, addMode = false, recoveredFromBackup = false;
 
-var loginP = '', clockP = '', adminP = '', clockTarget = '', dlTarget = '', modTarget = null;
+state = loadState();
+if (recoveredFromBackup) { setTimeout(function(){ toast('Recovered your saved shifts from backup'); }, 500); }
+setInterval(function(){ try { saveState(); } catch(e) {} }, 20000); // extra safety net in case a refresh/close skips the unload save
 
 function drawDots(id, val, max) {
   var el = document.getElementById(id);
@@ -529,6 +531,7 @@ function toggleClock(nm){
       out: now.toISOString(),
       hours: hrs,
       adjusted: false,
+      manual: false,
       reason: ''
     });
     delete state.sessions[nm];
@@ -723,7 +726,7 @@ function openDetail(nm){
     var fh = Math.floor(h2.hours), fm = Math.round((h2.hours-fh)*60);
     logHtml += '<div class="slog-row">';
     logHtml += '<div class="slog-date">' + dateStr(new Date(h2.in)) + '</div>';
-    logHtml += '<div class="slog-time">' + inT + ' - ' + outT + '</div>';
+    logHtml += '<div class="slog-time">' + inT + ' - ' + outT + (h2.manual ? ' <span class="rb-adj">Manual</span>' : '') + '</div>';
     logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
     logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
     logHtml += '<button class="slog-mod" onclick="openModify(\'' + h2.id + '\')" type="button">Modify</button>';
@@ -745,7 +748,10 @@ function openDetail(nm){
   content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
   content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
   content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
-  content += '<button class="dl-btn" onclick="openAdminSheet(\'' + nm + '\')" type="button">Share / Download</button></div>';
+  content += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+  content += '<button class="btn ghost xs" onclick="openAddShift(\'' + nm + '\')" type="button">+ Add Shift</button>';
+  content += '<button class="dl-btn" onclick="openAdminSheet(\'' + nm + '\')" type="button">Share / Download</button>';
+  content += '</div></div>';
   content += logHtml || '<div class="empty" style="padding:14px">No shifts yet</div>';
 
   document.getElementById('detail-name').textContent = nm;
@@ -755,9 +761,12 @@ function openDetail(nm){
 function closeDetail(){ document.getElementById('detail-bg').classList.remove('on'); }
 
 function openModify(id){
+  addMode = false;
   modTarget = id;
   var h = state.history.find(function(x){ return x.id === id; });
   if (!h) return;
+  document.getElementById('mod-title').textContent = 'Modify Shift';
+  document.getElementById('mod-subtitle').textContent = 'Set when this person was actually working.';
   document.getElementById('mod-person').value = h.name;
   function toLocal(iso){
     var d = new Date(iso), pad = function(n){ return String(n).padStart(2,'0'); };
@@ -767,6 +776,19 @@ function openModify(id){
   document.getElementById('mod-end').value = h.out ? toLocal(h.out) : '';
   document.getElementById('mod-reason').value = h.reason || '';
   document.getElementById('mod-total-hours').value = h.hours ? h.hours.toFixed(2) : '';
+  updateDur();
+  document.getElementById('mod-modal-bg').classList.add('on');
+}
+function openAddShift(nm){
+  addMode = true;
+  modTarget = null;
+  document.getElementById('mod-title').textContent = 'Add Shift';
+  document.getElementById('mod-subtitle').textContent = 'Log a shift for a day ' + nm + ' forgot to clock in or out.';
+  document.getElementById('mod-person').value = nm;
+  document.getElementById('mod-start').value = '';
+  document.getElementById('mod-end').value = '';
+  document.getElementById('mod-reason').value = '';
+  document.getElementById('mod-total-hours').value = '';
   updateDur();
   document.getElementById('mod-modal-bg').classList.add('on');
 }
@@ -808,10 +830,33 @@ function saveModify(){
   var s = document.getElementById('mod-start').value;
   var e = document.getElementById('mod-end').value;
   var reason = document.getElementById('mod-reason').value.trim();
+  var personName = document.getElementById('mod-person').value;
   if (!s || !e) { toast('Fill in both times'); return; }
   var inISO = new Date(s).toISOString(), outISO = new Date(e).toISOString();
   if (new Date(outISO) <= new Date(inISO)) { toast('End must be after start'); return; }
   var hrs = Math.round((new Date(outISO) - new Date(inISO)) / 36000) / 100;
+
+  if (addMode) {
+    if (!personName || !state.staff[personName]) { toast('Unknown employee'); return; }
+    state.history.unshift({
+      id: 'shift-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      name: personName,
+      in: inISO,
+      out: outISO,
+      hours: hrs,
+      adjusted: true,
+      manual: true,
+      reason: reason || 'Manually added shift'
+    });
+    saveState();
+    addMode = false;
+    closeModify();
+    openDetail(personName);
+    renderAll();
+    toast('Shift added for ' + personName);
+    return;
+  }
+
   var entry = state.history.find(function(x){ return x.id === modTarget; });
   if (entry) {
     entry.in = inISO;
@@ -845,7 +890,7 @@ function openDownloadSheet(nm){
     var dateLbl = SDAYS[dow] + ', ' + d.getDate() + ' ' + MO[d.getMonth()];
     var inT = fmtTime(new Date(h.in));
     var outT = h.out ? fmtTime(new Date(h.out)) : 'In progress';
-    var adjBadge = h.adjusted ? '<span class="rb-adj">Adjusted</span>' : '';
+    var adjBadge = h.manual ? '<span class="rb-adj">Manual</span>' : (h.adjusted ? '<span class="rb-adj">Adjusted</span>' : '');
     rows += '<div class="rb-row">';
     rows += '<div class="rb-date">' + dateLbl + '</div>';
     rows += '<div class="rb-time">' + inT + ' &rarr; ' + outT + '</div>';
@@ -886,7 +931,7 @@ function buildShiftReportText(nm, entries){
     var dateLbl = SDAYS[dow] + ' ' + d.getDate() + ' ' + MO[d.getMonth()];
     var inT = fmtTime(new Date(h.in));
     var outT = h.out ? fmtTime(new Date(h.out)) : 'In progress';
-    lines.push(dateLbl + ': ' + inT + ' - ' + outT + ' (' + h.hours.toFixed(2) + 'h)' + (h.adjusted ? ' [adjusted]' : ''));
+    lines.push(dateLbl + ': ' + inT + ' - ' + outT + ' (' + h.hours.toFixed(2) + 'h)' + (h.manual ? ' [manual]' : (h.adjusted ? ' [adjusted]' : '')));
   });
   lines.push('');
   lines.push('*Total: ' + total.toFixed(2) + ' hours across ' + entries.length + ' shift' + (entries.length!==1?'s':'') + '*');
@@ -902,10 +947,11 @@ function sendToWhatsApp(){
 function confirmDownloadCSV(){
   var nm = currentDetailName;
   var entries = currentDetailEntries;
-  var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Adjusted,Reason'];
+  var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Type,Reason'];
   entries.forEach(function(h){
     var d = new Date(h.in), dow = (d.getDay()+6)%7;
-    var cols = [nm, dateStr(d), FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), h.adjusted ? 'Yes' : 'No', h.reason || ''];
+    var type = h.manual ? 'Manual' : (h.adjusted ? 'Adjusted' : 'Clock');
+    var cols = [nm, dateStr(d), FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), type, h.reason || ''];
     var escaped = cols.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; });
     lines.push(escaped.join(','));
   });
@@ -947,8 +993,19 @@ function saveNewEmp(){
 }
 function delEmp(nm){
   if (!confirm('Remove ' + nm + ' from the bakery team? Their past shift history is kept.')) return;
+  if (state.sessions[nm]) {
+    // they're still clocked in - close it out as a real shift first so those hours aren't lost
+    var sess = state.sessions[nm];
+    var now = new Date();
+    var hrs = Math.round((now - new Date(sess.in)) / 36000) / 100;
+    state.history.unshift({
+      id: 'shift-' + now.getTime() + '-' + Math.random().toString(36).slice(2,7),
+      name: nm, in: sess.in, out: now.toISOString(), hours: hrs,
+      adjusted: false, manual: false, reason: ''
+    });
+    delete state.sessions[nm];
+  }
   delete state.staff[nm];
-  delete state.sessions[nm];
   saveState();
   renderAll();
   toast(nm + ' removed');
