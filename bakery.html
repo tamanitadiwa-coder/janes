@@ -941,12 +941,17 @@ function buildShiftReportText(nm, entries){
 function sendToWhatsApp(){
   var text = buildShiftReportText(currentDetailName, currentDetailEntries);
   var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
-  window.open(url, '_blank');
+  var win = window.open(url, '_blank');
+  if (!win || win.closed || typeof win.closed === 'undefined') {
+    // popup blocked (common in some in-app/embedded browsers) - navigate this tab instead
+    window.location.href = url;
+  }
 }
 
 function confirmDownloadCSV(){
   var nm = currentDetailName;
-  var entries = currentDetailEntries;
+  var entries = currentDetailEntries || [];
+  if (!entries.length) { toast('No shifts to download'); return; }
   var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Type,Reason'];
   entries.forEach(function(h){
     var d = new Date(h.in), dow = (d.getDay()+6)%7;
@@ -956,17 +961,41 @@ function confirmDownloadCSV(){
     lines.push(escaped.join(','));
   });
   var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
-  lines.push('"","","","","TOTAL","' + total.toFixed(2) + '","",""');
+  lines.push('"","","","","","TOTAL","' + total.toFixed(2) + '",""');
   var csv = lines.join('\r\n');
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = nm + '_shifts_' + dateStr(new Date()) + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  var filename = nm + '_shifts_' + dateStr(new Date()) + '.csv';
+
+  var triggered = false;
+  try {
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    triggered = true;
+  } catch(e) {
+    console.warn('Blob download failed', e);
+  }
+
+  if (!triggered) {
+    // Fallback that works even where the download attribute is blocked: open the CSV as
+    // plain text in a new tab so it can be saved/shared from the browser's own menu.
+    try {
+      var dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      var win = window.open(dataUrl, '_blank');
+      if (!win) window.location.href = dataUrl;
+      toast('Opened the report - use your browser\'s Share/Save option');
+      return;
+    } catch(e2) {
+      toast('Could not export - try Print / Save PDF instead');
+      return;
+    }
+  }
   toast('Downloaded ' + nm + ' shifts');
 }
 
@@ -1049,4 +1078,3 @@ tryAutoLogin();
 </script>
 </body>
 </html>
-
