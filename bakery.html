@@ -16,10 +16,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .btn.primary{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;box-shadow:0 4px 20px rgba(233,30,140,.4)}.btn.primary:hover{transform:translateY(-1px)}.btn.primary:active{transform:scale(.97)}
 .btn.ghost{background:transparent;border:1px solid var(--bd);color:var(--ts)}.btn.ghost:hover{border-color:var(--pk);color:var(--pk)}
 .btn.danger{background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.3);color:#ff7070}
+.btn.success{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff}
 .btn.full{width:100%}.btn.xs{padding:7px 14px;font-size:11px;border-radius:7px}.btn.sm{padding:10px 18px;font-size:12px;border-radius:8px}
 #pg-login{align-items:center;justify-content:center;padding:24px;min-height:100vh}
 .login-wrap{width:100%;max-width:420px;text-align:center}
-.logo-ring{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45);overflow:hidden}
+.logo-ring{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 0 0 1px rgba(233,30,140,.25),0 0 50px rgba(233,30,140,.45)}
 .logo-ring span{font-family:'Fredoka One',cursive;font-size:38px;color:#fff}
 .brand{font-family:'Fredoka One',cursive;font-size:32px;color:var(--pk);margin-bottom:3px;text-shadow:0 0 24px rgba(233,30,140,.5)}
 .sub{font-size:12px;color:var(--ts);margin-bottom:24px;letter-spacing:.08em;text-transform:uppercase}
@@ -33,7 +34,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .pb:hover{background:var(--s3);border-color:rgba(233,30,140,.5)}.pb:active{transform:scale(.88);background:var(--pk);color:#fff}
 .pb.sm{font-size:12px;font-weight:700;color:var(--ts)}.pb.z{grid-column:2}
 .err{color:#ff7080;font-size:13px;text-align:center;margin-top:10px;font-weight:700;display:none;background:rgba(255,60,80,.07);border:1px solid rgba(255,60,80,.15);border-radius:8px;padding:9px}
-.hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+.hdr{background:rgba(5,5,8,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;flex-wrap:wrap;gap:8px}
 .hdr-left{display:flex;align-items:center;gap:12px}
 .hdr-logo{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center}
 .hdr-logo span{font-family:'Fredoka One',cursive;font-size:16px;color:#fff}
@@ -62,7 +63,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .crew-card:hover .del-btn{opacity:1}.del-btn:hover{color:#ff7070}
 .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
 .sheet-bg.on{display:flex}
-.sheet{background:var(--s1);border:1px solid var(--bd);border-radius:20px 20px 0 0;padding:26px;width:100%;max-width:440px;box-shadow:0 -20px 60px rgba(0,0,0,.8)}
+.sheet{background:var(--s1);border:1px solid var(--bd);border-radius:20px 20px 0 0;padding:26px;width:100%;max-width:440px;box-shadow:0 -20px 60px rgba(0,0,0,.8);max-height:90vh;overflow-y:auto}
 .sheet-handle{width:40px;height:4px;background:var(--bd2);border-radius:2px;margin:0 auto 20px}
 .sheet-person{font-family:'Fredoka One',cursive;font-size:24px;color:var(--t);text-align:center;margin-bottom:4px}
 .sheet-hint{font-size:13px;color:var(--ts);text-align:center;margin-bottom:18px}
@@ -86,10 +87,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .hist-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--pk),var(--pk3));display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:16px;color:#fff;flex-shrink:0}
 .form-input{width:100%;padding:12px 14px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--t);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:10px}
 .form-input:focus{border-color:var(--pk)}
-.sync-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.04em}
-.sync-ok{background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.2)}
-.sync-ing{background:rgba(255,229,0,.1);color:var(--y);border:1px solid rgba(255,229,0,.2)}
-.sync-err{background:rgba(255,82,82,.1);color:#ff7070;border:1px solid rgba(255,82,82,.2)}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.04em;background:rgba(0,230,118,.1);color:var(--g);border:1px solid rgba(0,230,118,.2)}
 .slog-row{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;margin-bottom:6px;flex-wrap:wrap}
 .slog-date{font-size:13px;font-weight:800;color:var(--t);min-width:95px}
 .slog-time{font-size:13px;font-weight:700;color:var(--pk);min-width:120px}
@@ -103,36 +101,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .slog-mod:hover{background:var(--pk);color:#fff}
 .mod-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:700;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 .mod-modal-bg.on{display:flex}
-.mod-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;color:#111;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.mod-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;color:#111;box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
 .mod-modal h2{font-size:22px;font-weight:800;margin-bottom:4px}
-.quick-adj{display:flex;gap:6px;margin-top:6px}
-.quick-adj button{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid #e0e0e0;background:#f7f7f7;color:#555;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .12s}
-.quick-adj button:hover{background:#E91E8C;color:#fff;border-color:#E91E8C}
-.mod-apply-hrs{padding:11px 16px;border-radius:9px;background:#111;color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
-.mod-apply-hrs:hover{background:#333}
-.dl-sheet-wide{max-width:560px}
-.dl-summary{display:flex;gap:10px;margin-bottom:18px}
-.dl-sum-item{flex:1;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center}
-.dl-sum-val{font-family:'Fredoka One',cursive;font-size:24px;color:var(--pk)}
-.dl-sum-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);margin-top:4px}
-.dl-table{border:1px solid var(--bd);border-radius:12px;overflow:hidden;max-height:340px;overflow-y:auto}
-.dl-row{display:flex;align-items:center;padding:11px 14px;border-bottom:1px solid var(--bd)}
-.dl-row:last-child{border-bottom:none}
-.dl-row.alt{background:rgba(255,255,255,.02)}
-.dl-row.dl-head{background:var(--s2);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);padding:10px 14px}
-.dl-col{font-size:13px;color:var(--t)}
-.dl-col-date{flex:0 0 110px;font-weight:700}
-.dl-col-time{flex:1;color:var(--ts)}
-.dl-col-hrs{flex:0 0 60px;font-weight:800;color:var(--y);text-align:right}
-.dl-col-badge{flex:0 0 70px;text-align:right}
-.dl-adj-badge{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;background:rgba(255,229,0,.12);color:var(--y);border:1px solid rgba(255,229,0,.25);padding:2px 8px;border-radius:100px}
-.dl-actions{display:flex;gap:10px;margin-top:18px}
-.dl-actions .dl-btn{flex:1}
-@media print{
-  body *{visibility:hidden}
-  #dl-sheet-content, #dl-sheet-content *{visibility:visible}
-  #dl-sheet-content{position:absolute;left:0;top:0;width:100%}
-}
 .mod-sub{font-size:13px;color:#666;margin-bottom:20px}
 .mf{margin-bottom:14px}
 .mf label{display:block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#999;margin-bottom:6px}
@@ -140,6 +110,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mf input:focus,.mf textarea:focus{border-color:#E91E8C}
 .mf input[readonly]{background:#f9f9f9;color:#777;cursor:default}
 .mf textarea{resize:none;height:70px;font-weight:400}
+.quick-adj{display:flex;gap:6px;margin-top:6px}
+.quick-adj button{flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid #e0e0e0;background:#f7f7f7;color:#555;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .12s}
+.quick-adj button:hover{background:#E91E8C;color:#fff;border-color:#E91E8C}
+.mod-apply-hrs{padding:11px 16px;border-radius:9px;background:#111;color:#fff;border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mod-apply-hrs:hover{background:#333}
 .mdur{background:#fff5f0;border:1px solid #ffd0c0;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .mdur-lbl{font-size:14px;font-weight:700;color:#333}
 .mdur-val{font-size:18px;font-weight:800;color:#E91E8C}
@@ -148,17 +123,43 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mod-save:hover{background:#C2185B}
 .mod-cancel{padding:12px 24px;border-radius:10px;background:#f5f5f5;color:#666;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .mod-cancel:hover{background:#eee}
-.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,#00b856,var(--g));color:#000;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer}
-.dl-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,230,118,.4)}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(233,30,140,.35)}
+.dl-btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(233,30,140,.5)}
+.dl-sheet-wide{max-width:600px}
+.report-paper{background:var(--s1);color:var(--t);border:1px solid var(--bd);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.report-head{background:linear-gradient(135deg,var(--pk),var(--pk3));padding:22px 24px;color:#fff}
+.report-head .rh-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.report-head .rh-brand{font-family:'Fredoka One',cursive;font-size:22px}
+.report-head .rh-badge{background:rgba(255,255,255,.2);padding:4px 12px;border-radius:100px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.report-head .rh-name{font-family:'Fredoka One',cursive;font-size:28px;margin-bottom:2px}
+.report-head .rh-sub{font-size:12px;opacity:.85}
+.report-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bd)}
+.rs-item{background:var(--s1);padding:16px 10px;text-align:center}
+.rs-val{font-family:'Fredoka One',cursive;font-size:24px;color:var(--pk)}
+.rs-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ts);margin-top:4px}
+.report-body{padding:8px 0}
+.rb-row{display:flex;align-items:center;padding:11px 20px;border-bottom:1px solid var(--bd);font-size:12px}
+.rb-row.rb-head{background:var(--s2);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:9px;color:var(--ts)}
+.rb-row:nth-child(even):not(.rb-head){background:rgba(255,255,255,.02)}
+.rb-date{flex:0 0 100px;font-weight:700;color:var(--t)}
+.rb-time{flex:1;color:var(--ts)}
+.rb-hrs{flex:0 0 55px;text-align:right;font-weight:800;color:var(--pk)}
+.rb-badge{flex:0 0 70px;text-align:right}
+.rb-adj{font-size:8px;font-weight:800;text-transform:uppercase;background:rgba(255,229,0,.12);color:var(--y);border:1px solid rgba(255,229,0,.25);padding:2px 7px;border-radius:100px}
+.report-foot{padding:16px 20px;background:var(--s2);display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--bd)}
+.rf-lbl{font-size:13px;font-weight:700;color:var(--t)}
+.rf-val{font-family:'Fredoka One',cursive;font-size:20px;color:var(--pk)}
+.dl-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.dl-actions .dl-btn, .dl-actions .btn{flex:1;min-width:120px}
 .empty{text-align:center;padding:28px 20px;color:var(--ts);font-size:13px}
 .empty .ei{font-size:36px;margin-bottom:10px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;padding:10px 24px;border-radius:100px;font-size:13px;font-weight:800;opacity:0;transition:all .28s;z-index:999;pointer-events:none;white-space:nowrap;box-shadow:0 4px 24px rgba(233,30,140,.55)}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .shake{animation:sk .32s ease}
-.setup-box{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:20px;text-align:left}
-.setup-box label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:6px}
+.wa-note{background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.25);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:12px;color:#25D366;line-height:1.6}
 @media(min-width:768px){.body{padding:28px 40px}.sec{padding:26px}.tab{font-size:14px;padding:11px 16px}.crew-name{font-size:17px}.hdr-title{font-size:24px}.brand{font-size:36px}.pb{font-size:22px;padding:18px}}
+@media print{body *{visibility:hidden}#dl-sheet-content, #dl-sheet-content *{visibility:visible}#dl-sheet-content{position:absolute;left:0;top:0;width:100%}}
 </style>
 </head>
 <body>
@@ -197,7 +198,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;margin-bottom:6px">Manager Access Required</div>
     <div class="sheet-person" id="admin-target-name">-</div>
-    <div class="sheet-hint">Enter any manager PIN to view shifts</div>
+    <div class="sheet-hint">Enter manager PIN to download this report</div>
     <div class="pin-dots" id="admin-dots"></div>
     <div class="pin-grid">
       <button class="pb" onclick="ap1('1')" type="button">1</button><button class="pb" onclick="ap1('2')" type="button">2</button><button class="pb" onclick="ap1('3')" type="button">3</button>
@@ -215,7 +216,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
       <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Manager View</div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Shifts</div>
         <div style="font-family:'Fredoka One',cursive;font-size:24px;color:var(--t)" id="detail-name">-</div>
       </div>
       <button class="btn ghost xs" onclick="closeDetail()" type="button">Close</button>
@@ -258,7 +259,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
         <input type="number" id="mod-total-hours" step="0.25" min="0" placeholder="e.g. 8.5" style="flex:1">
         <button type="button" class="mod-apply-hrs" onclick="applyTotalHours()">Apply</button>
       </div>
-      <div style="font-size:11px;color:#999;margin-top:6px">Keeps the start time, moves the end time to match.</div>
     </div>
     <div class="mf"><label>Reason (optional)</label><textarea id="mod-reason" placeholder="e.g. forgot to clock out"></textarea></div>
     <div class="mod-btns">
@@ -272,17 +272,16 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
   <div class="sheet dl-sheet-wide">
     <div class="sheet-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <div>
-        <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--pk);margin-bottom:4px">Shift Report</div>
-        <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--t)" id="dl-sheet-name">-</div>
-      </div>
+      <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--t)">Shift Report</div>
       <button class="btn ghost xs" onclick="closeDownloadSheet()" type="button">Close</button>
     </div>
     <div id="dl-sheet-content"></div>
     <div class="dl-actions">
+      <button class="dl-btn" onclick="sendToWhatsApp()" type="button">Send to WhatsApp</button>
       <button class="dl-btn" onclick="confirmDownloadCSV()" type="button">Download CSV</button>
-      <button class="btn ghost sm" onclick="window.print()" type="button">Print</button>
+      <button class="btn ghost sm" onclick="window.print()" type="button">Print / Save PDF</button>
     </div>
+    <div class="wa-note">Sends this report as a formatted message to your saved WhatsApp number - opens WhatsApp with everything ready, just tap send.</div>
   </div>
 </div>
 
@@ -291,7 +290,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="sheet-handle"></div>
     <div style="font-family:'Fredoka One',cursive;font-size:22px;margin-bottom:18px">Add Employee</div>
     <input class="form-input" id="new-name" type="text" placeholder="Full name" maxlength="24">
-    <input class="form-input" id="new-pin" type="password" placeholder="4-digit PIN" maxlength="6" inputmode="numeric">
+    <input class="form-input" id="new-pin" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
     <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ts);margin-bottom:14px;cursor:pointer">
       <input type="checkbox" id="new-manager" style="width:16px;height:16px;accent-color:var(--pk)"> Give this person manager access
     </label>
@@ -309,13 +308,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       <div class="logo-ring"><span>J</span></div>
       <div class="brand">Jane's Bakery</div>
       <p class="sub">Manager Login</p>
-
-      <div class="setup-box" id="setup-box" style="display:none">
-        <label>Backend API URL</label>
-        <input class="form-input" id="api-url-input" type="text" placeholder="https://your-backend.example.com" style="margin-bottom:8px">
-        <button class="btn primary full sm" onclick="saveApiUrl()" type="button">Save & Connect</button>
-      </div>
-
       <div class="l-card" id="login-card">
         <label class="lbl">Manager PIN</label>
         <div class="pin-dots" id="login-dots"></div>
@@ -330,8 +322,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       </div>
       <div style="text-align:center;margin-top:20px">
         <a href="index.html" style="font-size:13px;color:var(--ts);text-decoration:none">&#8592; Back to Staff Portal</a>
-        &nbsp;&middot;&nbsp;
-        <a href="#" onclick="toggleSetup();return false;" style="font-size:12px;color:var(--ts);text-decoration:underline">API settings</a>
       </div>
     </div>
   </div>
@@ -343,8 +333,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
       <div class="hdr-logo"><span>J</span></div>
       <div><div class="hdr-title">Bakery</div><div class="hdr-sub" id="hdr-date">-</div></div>
     </div>
-    <div style="display:flex;gap:8px;align-items:center">
-      <div id="sync-ind" class="sync-badge sync-ing">Connecting</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div class="status-badge">Saved on this device</div>
       <a href="index.html" style="text-decoration:none;display:inline-flex;align-items:center;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:700;background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff">&#8592; Portal</a>
       <button class="btn danger xs" onclick="doLogout()" type="button">Sign Out</button>
     </div>
@@ -369,7 +359,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="tab-content" id="tc2">
       <div class="sec">
         <div class="sec-title">Shift History</div>
-        <div class="sec-sub">Tap a name - manager PIN required to view details &amp; download</div>
+        <div class="sec-sub">Tap a name to view their shifts. Manager PIN is only needed to download or share a report.</div>
         <div id="hist-list"></div>
       </div>
     </div>
@@ -377,84 +367,64 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 </div>
 
 <script>
-// ══════════════════════════════════════════
-// CONFIG — set your backend URL once, it's saved in localStorage
-// ══════════════════════════════════════════
-var API_BASE = localStorage.getItem('bk_api_base') || 'https://janes-backend-lr0r.onrender.com';
+var WHATSAPP_NUMBER = '27842818624';
 
 var MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 var FDAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 var SDAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
-var employees = [];      // [{id,name,role,manager}]
-var openSessions = {};   // { name: clockInISO }
-var todayShifts = [];    // rows for today
-var histCache = {};      // name -> shift rows (loaded on demand)
+var STORE_KEY = 'bk_local_v1';
+var BACKUP_KEY = 'bk_local_v1_backup';
 
-var loginP = '', clockP = '', adminP = '', clockTarget = '', histTarget = '', modTarget = null;
+var DEFAULT_STATE = {
+  v: 1,
+  staff: {
+    Sly:     { pin: '1111', manager: false },
+    Wayne:   { pin: '2222', manager: false },
+    Panashe: { pin: '3333', manager: false },
+    Hilda:   { pin: '4444', manager: false },
+    Grace:   { pin: '5555', manager: true },
+    Josh:    { pin: '765305', manager: true }
+  },
+  sessions: {},
+  history: []
+};
 
-// ══════════════════════════════════════════
-// API SETUP
-// ══════════════════════════════════════════
-function toggleSetup(){
-  var box = document.getElementById('setup-box');
-  box.style.display = (box.style.display === 'none') ? 'block' : 'none';
-  document.getElementById('api-url-input').value = API_BASE;
-}
-function saveApiUrl(){
-  var v = document.getElementById('api-url-input').value.trim().replace(/\/$/, '');
-  if (!v) { toast('Enter a URL'); return; }
-  API_BASE = v;
-  localStorage.setItem('bk_api_base', v);
-  toast('API URL saved');
-  document.getElementById('setup-box').style.display = 'none';
-  checkConnection();
-}
+var state = null;
 
-function api(path, opts) {
-  opts = opts || {};
-  var headers = Object.assign({ 'Content-Type': 'application/json' }, opts.headers || {});
-  return fetch(API_BASE + path, Object.assign({}, opts, { headers: headers }))
-    .then(function(res){
-      return res.text().then(function(text){
-        var data;
-        try { data = text ? JSON.parse(text) : {}; }
-        catch(parseErr) {
-          var e = new Error('Server did not return valid JSON (status ' + res.status + '). Response: ' + text.slice(0,200));
-          e.status = res.status;
-          throw e;
-        }
-        if (!res.ok) { var e2 = new Error(data.error || ('Request failed with status ' + res.status)); e2.data = data; e2.status = res.status; throw e2; }
-        return data;
-      });
-    })
-    .catch(function(err){
-      if (err instanceof TypeError) {
-        // fetch itself failed — network/CORS/DNS issue, never reached the server
-        throw new Error('Could not reach ' + API_BASE + ' — check the URL is correct and the server is running (network/CORS error)');
-      }
-      throw err;
-    });
+function safeParse(raw){
+  try {
+    var parsed = JSON.parse(raw);
+    if (parsed && parsed.v === 1 && parsed.staff && parsed.history) return parsed;
+  } catch(e) {}
+  return null;
 }
 
-function setSyncStatus(s){
-  var el = document.getElementById('sync-ind');
-  if (!el) return;
-  if (s === 'ok') { el.className = 'sync-badge sync-ok'; el.textContent = 'Connected'; }
-  else if (s === 'err') { el.className = 'sync-badge sync-err'; el.textContent = 'No connection'; }
-  else { el.className = 'sync-badge sync-ing'; el.textContent = 'Connecting'; }
+function loadState(){
+  var primary = null, backup = null;
+  try { primary = safeParse(localStorage.getItem(STORE_KEY)); } catch(e) {}
+  try { backup = safeParse(localStorage.getItem(BACKUP_KEY)); } catch(e) {}
+  if (primary) return primary;
+  if (backup) { console.warn('Primary save missing/corrupt - recovered from backup copy'); return backup; }
+  return JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
 
-function checkConnection(){
-  if (!API_BASE) { setSyncStatus('err'); return Promise.resolve(false); }
-  setSyncStatus('ing');
-  return api('/').then(function(){ setSyncStatus('ok'); return true; })
-    .catch(function(){ setSyncStatus('err'); return false; });
+function saveState(){
+  var json;
+  try { json = JSON.stringify(state); }
+  catch(e) { console.error('Could not serialize state', e); return; }
+  var okPrimary = true, okBackup = true;
+  try { localStorage.setItem(STORE_KEY, json); } catch(e) { okPrimary = false; console.error('Primary save failed', e); }
+  try { localStorage.setItem(BACKUP_KEY, json); } catch(e) { okBackup = false; console.error('Backup save failed', e); }
+  if (!okPrimary && !okBackup) {
+    toast('Could not save - device storage may be full');
+  }
 }
 
-// ══════════════════════════════════════════
-// LOGIN (manager PIN, any manager account)
-// ══════════════════════════════════════════
+state = loadState();
+
+var loginP = '', clockP = '', adminP = '', clockTarget = '', dlTarget = '', modTarget = null;
+
 function drawDots(id, val, max) {
   var el = document.getElementById(id);
   if (!el) return;
@@ -467,76 +437,109 @@ function drawDots(id, val, max) {
   }
 }
 
-function lp1(d){ if(loginP.length>=6) return; loginP+=d; drawDots('login-dots',loginP,6); if(loginP.length===6) setTimeout(tryLogin, 200); }
-function lp1b(){ loginP=loginP.slice(0,-1); drawDots('login-dots',loginP,6); }
-function lp1c(){ loginP=''; drawDots('login-dots',loginP,6); }
+function shortestManagerPinLen(){
+  var lens = Object.keys(state.staff)
+    .filter(function(nm){ return state.staff[nm].manager; })
+    .map(function(nm){ return state.staff[nm].pin.length; });
+  return lens.length ? Math.min.apply(null, lens) : 4;
+}
 
-function tryLogin(){
-  if (!loginP) return;
-  doLogin();
+function lp1(d){
+  var maxLen = 6;
+  if (loginP.length >= maxLen) return;
+  loginP += d;
+  drawDots('login-dots', loginP, maxLen);
+  if (findManagerByPin(loginP)) setTimeout(doLogin, 150);
+}
+function lp1b(){ loginP = loginP.slice(0,-1); drawDots('login-dots', loginP, 6); }
+function lp1c(){ loginP = ''; drawDots('login-dots', loginP, 6); }
+
+function findManagerByPin(pin){
+  var found = null;
+  Object.keys(state.staff).forEach(function(nm){
+    if (state.staff[nm].manager && state.staff[nm].pin === pin) found = nm;
+  });
+  return found;
 }
 
 function doLogin(){
-  if (!API_BASE) { toggleSetup(); toast('Set your backend API URL first'); return; }
-  api('/verify-manager-pin', { method: 'POST', body: JSON.stringify({ pin: loginP }) })
-    .then(function(data){
-      document.getElementById('login-err').style.display = 'none';
-      localStorage.setItem('bk_session', data.name);
-      openDash();
-    })
-    .catch(function(err){
-      console.error('Login failed:', err, err && err.data);
-      document.getElementById('login-err').textContent = 'Login failed: ' + (err && err.message ? err.message : 'unknown error') + ' (check console for details)';
-      document.getElementById('login-err').style.display = 'block';
-      loginP = ''; drawDots('login-dots', loginP, 6);
-      var c = document.getElementById('login-card');
-      c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
-    });
+  var mgr = findManagerByPin(loginP);
+  if (!mgr) {
+    if (loginP.length < 6) return; // keep typing until they've had a full chance (max PIN length)
+    document.getElementById('login-err').style.display = 'block';
+    loginP = ''; drawDots('login-dots', loginP, 6);
+    var c = document.getElementById('login-card');
+    c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+    return;
+  }
+  document.getElementById('login-err').style.display = 'none';
+  loginP = '';
+  sessionStorage.setItem('bk_session', mgr);
+  openDash();
 }
 function doLogout(){
-  localStorage.removeItem('bk_session');
+  sessionStorage.removeItem('bk_session');
   loginP = ''; drawDots('login-dots', loginP, 6);
   showPg('pg-login');
 }
 function tryAutoLogin(){
-  if (localStorage.getItem('bk_session')) openDash();
-  else { drawDots('login-dots', loginP, 6); checkConnection(); }
+  if (sessionStorage.getItem('bk_session')) openDash();
+  else drawDots('login-dots', loginP, 6);
 }
 
-// ══════════════════════════════════════════
-// CLOCK SHEET (4-digit staff PIN)
-// ══════════════════════════════════════════
-function cp1(d){ if(clockP.length>=4) return; clockP+=d; drawDots('clock-dots',clockP,4); if(clockP.length===4) setTimeout(doClockPin,200); }
-function cp1b(){ clockP=clockP.slice(0,-1); drawDots('clock-dots',clockP,4); }
-function cp1c(){ clockP=''; drawDots('clock-dots',clockP,4); }
+function cp1(d){ if (clockP.length >= 4) return; clockP += d; drawDots('clock-dots', clockP, 4); if (clockP.length === 4) setTimeout(doClockPin, 150); }
+function cp1b(){ clockP = clockP.slice(0,-1); drawDots('clock-dots', clockP, 4); }
+function cp1c(){ clockP = ''; drawDots('clock-dots', clockP, 4); }
 
 function openClockSheet(nm){
   clockTarget = nm; clockP = ''; drawDots('clock-dots', clockP, 4);
   document.getElementById('clock-err').style.display = 'none';
   document.getElementById('clock-name').textContent = nm;
-  var isIn = !!openSessions[nm];
+  var isIn = !!state.sessions[nm];
   document.getElementById('clock-hint').textContent = isIn ? (nm + ' - PIN to clock out') : (nm + ' - PIN to clock in');
   document.getElementById('clock-sheet-bg').classList.add('on');
 }
-function closeClockSheet(){ document.getElementById('clock-sheet-bg').classList.remove('on'); clockP=''; drawDots('clock-dots',clockP,4); }
+function closeClockSheet(){ document.getElementById('clock-sheet-bg').classList.remove('on'); clockP = ''; drawDots('clock-dots', clockP, 4); }
 
 function doClockPin(){
-  if (!clockP) return;
-  var isIn = !!openSessions[clockTarget];
-  var endpoint = isIn ? '/clockout' : '/clockin';
-  api(endpoint, { method: 'POST', body: JSON.stringify({ employee: clockTarget, pin: clockP }) })
-    .then(function(data){
-      closeClockSheet();
-      var now = new Date();
-      showConfirm(!isIn, clockTarget, now, data.hours);
-      refreshAll();
-    })
-    .catch(function(){
-      clockP = ''; drawDots('clock-dots', clockP, 4);
-      document.getElementById('clock-err').style.display = 'block';
-      var s = document.querySelector('#clock-sheet-bg .sheet');
-      s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+  var v = state.staff[clockTarget];
+  if (!v || v.pin !== clockP) {
+    clockP = ''; drawDots('clock-dots', clockP, 4);
+    document.getElementById('clock-err').style.display = 'block';
+    var s = document.querySelector('#clock-sheet-bg .sheet');
+    s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    return;
+  }
+  closeClockSheet();
+  toggleClock(clockTarget);
+}
+
+function toggleClock(nm){
+  var now = new Date();
+  var sess = state.sessions[nm];
+  var isIn = !!sess;
+
+  if (isIn) {
+    var inTime = new Date(sess.in);
+    var hrs = Math.round((now - inTime) / 36000) / 100;
+    state.history.unshift({
+      id: 'shift-' + now.getTime() + '-' + Math.random().toString(36).slice(2,7),
+      name: nm,
+      in: sess.in,
+      out: now.toISOString(),
+      hours: hrs,
+      adjusted: false,
+      reason: ''
     });
+    delete state.sessions[nm];
+    saveState();
+    showConfirm(false, nm, now, hrs);
+  } else {
+    state.sessions[nm] = { in: now.toISOString() };
+    saveState();
+    showConfirm(true, nm, now, null);
+  }
+  renderAll();
 }
 
 function showConfirm(clockIn, nm, time, hrs){
@@ -549,43 +552,45 @@ function showConfirm(clockIn, nm, time, hrs){
 }
 function closeConfirm(){ document.getElementById('confirm-bg').classList.remove('on'); }
 
-// ══════════════════════════════════════════
-// MANAGER PIN SHEET (history access)
-// ══════════════════════════════════════════
-function ap1(d){ if(adminP.length>=6) return; adminP+=d; drawDots('admin-dots',adminP,6); if(adminP.length===6) setTimeout(doAdminPin,200); }
-function ap1b(){ adminP=adminP.slice(0,-1); drawDots('admin-dots',adminP,6); }
-function ap1c(){ adminP=''; drawDots('admin-dots',adminP,6); }
+/* Manager PIN is now only requested when someone wants to download / share a shift report. */
+function ap1(d){
+  var maxLen = 6;
+  if (adminP.length >= maxLen) return;
+  adminP += d;
+  drawDots('admin-dots', adminP, maxLen);
+  if (findManagerByPin(adminP)) setTimeout(doAdminPin, 150);
+}
+function ap1b(){ adminP = adminP.slice(0,-1); drawDots('admin-dots', adminP, 6); }
+function ap1c(){ adminP = ''; drawDots('admin-dots', adminP, 6); }
 
 function openAdminSheet(nm){
-  histTarget = nm; adminP = ''; drawDots('admin-dots', adminP, 6);
+  dlTarget = nm; adminP = ''; drawDots('admin-dots', adminP, 6);
   document.getElementById('admin-err').style.display = 'none';
   document.getElementById('admin-target-name').textContent = nm;
   document.getElementById('admin-sheet-bg').classList.add('on');
 }
-function closeAdminSheet(){ document.getElementById('admin-sheet-bg').classList.remove('on'); adminP=''; drawDots('admin-dots',adminP,6); }
+function closeAdminSheet(){ document.getElementById('admin-sheet-bg').classList.remove('on'); adminP = ''; drawDots('admin-dots', adminP, 6); }
 function doAdminPin(){
-  if (!adminP) return;
-  api('/verify-manager-pin', { method: 'POST', body: JSON.stringify({ pin: adminP }) })
-    .then(function(){ closeAdminSheet(); openDetail(histTarget); })
-    .catch(function(err){
-      console.error('Admin PIN check failed:', err, err && err.data);
-      adminP = ''; drawDots('admin-dots', adminP, 6);
-      document.getElementById('admin-err').textContent = err && err.message ? err.message : 'Incorrect admin PIN.';
-      document.getElementById('admin-err').style.display = 'block';
-      var s = document.getElementById('admin-sheet-inner');
-      s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
-    });
+  var mgr = findManagerByPin(adminP);
+  if (!mgr) {
+    if (adminP.length < shortestManagerPinLen()) return;
+    adminP = ''; drawDots('admin-dots', adminP, 6);
+    document.getElementById('admin-err').style.display = 'block';
+    var s = document.getElementById('admin-sheet-inner');
+    s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    return;
+  }
+  adminP = '';
+  closeAdminSheet();
+  openDownloadSheet(dlTarget);
 }
 
-// ══════════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════════
 function openDash(){
   showPg('pg-dash');
   var now = new Date(), dow = (now.getDay()+6)%7;
   document.getElementById('hdr-date').textContent = SDAYS[dow] + ' ' + now.getDate() + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
-  checkConnection().then(function(ok){ if (ok) refreshAll(); });
-  setInterval(function(){ checkConnection().then(function(ok){ if (ok) refreshAll(); }); }, 15000);
+  renderAll();
+  setInterval(renderAll, 15000);
 }
 
 function goTab(n){
@@ -598,47 +603,30 @@ function goTab(n){
   if (n===2) renderHist();
 }
 
-function refreshAll(){
-  Promise.all([
-    api('/employees'),
-    api('/status'),
-    api('/today')
-  ]).then(function(results){
-    employees = results[0];
-    openSessions = {};
-    results[1].forEach(function(s){ openSessions[s.employee] = s.clock_in; });
-    todayShifts = results[2];
-    renderCrew(); renderToday(); renderHist();
-  }).catch(function(e){
-    console.warn('refresh failed', e);
-    setSyncStatus('err');
-  });
-}
+function renderAll(){ renderCrew(); renderToday(); renderHist(); }
 
-// ══════════════════════════════════════════
-// TAB 0: TEAM
-// ══════════════════════════════════════════
 function getTodayHrs(nm){
+  var today = dateStr(new Date());
   var sum = 0;
-  for (var i=0;i<todayShifts.length;i++) {
-    var h = todayShifts[i];
-    if (h.employee === nm && h.hours) sum += h.hours;
-  }
+  state.history.forEach(function(h){
+    if (h.name === nm && dateStr(new Date(h.in)) === today) sum += h.hours;
+  });
   return sum;
 }
 
 function renderCrew(){
+  var names = Object.keys(state.staff);
+  var now = Date.now();
   var html = '';
-  employees.forEach(function(emp){
-    var nm = emp.name;
-    var inTs = openSessions[nm];
-    var isIn = !!inTs;
-    var elapsed = isIn ? Math.round((Date.now() - new Date(inTs).getTime()) / 36000) / 100 : 0;
+  names.forEach(function(nm){
+    var sess = state.sessions[nm];
+    var isIn = !!sess;
+    var elapsed = isIn ? Math.round((now - new Date(sess.in).getTime()) / 36000) / 100 : 0;
     var todayDone = getTodayHrs(nm);
     html += '<div class="crew-card' + (isIn ? ' clocked-in' : '') + '" onclick="openClockSheet(\'' + nm + '\')">';
     html += '<button class="del-btn" onclick="event.stopPropagation();delEmp(\'' + nm + '\')" type="button">&#10005;</button>';
     html += '<div class="crew-av">' + nm[0] + '</div>';
-    html += '<div class="crew-name">' + nm + (emp.manager ? ' &#9733;' : '') + '</div>';
+    html += '<div class="crew-name">' + nm + (state.staff[nm].manager ? ' &#9733;' : '') + '</div>';
     html += '<span class="crew-badge ' + (isIn ? 'badge-in' : 'badge-out') + '">' + (isIn ? 'Clocked In' : 'Clocked Out') + '</span>';
     html += '<div class="crew-elapsed">' + (isIn ? (elapsed + 'h elapsed') : '&nbsp;') + '</div>';
     html += '<div class="crew-today">Today: ' + (todayDone + (isIn ? elapsed : 0)).toFixed(2) + 'h</div>';
@@ -647,138 +635,136 @@ function renderCrew(){
   document.getElementById('crew-grid').innerHTML = html || '<div class="empty"><div class="ei">-</div>No employees yet</div>';
 }
 
-// ══════════════════════════════════════════
-// TAB 1: TODAY
-// ══════════════════════════════════════════
 function renderToday(){
+  var today = dateStr(new Date());
   var now = Date.now();
-  var inNow = Object.keys(openSessions);
+  var inNow = Object.keys(state.sessions);
   var h = '';
   inNow.forEach(function(nm){
-    var inTs = openSessions[nm];
-    var el = Math.round((now - new Date(inTs).getTime()) / 36000) / 100;
+    var sess = state.sessions[nm];
+    var el = Math.round((now - new Date(sess.in).getTime()) / 36000) / 100;
     h += '<div class="in-entry"><div class="shift-av">' + nm[0] + '</div>';
     h += '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--t)">' + nm + '</div>';
-    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px">Since <span style="color:var(--g);font-weight:700">' + fmtTime(new Date(inTs)) + '</span></div></div>';
+    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px">Since <span style="color:var(--g);font-weight:700">' + fmtTime(new Date(sess.in)) + '</span></div></div>';
     h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:24px;color:var(--g)">' + el + 'h</div>';
     h += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase">elapsed</div></div></div>';
   });
   document.getElementById('cur-in').innerHTML = inNow.length ? h : '<div class="empty" style="padding:18px"><div class="ei">-</div>Nobody clocked in right now</div>';
 
-  var done = todayShifts.filter(function(s){ return s.clock_out; });
+  var done = state.history.filter(function(sh){ return dateStr(new Date(sh.in)) === today; });
   var dh = '';
   done.forEach(function(sh){
-    dh += '<div class="shift-entry"><div class="shift-av">' + sh.employee[0] + '</div>';
-    dh += '<div class="shift-name">' + sh.employee + '</div>';
-    dh += '<div class="shift-times"><span style="color:var(--g);font-weight:700">In: ' + fmtTime(new Date(sh.clock_in)) + '</span><br>';
-    dh += '<span style="color:var(--r);font-weight:700">Out: ' + fmtTime(new Date(sh.clock_out)) + '</span></div>';
+    dh += '<div class="shift-entry"><div class="shift-av">' + sh.name[0] + '</div>';
+    dh += '<div class="shift-name">' + sh.name + '</div>';
+    dh += '<div class="shift-times"><span style="color:var(--g);font-weight:700">In: ' + fmtTime(new Date(sh.in)) + '</span><br>';
+    dh += '<span style="color:var(--r);font-weight:700">Out: ' + fmtTime(new Date(sh.out)) + '</span></div>';
     dh += '<div class="shift-hrs">' + sh.hours + 'h</div></div>';
   });
   document.getElementById('today-done').innerHTML = done.length ? dh : '<div class="empty" style="padding:18px"><div class="ei">-</div>No completed shifts yet today</div>';
 }
 
-// ══════════════════════════════════════════
-// TAB 2: HISTORY
-// ══════════════════════════════════════════
 function renderHist(){
   var el = document.getElementById('hist-list');
-  if (!employees.length) { el.innerHTML = '<div class="empty"><div class="ei">-</div>No employees yet</div>'; return; }
+  var names = Object.keys(state.staff);
+  if (!state.history.length) { el.innerHTML = '<div class="empty"><div class="ei">-</div>No shifts recorded yet</div>'; return; }
   var h = '';
-  employees.forEach(function(emp){
-    var nm = emp.name;
-    h += '<div class="hist-card" onclick="openAdminSheet(\'' + nm + '\')">';
+  names.forEach(function(nm){
+    var entries = state.history.filter(function(x){ return x.name === nm; });
+    if (!entries.length) return;
+    var total = entries.reduce(function(a,e){ return a + e.hours; }, 0);
+    h += '<div class="hist-card" onclick="openDetail(\'' + nm + '\')">';
     h += '<div style="display:flex;align-items:center;gap:14px">';
     h += '<div class="hist-av">' + nm[0] + '</div>';
     h += '<div style="flex:1"><div style="font-size:16px;font-weight:700;color:var(--t)">' + nm + '</div>';
-    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">Today: ' + getTodayHrs(nm).toFixed(2) + 'h</div></div>';
-    h += '<div style="font-size:11px;color:var(--pk);font-weight:700">View &#8594;</div></div></div>';
+    h += '<div style="font-size:12px;color:var(--ts);margin-top:3px;font-weight:600">' + entries.length + ' shift' + (entries.length!==1?'s':'') + ' - Today: ' + getTodayHrs(nm).toFixed(2) + 'h</div></div>';
+    h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:20px;color:var(--pk)">' + total.toFixed(1) + 'h</div>';
+    h += '<div style="font-size:10px;color:var(--ts);font-weight:700">total hours</div>';
+    h += '<div style="font-size:11px;color:var(--pk);margin-top:4px;font-weight:700">View &#8594;</div></div></div></div>';
   });
   el.innerHTML = h;
 }
 
+var currentDetailEntries = [];
+var currentDetailName = '';
+
 function openDetail(nm){
-  api('/history/' + encodeURIComponent(nm)).then(function(entries){
-    histCache[nm] = entries;
-    var total = entries.reduce(function(a,e){ return a + (e.hours||0); }, 0);
-    var avg = entries.length ? (total/entries.length).toFixed(2) : '0';
+  currentDetailName = nm;
+  var entries = state.history.filter(function(x){ return x.name === nm; })
+    .sort(function(a,b){ return new Date(b.in) - new Date(a.in); });
+  currentDetailEntries = entries;
 
-    var byWeek = {};
-    entries.forEach(function(h1){
-      if (!h1.clock_in) return;
-      var d = new Date(h1.clock_in), di = (d.getDay()+6)%7;
-      var mon = new Date(d); mon.setDate(d.getDate()-di); mon.setHours(0,0,0,0);
-      var wk = dateStr(mon);
-      var wkEnd = new Date(mon.getTime() + 6*86400000);
-      if (!byWeek[wk]) byWeek[wk] = { hrs:0, shifts:0, lbl: mon.getDate() + ' ' + MO[mon.getMonth()] + ' - ' + wkEnd.getDate() + ' ' + MO[wkEnd.getMonth()] };
-      byWeek[wk].hrs += (h1.hours||0); byWeek[wk].shifts++;
-    });
+  var total = entries.reduce(function(a,e){ return a + e.hours; }, 0);
+  var avg = entries.length ? (total/entries.length).toFixed(2) : '0';
 
-    var wkKeys = Object.keys(byWeek).sort().reverse();
-    var wkHtml = '';
-    wkKeys.forEach(function(k){
-      var w = byWeek[k];
-      wkHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
-      wkHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + w.lbl + '</span>';
-      wkHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + w.shifts + ' shift' + (w.shifts!==1?'s':'') + '</span>';
-      wkHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + w.hrs.toFixed(1) + 'h</span></span></div>';
-    });
+  var byWeek = {};
+  entries.forEach(function(h1){
+    var d = new Date(h1.in), di = (d.getDay()+6)%7;
+    var mon = new Date(d); mon.setDate(d.getDate()-di); mon.setHours(0,0,0,0);
+    var wk = dateStr(mon);
+    var wkEnd = new Date(mon.getTime() + 6*86400000);
+    if (!byWeek[wk]) byWeek[wk] = { hrs:0, shifts:0, lbl: mon.getDate() + ' ' + MO[mon.getMonth()] + ' - ' + wkEnd.getDate() + ' ' + MO[wkEnd.getMonth()] };
+    byWeek[wk].hrs += h1.hours; byWeek[wk].shifts++;
+  });
 
-    var logHtml = '';
-    entries.forEach(function(h2){
-      var inT = fmtTime(new Date(h2.clock_in)), outT = h2.clock_out ? fmtTime(new Date(h2.clock_out)) : '--:--';
-      var isLive = !h2.clock_out;
-      var dateLbl = new Date(h2.clock_in).toISOString().slice(0,10);
-      var hrs = h2.hours || 0;
-      var fh = Math.floor(hrs), fm = Math.round((hrs-fh)*60);
-      logHtml += '<div class="slog-row">';
-      logHtml += '<div class="slog-date">' + dateLbl + '</div>';
-      logHtml += '<div class="slog-time">' + inT + ' - ' + outT + '</div>';
-      logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
-      logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
-      logHtml += '<button class="slog-mod" onclick="openModify(\'' + nm + '\',' + h2.id + ')" type="button">Modify</button>';
-      logHtml += '</div>';
-    });
+  var wkKeys = Object.keys(byWeek).sort().reverse();
+  var wkHtml = '';
+  wkKeys.forEach(function(k){
+    var w = byWeek[k];
+    wkHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
+    wkHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + w.lbl + '</span>';
+    wkHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + w.shifts + ' shift' + (w.shifts!==1?'s':'') + '</span>';
+    wkHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + w.hrs.toFixed(1) + 'h</span></span></div>';
+  });
 
-    var content = '';
-    content += '<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">';
-    var chips = [['Total Hours', total.toFixed(1)+'h', 'var(--pk)'], ['Shifts', String(entries.length), 'var(--t)'], ['Avg/Shift', avg+'h', 'var(--y)']];
-    chips.forEach(function(c){
-      content += '<div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center">';
-      content += '<div style="font-family:Fredoka One,cursive;font-size:26px;color:' + c[2] + '">' + c[1] + '</div>';
-      content += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">' + c[0] + '</div></div>';
-    });
-    content += '</div>';
-    content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Weekly Hours</div>';
-    content += '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">';
-    content += wkHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
-    content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
-    content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
-    content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
-    content += '<button class="dl-btn" onclick="dlCSV(\'' + nm + '\')" type="button">Download CSV</button></div>';
-    content += logHtml || '<div class="empty" style="padding:14px">No shifts yet</div>';
+  var logHtml = '';
+  entries.forEach(function(h2){
+    var inT = fmtTime(new Date(h2.in)), outT = h2.out ? fmtTime(new Date(h2.out)) : '--:--';
+    var isLive = !h2.out;
+    var fh = Math.floor(h2.hours), fm = Math.round((h2.hours-fh)*60);
+    logHtml += '<div class="slog-row">';
+    logHtml += '<div class="slog-date">' + dateStr(new Date(h2.in)) + '</div>';
+    logHtml += '<div class="slog-time">' + inT + ' - ' + outT + '</div>';
+    logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
+    logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
+    logHtml += '<button class="slog-mod" onclick="openModify(\'' + h2.id + '\')" type="button">Modify</button>';
+    logHtml += '</div>';
+  });
 
-    document.getElementById('detail-name').textContent = nm;
-    document.getElementById('detail-content').innerHTML = content;
-    document.getElementById('detail-bg').classList.add('on');
-  }).catch(function(e){ toast('Could not load history'); });
+  var content = '';
+  content += '<div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">';
+  var chips = [['Total Hours', total.toFixed(1)+'h', 'var(--pk)'], ['Shifts', String(entries.length), 'var(--t)'], ['Avg/Shift', avg+'h', 'var(--y)']];
+  chips.forEach(function(c){
+    content += '<div style="flex:1;min-width:80px;background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center">';
+    content += '<div style="font-family:Fredoka One,cursive;font-size:26px;color:' + c[2] + '">' + c[1] + '</div>';
+    content += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">' + c[0] + '</div></div>';
+  });
+  content += '</div>';
+  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Weekly Hours</div>';
+  content += '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">';
+  content += wkHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
+  content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
+  content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
+  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
+  content += '<button class="dl-btn" onclick="openAdminSheet(\'' + nm + '\')" type="button">Share / Download</button></div>';
+  content += logHtml || '<div class="empty" style="padding:14px">No shifts yet</div>';
+
+  document.getElementById('detail-name').textContent = nm;
+  document.getElementById('detail-content').innerHTML = content;
+  document.getElementById('detail-bg').classList.add('on');
 }
 function closeDetail(){ document.getElementById('detail-bg').classList.remove('on'); }
 
-// ══════════════════════════════════════════
-// MODIFY SHIFT (manager only)
-// ══════════════════════════════════════════
-function openModify(nm, id){
-  modTarget = { nm: nm, id: id };
-  var entries = histCache[nm] || [];
-  var h = entries.find(function(x){ return x.id === id; });
+function openModify(id){
+  modTarget = id;
+  var h = state.history.find(function(x){ return x.id === id; });
   if (!h) return;
-  document.getElementById('mod-person').value = nm;
+  document.getElementById('mod-person').value = h.name;
   function toLocal(iso){
     var d = new Date(iso), pad = function(n){ return String(n).padStart(2,'0'); };
     return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
   }
-  document.getElementById('mod-start').value = toLocal(h.clock_in);
-  document.getElementById('mod-end').value = h.clock_out ? toLocal(h.clock_out) : '';
+  document.getElementById('mod-start').value = toLocal(h.in);
+  document.getElementById('mod-end').value = h.out ? toLocal(h.out) : '';
   document.getElementById('mod-reason').value = h.reason || '';
   document.getElementById('mod-total-hours').value = h.hours ? h.hours.toFixed(2) : '';
   updateDur();
@@ -825,74 +811,105 @@ function saveModify(){
   if (!s || !e) { toast('Fill in both times'); return; }
   var inISO = new Date(s).toISOString(), outISO = new Date(e).toISOString();
   if (new Date(outISO) <= new Date(inISO)) { toast('End must be after start'); return; }
-  api('/shifts/' + modTarget.id, { method: 'PUT', body: JSON.stringify({ clockIn: inISO, clockOut: outISO, reason: reason }) })
-    .then(function(){
-      closeModify();
-      openDetail(modTarget.nm);
-      refreshAll();
-      toast(modTarget.nm + ' shift updated');
-    })
-    .catch(function(){ toast('Could not save — check connection'); });
+  var hrs = Math.round((new Date(outISO) - new Date(inISO)) / 36000) / 100;
+  var entry = state.history.find(function(x){ return x.id === modTarget; });
+  if (entry) {
+    entry.in = inISO;
+    entry.out = outISO;
+    entry.hours = hrs;
+    entry.adjusted = true;
+    entry.reason = reason;
+  }
+  saveState();
+  closeModify();
+  openDetail(entry ? entry.name : currentDetailName);
+  renderAll();
+  toast('Shift updated');
 }
 
-// ══════════════════════════════════════════
-// DOWNLOAD CSV
-// ══════════════════════════════════════════
-function dlCSV(nm){
-  var entries = (histCache[nm] || []).slice().sort(function(a,b){ return new Date(b.clock_in) - new Date(a.clock_in); });
-  if (!entries.length) { toast('No shifts to download'); return; }
-  openDownloadSheet(nm, entries);
-}
+function openDownloadSheet(nm){
+  var entries = state.history.filter(function(x){ return x.name === nm; })
+    .sort(function(a,b){ return new Date(b.in) - new Date(a.in); });
+  if (!entries.length) { toast('No shifts to share'); return; }
+  currentDetailEntries = entries;
+  currentDetailName = nm;
 
-function openDownloadSheet(nm, entries){
-  var total = entries.reduce(function(a,h){ return a + (h.hours||0); }, 0);
-  var completeCount = entries.filter(function(h){ return h.clock_out; }).length;
+  var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
+  var completeCount = entries.filter(function(h){ return h.out; }).length;
+  var isManager = state.staff[nm] && state.staff[nm].manager;
 
   var rows = '';
-  entries.forEach(function(h, i){
-    var d = new Date(h.clock_in), dow = (d.getDay()+6)%7;
+  rows += '<div class="rb-row rb-head"><div class="rb-date">Date</div><div class="rb-time">Clock In &rarr; Out</div><div class="rb-hrs">Hours</div><div class="rb-badge"></div></div>';
+  entries.forEach(function(h){
+    var d = new Date(h.in), dow = (d.getDay()+6)%7;
     var dateLbl = SDAYS[dow] + ', ' + d.getDate() + ' ' + MO[d.getMonth()];
-    var inT = fmtTime(new Date(h.clock_in));
-    var outT = h.clock_out ? fmtTime(new Date(h.clock_out)) : 'In progress';
-    var hrs = (h.hours||0).toFixed(2);
-    var adjBadge = h.adjusted ? '<span class="dl-adj-badge">Adjusted</span>' : '';
-    rows += '<div class="dl-row' + (i % 2 === 0 ? ' alt' : '') + '">';
-    rows += '<div class="dl-col dl-col-date">' + dateLbl + '</div>';
-    rows += '<div class="dl-col dl-col-time">' + inT + ' &rarr; ' + outT + '</div>';
-    rows += '<div class="dl-col dl-col-hrs">' + hrs + 'h</div>';
-    rows += '<div class="dl-col dl-col-badge">' + adjBadge + '</div>';
+    var inT = fmtTime(new Date(h.in));
+    var outT = h.out ? fmtTime(new Date(h.out)) : 'In progress';
+    var adjBadge = h.adjusted ? '<span class="rb-adj">Adjusted</span>' : '';
+    rows += '<div class="rb-row">';
+    rows += '<div class="rb-date">' + dateLbl + '</div>';
+    rows += '<div class="rb-time">' + inT + ' &rarr; ' + outT + '</div>';
+    rows += '<div class="rb-hrs">' + h.hours.toFixed(2) + 'h</div>';
+    rows += '<div class="rb-badge">' + adjBadge + '</div>';
     rows += '</div>';
   });
 
-  var html = '';
-  html += '<div class="dl-summary">';
-  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + total.toFixed(1) + 'h</div><div class="dl-sum-lbl">Total Hours</div></div>';
-  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + entries.length + '</div><div class="dl-sum-lbl">Shifts</div></div>';
-  html += '  <div class="dl-sum-item"><div class="dl-sum-val">' + completeCount + '</div><div class="dl-sum-lbl">Complete</div></div>';
-  html += '</div>';
-  html += '<div class="dl-table">';
-  html += '  <div class="dl-row dl-head"><div class="dl-col dl-col-date">Date</div><div class="dl-col dl-col-time">Clock In &rarr; Out</div><div class="dl-col dl-col-hrs">Hours</div><div class="dl-col dl-col-badge"></div></div>';
-  html += rows;
+  var html = '<div class="report-paper">';
+  html += '  <div class="report-head">';
+  html += '    <div class="rh-top"><span class="rh-brand">Jane\'s Bakery</span><span class="rh-badge">' + (isManager ? 'Manager' : 'Staff') + '</span></div>';
+  html += '    <div class="rh-name">' + nm + '</div>';
+  html += '    <div class="rh-sub">Report generated ' + new Date().toLocaleDateString() + ' at ' + fmtTime(new Date()) + '</div>';
+  html += '  </div>';
+  html += '  <div class="report-summary">';
+  html += '    <div class="rs-item"><div class="rs-val">' + total.toFixed(1) + 'h</div><div class="rs-lbl">Total Hours</div></div>';
+  html += '    <div class="rs-item"><div class="rs-val">' + entries.length + '</div><div class="rs-lbl">Shifts</div></div>';
+  html += '    <div class="rs-item"><div class="rs-val">' + completeCount + '</div><div class="rs-lbl">Complete</div></div>';
+  html += '  </div>';
+  html += '  <div class="report-body">' + rows + '</div>';
+  html += '  <div class="report-foot"><span class="rf-lbl">Total hours worked</span><span class="rf-val">' + total.toFixed(2) + 'h</span></div>';
   html += '</div>';
 
-  document.getElementById('dl-sheet-name').textContent = nm;
   document.getElementById('dl-sheet-content').innerHTML = html;
-  document.getElementById('dl-sheet-bg').dataset.name = nm;
   document.getElementById('dl-sheet-bg').classList.add('on');
 }
 function closeDownloadSheet(){ document.getElementById('dl-sheet-bg').classList.remove('on'); }
 
+function buildShiftReportText(nm, entries){
+  var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
+  var lines = [];
+  lines.push('*Jane\'s Bakery - Shift Report*');
+  lines.push(nm);
+  lines.push('Generated: ' + new Date().toLocaleString());
+  lines.push('');
+  entries.forEach(function(h){
+    var d = new Date(h.in), dow = (d.getDay()+6)%7;
+    var dateLbl = SDAYS[dow] + ' ' + d.getDate() + ' ' + MO[d.getMonth()];
+    var inT = fmtTime(new Date(h.in));
+    var outT = h.out ? fmtTime(new Date(h.out)) : 'In progress';
+    lines.push(dateLbl + ': ' + inT + ' - ' + outT + ' (' + h.hours.toFixed(2) + 'h)' + (h.adjusted ? ' [adjusted]' : ''));
+  });
+  lines.push('');
+  lines.push('*Total: ' + total.toFixed(2) + ' hours across ' + entries.length + ' shift' + (entries.length!==1?'s':'') + '*');
+  return lines.join('\n');
+}
+
+function sendToWhatsApp(){
+  var text = buildShiftReportText(currentDetailName, currentDetailEntries);
+  var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
+  window.open(url, '_blank');
+}
+
 function confirmDownloadCSV(){
-  var nm = document.getElementById('dl-sheet-bg').dataset.name;
-  var entries = (histCache[nm] || []).slice().sort(function(a,b){ return new Date(b.clock_in) - new Date(a.clock_in); });
+  var nm = currentDetailName;
+  var entries = currentDetailEntries;
   var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Adjusted,Reason'];
   entries.forEach(function(h){
-    var d = new Date(h.clock_in), dow = (d.getDay()+6)%7;
-    var cols = [nm, d.toISOString().slice(0,10), FDAYS[dow], fmtTime(new Date(h.clock_in)), h.clock_out ? fmtTime(new Date(h.clock_out)) : 'In progress', (h.hours||0).toFixed(2), h.adjusted ? 'Yes' : 'No', h.reason || ''];
+    var d = new Date(h.in), dow = (d.getDay()+6)%7;
+    var cols = [nm, dateStr(d), FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), h.adjusted ? 'Yes' : 'No', h.reason || ''];
     var escaped = cols.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; });
     lines.push(escaped.join(','));
   });
-  var total = entries.reduce(function(a,h){ return a + (h.hours||0); }, 0);
+  var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
   lines.push('"","","","","TOTAL","' + total.toFixed(2) + '","",""');
   var csv = lines.join('\r\n');
   var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -907,10 +924,6 @@ function confirmDownloadCSV(){
   toast('Downloaded ' + nm + ' shifts');
 }
 
-
-// ══════════════════════════════════════════
-// ADD / DELETE EMPLOYEE
-// ══════════════════════════════════════════
 function openAddEmp(){
   document.getElementById('new-name').value = '';
   document.getElementById('new-pin').value = '';
@@ -925,24 +938,22 @@ function saveNewEmp(){
   var isManager = document.getElementById('new-manager').checked;
   var err = document.getElementById('emp-err');
   if (!name || !/^[0-9]{4,6}$/.test(pin)) { err.style.display='block'; err.textContent='Enter a name and a 4-6 digit PIN.'; return; }
-  api('/employees', { method: 'POST', body: JSON.stringify({ name: name, pin: pin, role: isManager ? 'Manager' : 'Staff', manager: isManager ? 1 : 0 }) })
-    .then(function(){
-      closeAddEmp();
-      refreshAll();
-      toast(name + ' added');
-    })
-    .catch(function(e){ err.style.display='block'; err.textContent = (e.data && e.data.error) || 'Could not add employee'; });
+  if (state.staff[name]) { err.style.display='block'; err.textContent='Name already exists.'; return; }
+  state.staff[name] = { pin: pin, manager: isManager };
+  saveState();
+  closeAddEmp();
+  renderAll();
+  toast(name + ' added');
 }
 function delEmp(nm){
-  if (!confirm('Remove ' + nm + ' from the bakery team?')) return;
-  api('/employees/' + encodeURIComponent(nm), { method: 'DELETE' })
-    .then(function(){ refreshAll(); toast(nm + ' removed'); })
-    .catch(function(){ toast('Could not remove — check connection'); });
+  if (!confirm('Remove ' + nm + ' from the bakery team? Their past shift history is kept.')) return;
+  delete state.staff[nm];
+  delete state.sessions[nm];
+  saveState();
+  renderAll();
+  toast(nm + ' removed');
 }
 
-// ══════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════
 function fmtTime(d){ var h=d.getHours(), m=d.getMinutes(), ap=h>=12?'pm':'am', hh=h%12||12; return hh + ':' + String(m).padStart(2,'0') + ap; }
 function dateStr(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 function showPg(id){
@@ -952,6 +963,16 @@ function showPg(id){
   window.scrollTo(0,0);
 }
 function toast(m){ var t=document.getElementById('toast'); t.textContent=m; t.classList.add('on'); setTimeout(function(){ t.classList.remove('on'); }, 2600); }
+
+document.addEventListener('visibilitychange', function(){
+  if (document.visibilityState === 'hidden') saveState();
+});
+window.addEventListener('beforeunload', saveState);
+
+window.addEventListener('error', function(e){
+  console.error('Caught error:', e.error || e.message);
+  toast('Something glitched - your data is safe, try again');
+});
 
 (function(){
   var c = document.getElementById('bg-canvas'), ctx = c.getContext('2d');
