@@ -279,6 +279,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div class="dl-actions">
       <button class="dl-btn" onclick="sendToWhatsApp()" type="button">Send to WhatsApp</button>
       <button class="dl-btn" onclick="confirmDownloadCSV()" type="button">Download CSV</button>
+      <button class="btn ghost sm" onclick="copyCSVToClipboard()" type="button">Copy CSV Text</button>
       <button class="btn ghost sm" onclick="window.print()" type="button">Print / Save PDF</button>
     </div>
     <div class="wa-note">Sends this report as a formatted message to your saved WhatsApp number - opens WhatsApp with everything ready, just tap send.</div>
@@ -872,6 +873,22 @@ function saveModify(){
   toast('Shift updated');
 }
 
+function buildShiftCSV(nm, entries){
+  var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Type,Reason'];
+  entries.forEach(function(h){
+    var d = new Date(h.in), dow = (d.getDay()+6)%7;
+    var type = h.manual ? 'Manual' : (h.adjusted ? 'Adjusted' : 'Clock');
+    var cols = [nm, dateStr(d), FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), type, h.reason || ''];
+    var escaped = cols.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; });
+    lines.push(escaped.join(','));
+  });
+  var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
+  lines.push('"","","","","","TOTAL","' + total.toFixed(2) + '",""');
+  return lines.join('\r\n');
+}
+
+var currentCSVText = '';
+
 function openDownloadSheet(nm){
   var entries = state.history.filter(function(x){ return x.name === nm; })
     .sort(function(a,b){ return new Date(b.in) - new Date(a.in); });
@@ -913,8 +930,14 @@ function openDownloadSheet(nm){
   html += '  <div class="report-body">' + rows + '</div>';
   html += '  <div class="report-foot"><span class="rf-lbl">Total hours worked</span><span class="rf-val">' + total.toFixed(2) + 'h</span></div>';
   html += '</div>';
+  html += '<div style="margin-top:16px">';
+  html += '  <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:8px">Raw CSV text (always visible - tap Copy CSV Text below, or select it manually)</div>';
+  html += '  <textarea id="csv-raw" readonly style="width:100%;min-height:110px;background:var(--s2);color:var(--t);border:1px solid var(--bd);border-radius:10px;padding:10px;font-family:monospace;font-size:11px;white-space:pre;resize:vertical"></textarea>';
+  html += '</div>';
 
   document.getElementById('dl-sheet-content').innerHTML = html;
+  currentCSVText = buildShiftCSV(nm, entries);
+  document.getElementById('csv-raw').value = currentCSVText;
   document.getElementById('dl-sheet-bg').classList.add('on');
 }
 function closeDownloadSheet(){ document.getElementById('dl-sheet-bg').classList.remove('on'); }
@@ -943,39 +966,56 @@ function sendToWhatsApp(){
   var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text);
   var win = window.open(url, '_blank');
   if (!win || win.closed || typeof win.closed === 'undefined') {
-    // popup blocked (common in some in-app/embedded browsers) - navigate this tab instead
+    // popup blocked (common in some in-app/embedded browsers) - navigate this tab instead.
+    // This is a normal https:// link (not a data: URL) so browsers won't block this navigation.
     window.location.href = url;
   }
 }
 
-function confirmDownloadCSV(){
-  var nm = currentDetailName;
-  var entries = currentDetailEntries || [];
-  if (!entries.length) { toast('No shifts to download'); return; }
-  var lines = ['Employee,Date,Day,Clock In,Clock Out,Hours,Type,Reason'];
-  entries.forEach(function(h){
-    var d = new Date(h.in), dow = (d.getDay()+6)%7;
-    var type = h.manual ? 'Manual' : (h.adjusted ? 'Adjusted' : 'Clock');
-    var cols = [nm, dateStr(d), FDAYS[dow], fmtTime(new Date(h.in)), h.out ? fmtTime(new Date(h.out)) : 'In progress', h.hours.toFixed(2), type, h.reason || ''];
-    var escaped = cols.map(function(v){ return '"' + String(v).replace(/"/g,'""') + '"'; });
-    lines.push(escaped.join(','));
-  });
-  var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
-  lines.push('"","","","","","TOTAL","' + total.toFixed(2) + '",""');
-  var csv = lines.join('\r\n');
-
-  // Always open the report first in its own tab/view - this works even in browsers and
-  // in-app browsers that silently ignore the <a download> attribute. From there the
-  // person can use their browser's own Save/Download/Print option to keep the file.
-  var dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  var win = null;
-  try { win = window.open(dataUrl, '_blank'); } catch(e) { win = null; }
-  if (!win) {
-    // popup blocked - fall back to navigating this tab so it still opens somewhere
-    window.location.href = dataUrl;
+function copyCSVToClipboard(){
+  var ta = document.getElementById('csv-raw');
+  if (!ta || !ta.value) { toast('Nothing to copy yet'); return; }
+  ta.focus();
+  ta.select();
+  try { ta.setSelectionRange(0, ta.value.length); } catch(e) {}
+  var copied = false;
+  try { copied = document.execCommand('copy'); } catch(e) { copied = false; }
+  if (copied) { toast('CSV copied - paste into Notes, Files or WhatsApp'); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ta.value).then(function(){
+      toast('CSV copied - paste into Notes, Files or WhatsApp');
+    }).catch(function(){
+      toast('Could not copy automatically - tap the box above and copy manually');
+    });
     return;
   }
-  toast('Report opened - use your browser\'s Save or Download option to keep it');
+  toast('Could not copy automatically - tap the box above and copy manually');
+}
+
+function confirmDownloadCSV(){
+  var nm = currentDetailName;
+  if (!currentCSVText) { toast('Nothing to download yet'); return; }
+  var filename = nm + '_shifts_' + dateStr(new Date()) + '.csv';
+  // Best-effort direct download using a blob: URL (not a data: URL, so it is not blocked
+  // by the browser's anti-phishing rules the way a full-page data: navigation is).
+  // If the browser/environment doesn't allow it, the CSV text is already visible above
+  // and the Copy CSV Text button always works as the guaranteed fallback.
+  try {
+    var blob = new Blob([currentCSVText], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    toast('Downloaded ' + nm + ' shifts (check your Downloads/Files app)');
+  } catch(e) {
+    console.warn('Direct download not available in this browser', e);
+    toast('Direct download not available here - use Copy CSV Text instead');
+  }
 }
 
 function openAddEmp(){
@@ -1057,4 +1097,3 @@ tryAutoLogin();
 </script>
 </body>
 </html>
-
