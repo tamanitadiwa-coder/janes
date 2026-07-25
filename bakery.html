@@ -278,7 +278,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div id="dl-sheet-content"></div>
     <div class="dl-actions">
       <button class="dl-btn" onclick="sendToWhatsApp()" type="button">Send to WhatsApp</button>
-      <a id="csv-dl-link" class="dl-btn" href="#" download="shifts.csv" style="text-decoration:none">Download CSV</a>
+      <a id="csv-dl-link" class="dl-btn" href="#" download="shifts.csv" target="_blank" rel="noopener" style="text-decoration:none" onclick="toast('Opening download...')">Download CSV</a>
       <button class="btn ghost sm" onclick="copyCSVToClipboard()" type="button">Copy CSV Text</button>
       <button class="btn ghost sm" onclick="window.print()" type="button">Print / Save PDF</button>
     </div>
