@@ -514,6 +514,7 @@ function cp1b(){ clockP = clockP.slice(0,-1); drawDots('clock-dots', clockP, 4);
 function cp1c(){ clockP = ''; drawDots('clock-dots', clockP, 4); }
 
 function openClockSheet(nm){
+  refreshStateFromDisk();
   clockTarget = nm; clockP = ''; drawDots('clock-dots', clockP, 4);
   document.getElementById('clock-err').style.display = 'none';
   document.getElementById('clock-name').textContent = nm;
@@ -609,12 +610,16 @@ function doAdminPin(){
   openDownloadSheet(dlTarget);
 }
 
+var dashIntervalStarted = false;
 function openDash(){
   showPg('pg-dash');
   var now = new Date(), dow = (now.getDay()+6)%7;
   document.getElementById('hdr-date').textContent = SDAYS[dow] + ' ' + now.getDate() + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
   renderAll();
-  setInterval(function(){ refreshStateFromDisk(); renderAll(); }, 15000);
+  if (!dashIntervalStarted) {
+    dashIntervalStarted = true;
+    setInterval(function(){ refreshStateFromDisk(); renderAll(); }, 15000);
+  }
 }
 
 function goTab(n){
