@@ -278,7 +278,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     <div id="dl-sheet-content"></div>
     <div class="dl-actions">
       <button class="dl-btn" onclick="sendToWhatsApp()" type="button">Send to WhatsApp</button>
-      <a id="csv-dl-link" class="dl-btn" href="#" download="shifts.csv" target="_blank" rel="noopener" style="text-decoration:none" onclick="toast('Opening download...')">Download CSV</a>
+      <button id="dl-csv-btn" class="dl-btn" onclick="downloadReportCSV()" type="button">Download CSV</button>
       <button class="btn ghost sm" onclick="copyCSVToClipboard()" type="button">Copy CSV Text</button>
       <button class="btn ghost sm" onclick="window.print()" type="button">Print / Save PDF</button>
     </div>
@@ -425,6 +425,25 @@ function saveState(){
 var loginP = '', clockP = '', adminP = '', clockTarget = '', dlTarget = '', modTarget = null, addMode = false, recoveredFromBackup = false;
 
 state = loadState();
+
+// If this page is open in more than one tab/window (common on a shared laptop),
+// each tab only knows about its own changes until it reloads. Re-syncing from the
+// saved copy right before every change means a change made in another tab never
+// gets silently overwritten - it's always picked up first.
+function refreshStateFromDisk(){
+  state = loadState();
+}
+// Also pick up changes the instant another tab saves, without waiting for a click here.
+window.addEventListener('storage', function(e){
+  if (e.key === STORE_KEY || e.key === BACKUP_KEY) {
+    refreshStateFromDisk();
+    renderAll();
+  }
+});
+// And catch up whenever this tab becomes visible again (e.g. switching back from another tab).
+document.addEventListener('visibilitychange', function(){
+  if (document.visibilityState === 'visible') { refreshStateFromDisk(); renderAll(); }
+});
 if (recoveredFromBackup) { setTimeout(function(){ toast('Recovered your saved shifts from backup'); }, 500); }
 setInterval(function(){ try { saveState(); } catch(e) {} }, 20000); // extra safety net in case a refresh/close skips the unload save
 
@@ -518,6 +537,7 @@ function doClockPin(){
 }
 
 function toggleClock(nm){
+  refreshStateFromDisk();
   var now = new Date();
   var sess = state.sessions[nm];
   var isIn = !!sess;
@@ -594,7 +614,7 @@ function openDash(){
   var now = new Date(), dow = (now.getDay()+6)%7;
   document.getElementById('hdr-date').textContent = SDAYS[dow] + ' ' + now.getDate() + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
   renderAll();
-  setInterval(renderAll, 15000);
+  setInterval(function(){ refreshStateFromDisk(); renderAll(); }, 15000);
 }
 
 function goTab(n){
@@ -828,6 +848,7 @@ function applyTotalHours(){
   toast('End time set to match ' + hrs + 'h');
 }
 function saveModify(){
+  refreshStateFromDisk();
   var s = document.getElementById('mod-start').value;
   var e = document.getElementById('mod-end').value;
   var reason = document.getElementById('mod-reason').value.trim();
@@ -888,7 +909,7 @@ function buildShiftCSV(nm, entries){
 }
 
 var currentCSVText = '';
-var currentCSVBlobUrl = '';
+var currentCSVFilename = '';
 
 function openDownloadSheet(nm){
   var entries = state.history.filter(function(x){ return x.name === nm; })
@@ -932,24 +953,43 @@ function openDownloadSheet(nm){
   html += '  <div class="report-foot"><span class="rf-lbl">Total hours worked</span><span class="rf-val">' + total.toFixed(2) + 'h</span></div>';
   html += '</div>';
   html += '<div style="margin-top:16px">';
-  html += '  <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:8px">Raw CSV text (always visible - tap Copy CSV Text below, or select it manually)</div>';
+  html += '  <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:8px">Raw CSV text (always visible - Copy CSV Text or select it manually as a guaranteed backup)</div>';
   html += '  <textarea id="csv-raw" readonly style="width:100%;min-height:110px;background:var(--s2);color:var(--t);border:1px solid var(--bd);border-radius:10px;padding:10px;font-family:monospace;font-size:11px;white-space:pre;resize:vertical"></textarea>';
   html += '</div>';
 
   document.getElementById('dl-sheet-content').innerHTML = html;
   currentCSVText = buildShiftCSV(nm, entries);
+  currentCSVFilename = nm + '_shifts_' + dateStr(new Date()) + '.csv';
   document.getElementById('csv-raw').value = currentCSVText;
-
-  if (currentCSVBlobUrl) { try { URL.revokeObjectURL(currentCSVBlobUrl); } catch(e) {} }
-  var blob = new Blob([currentCSVText], { type: 'text/csv;charset=utf-8;' });
-  currentCSVBlobUrl = URL.createObjectURL(blob);
-  var link = document.getElementById('csv-dl-link');
-  link.href = currentCSVBlobUrl;
-  link.download = nm + '_shifts_' + dateStr(new Date()) + '.csv';
 
   document.getElementById('dl-sheet-bg').classList.add('on');
 }
 function closeDownloadSheet(){ document.getElementById('dl-sheet-bg').classList.remove('on'); }
+
+/* The one and only download function. Builds a fresh Blob and triggers it via a
+   throwaway <a download> element right at the moment of the click - this is the
+   standard, widely-used pattern for browser-side file downloads. It cannot fix a
+   browser/environment that blocks downloads outright (e.g. a sandboxed preview),
+   but it is the most reliable version of this technique available. */
+function downloadReportCSV(){
+  if (!currentCSVText) { toast('Open a report first'); return; }
+  try {
+    var blob = new Blob([currentCSVText], { type: 'text/csv;charset=utf-8;' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = currentCSVFilename || 'shifts.csv';
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    toast('Downloaded - check your Downloads/Files app');
+  } catch(e) {
+    console.warn('Download failed', e);
+    toast('Download blocked here - use Copy CSV Text instead');
+  }
+}
 
 function buildShiftReportText(nm, entries){
   var total = entries.reduce(function(a,h){ return a + h.hours; }, 0);
@@ -1010,6 +1050,7 @@ function openAddEmp(){
 }
 function closeAddEmp(){ document.getElementById('add-emp-bg').classList.remove('on'); }
 function saveNewEmp(){
+  refreshStateFromDisk();
   var name = document.getElementById('new-name').value.trim();
   var pin = document.getElementById('new-pin').value.trim();
   var isManager = document.getElementById('new-manager').checked;
@@ -1024,6 +1065,7 @@ function saveNewEmp(){
 }
 function delEmp(nm){
   if (!confirm('Remove ' + nm + ' from the bakery team? Their past shift history is kept.')) return;
+  refreshStateFromDisk();
   if (state.sessions[nm]) {
     // they're still clocked in - close it out as a real shift first so those hours aren't lost
     var sess = state.sessions[nm];
