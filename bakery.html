@@ -6,13 +6,13 @@
 <title>Jane's Bakery</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html,body{height:100%;background:#050508;color:#fff;font-family:'Inter',sans-serif;overflow-x:hidden}
 :root{--pk:#E91E8C;--pk2:#C2185B;--pk3:#880E4F;--g:#00E676;--r:#ff5252;--y:#FFE500;--bg:#050508;--s1:#0d0d12;--s2:#141419;--s3:#1c1c24;--bd:#252530;--bd2:#333340;--t:#fff;--ts:#8888a0;--tm:#444455}
 canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .z1{position:relative;z-index:1}
 .pg{display:none;min-height:100vh;flex-direction:column}.pg.on{display:flex}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:none;text-decoration:none;gap:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;border:none;text-decoration:none;gap:6px;user-select:none;-webkit-user-select:none}
 .btn.primary{background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;box-shadow:0 4px 20px rgba(233,30,140,.4)}.btn.primary:hover{transform:translateY(-1px)}.btn.primary:active{transform:scale(.97)}
 .btn.ghost{background:transparent;border:1px solid var(--bd);color:var(--ts)}.btn.ghost:hover{border-color:var(--pk);color:var(--pk)}
 .btn.danger{background:rgba(255,82,82,.1);border:1px solid rgba(255,82,82,.3);color:#ff7070}
@@ -123,7 +123,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .mod-save:hover{background:#C2185B}
 .mod-cancel{padding:12px 24px;border-radius:10px;background:#f5f5f5;color:#666;border:none;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
 .mod-cancel:hover{background:#eee}
-.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(233,30,140,.35)}
+.dl-btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:linear-gradient(135deg,var(--pk),var(--pk2));color:#fff;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(233,30,140,.35);user-select:none;-webkit-user-select:none}
 .dl-btn:hover{transform:translateY(-1px);box-shadow:0 6px 22px rgba(233,30,140,.5)}
 .dl-sheet-wide{max-width:600px}
 .report-paper{background:var(--s1);color:var(--t);border:1px solid var(--bd);border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.5)}
@@ -632,6 +632,20 @@ function goTab(n){
   if (n===2) renderHist();
 }
 
+function tickLiveElapsed(){
+  var now = Date.now();
+  var nodes = document.querySelectorAll('[data-live-in]');
+  for (var i = 0; i < nodes.length; i++) {
+    var el = nodes[i];
+    var inIso = el.getAttribute('data-live-in');
+    var suffix = el.getAttribute('data-live-suffix') || 'h';
+    if (!inIso) continue;
+    var elapsed = Math.round((now - new Date(inIso).getTime()) / 36000) / 100;
+    el.textContent = elapsed + suffix;
+  }
+}
+setInterval(tickLiveElapsed, 1000);
+
 function renderAll(){ renderCrew(); renderToday(); renderHist(); }
 
 function getTodayHrs(nm){
@@ -657,7 +671,7 @@ function renderCrew(){
     html += '<div class="crew-av">' + nm[0] + '</div>';
     html += '<div class="crew-name">' + nm + (state.staff[nm].manager ? ' &#9733;' : '') + '</div>';
     html += '<span class="crew-badge ' + (isIn ? 'badge-in' : 'badge-out') + '">' + (isIn ? 'Clocked In' : 'Clocked Out') + '</span>';
-    html += '<div class="crew-elapsed">' + (isIn ? (elapsed + 'h elapsed') : '&nbsp;') + '</div>';
+    html += '<div class="crew-elapsed"' + (isIn ? (' data-live-in="' + sess.in + '" data-live-suffix="h elapsed"') : '') + '>' + (isIn ? (elapsed + 'h elapsed') : '&nbsp;') + '</div>';
     html += '<div class="crew-today">Today: ' + (todayDone + (isIn ? elapsed : 0)).toFixed(2) + 'h</div>';
     html += '</div>';
   });
@@ -675,7 +689,7 @@ function renderToday(){
     h += '<div class="in-entry"><div class="shift-av">' + nm[0] + '</div>';
     h += '<div style="flex:1"><div style="font-size:14px;font-weight:700;color:var(--t)">' + nm + '</div>';
     h += '<div style="font-size:12px;color:var(--ts);margin-top:3px">Since <span style="color:var(--g);font-weight:700">' + fmtTime(new Date(sess.in)) + '</span></div></div>';
-    h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:24px;color:var(--g)">' + el + 'h</div>';
+    h += '<div style="text-align:right"><div style="font-family:Fredoka One,cursive;font-size:24px;color:var(--g)" data-live-in="' + sess.in + '" data-live-suffix="h">' + el + 'h</div>';
     h += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase">elapsed</div></div></div>';
   });
   document.getElementById('cur-in').innerHTML = inNow.length ? h : '<div class="empty" style="padding:18px"><div class="ei">-</div>Nobody clocked in right now</div>';
