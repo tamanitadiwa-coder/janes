@@ -441,11 +441,6 @@ input[type=file]{display:none}.hdr-name{font-size:12px;font-weight:600;color:var
         <div class="profile-name-big" id="prof-name">--</div>
         <div class="info-grid" id="prof-stats-grid"></div>
         <div class="divider"></div>
-        <div class="sec-lbl" style="text-align:left">Change PIN</div>
-        <div class="profile-pin-row">
-          <input type="password" id="new-pin" placeholder="New 4-digit PIN" maxlength="4">
-          <button class="btn primary xs" onclick="changePin()">Update</button>
-        </div>
       </div>
       <div class="card">
         <div style="font-family:'Fredoka One',cursive;font-size:18px;margin-bottom:14px">📊 My Shift History</div>
@@ -492,7 +487,7 @@ const DEFAULT_STAFF = {
   Panashe:{pin:'3333',role:'Budtender',admin:false,owner:false},
   Kate:   {pin:'2222',role:'Budtender',admin:false,owner:false},
   Jamal:  {pin:'1111',role:'Budtender',admin:true, owner:false},
-  JP:     {pin:'4444',role:'Chef',     admin:false,owner:false},
+  Jonathan:{pin:'4444',role:'Chef',     admin:false,owner:false},
   Josh:   {pin:'5555',role:'Manager',  admin:true, owner:true},
   Eva:    {pin:'6666',role:'Owner',    admin:true, owner:true},
   Charlet:{pin:'7777',role:'Owner',    admin:true, owner:true}
@@ -503,7 +498,7 @@ const DEFAULT_SCHEDULES = {
   Panashe: [{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'close',station:'bakery'},{type:'close',station:'bakery'},{type:'open',station:'cafe'},null],
   Kate:    [null,{type:'open',station:'cafe'},{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,{type:'close',station:'cafe'},{type:'close',station:'cafe'}],
   Jamal:   [{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,null],
-  JP:      [{type:'close',station:'bakery'},null,{type:'open',station:'bakery'},{type:'open',station:'bakery'},{type:'close',station:'bakery'},null,{type:'open',station:'bakery'}],
+  Jonathan:[{type:'close',station:'bakery'},null,{type:'open',station:'bakery'},{type:'open',station:'bakery'},{type:'close',station:'bakery'},null,{type:'open',station:'bakery'}],
   Josh:    [{type:'open',station:'cafe'},{type:'open',station:'cafe'},{type:'open',station:'cafe'},null,{type:'open',station:'cafe'},{type:'open',station:'cafe'},null],
   Eva:     [{type:'open',station:'cafe'},{type:'open',station:'cafe'},{type:'open',station:'bakery'},{type:'open',station:'cafe'},null,null,null],
   Charlet: [{type:'open',station:'bakery'},{type:'open',station:'bakery'},null,{type:'close',station:'cafe'},{type:'close',station:'cafe'},{type:'open',station:'cafe'},null]
@@ -1225,7 +1220,6 @@ function renderProfile(){
   if(adminWrap)adminWrap.style.display=(s&&s.admin===true)?'block':'none';
   renderHistory();
 }
-function changePin(){const v=document.getElementById('new-pin').value.trim();if(!/^\d{4}$/.test(v)){toast('PIN must be 4 digits');return}db.staff[me].pin=v;saveDB(db, ['staff']);document.getElementById('new-pin').value='';toast('PIN updated ✓')}
 
 function renderHistory(){
   const hist=(db.shiftHistory[me]||[]).slice(0,30);
