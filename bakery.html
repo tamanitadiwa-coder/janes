@@ -211,6 +211,40 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
   </div>
 </div>
 
+<div class="sheet-bg" id="clear-pin-bg" onclick="if(event.target===this)closeClearPinSheet()">
+  <div class="sheet" id="clear-pin-inner">
+    <div class="sheet-handle"></div>
+    <div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);text-align:center;margin-bottom:6px">Manager Access Required</div>
+    <div class="sheet-person">Clear Shift History</div>
+    <div class="sheet-hint">Enter manager PIN to continue</div>
+    <div class="pin-dots" id="clear-pin-dots"></div>
+    <div class="pin-grid">
+      <button class="pb" onclick="zp1('1')" type="button">1</button><button class="pb" onclick="zp1('2')" type="button">2</button><button class="pb" onclick="zp1('3')" type="button">3</button>
+      <button class="pb" onclick="zp1('4')" type="button">4</button><button class="pb" onclick="zp1('5')" type="button">5</button><button class="pb" onclick="zp1('6')" type="button">6</button>
+      <button class="pb" onclick="zp1('7')" type="button">7</button><button class="pb" onclick="zp1('8')" type="button">8</button><button class="pb" onclick="zp1('9')" type="button">9</button>
+      <button class="pb sm" onclick="zp1c()" type="button">Clear</button><button class="pb z" onclick="zp1('0')" type="button">0</button><button class="pb" onclick="zp1b()" type="button">&#9003;</button>
+    </div>
+    <div class="sheet-err" id="clear-pin-err">Incorrect manager PIN.</div>
+    <button class="btn ghost full" style="margin-top:12px" onclick="closeClearPinSheet()" type="button">Cancel</button>
+  </div>
+</div>
+
+<div class="sheet-bg" id="clear-sheet-bg" onclick="if(event.target===this)closeClearSheet()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div style="font-family:'Fredoka One',cursive;font-size:20px;color:var(--t);margin-bottom:4px">Clear Shift History</div>
+    <div class="sheet-hint" style="text-align:left;margin-bottom:16px">Pick what to clear. This only removes completed shift records - anyone currently clocked in stays clocked in. Download or copy a report first if you want to keep a record - this can't be undone.</div>
+    <label class="lbl">Clear</label>
+    <select id="clear-scope" class="form-input" onchange="updateClearPreview()"></select>
+    <div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin:6px 0 18px;text-align:center">
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--pk)" id="clear-count">0 shifts</div>
+      <div style="font-size:11px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:2px" id="clear-hours">0.0 total hours</div>
+    </div>
+    <button class="btn danger full" onclick="confirmClearShifts()" type="button">Clear These Shifts</button>
+    <button class="btn ghost full" style="margin-top:8px" onclick="closeClearSheet()" type="button">Cancel</button>
+  </div>
+</div>
+
 <div class="sheet-bg" id="detail-bg" onclick="if(event.target===this)closeDetail()">
   <div class="sheet" style="max-height:88vh;overflow-y:auto">
     <div class="sheet-handle"></div>
@@ -359,8 +393,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
     </div>
     <div class="tab-content" id="tc2">
       <div class="sec">
-        <div class="sec-title">Shift History</div>
-        <div class="sec-sub">Tap a name to view their shifts. Manager PIN is only needed to download a report.</div>
+        <div class="sec-title">Shift History<button class="btn danger xs" onclick="openClearPinSheet()" type="button">Clear Shifts</button></div>
+        <div class="sec-sub">Tap a name to view their shifts. Manager PIN is needed to download a report or clear shift history.</div>
         <div id="hist-list"></div>
       </div>
     </div>
@@ -608,6 +642,97 @@ function doAdminPin(){
   adminP = '';
   closeAdminSheet();
   openDownloadSheet(dlTarget);
+}
+
+/* Clear Shift History - fully separate PIN flow from the download one above, so this
+   destructive feature can never accidentally interfere with the download feature. */
+var clearPinP = '';
+function zp1(d){
+  var maxLen = 6;
+  if (clearPinP.length >= maxLen) return;
+  clearPinP += d;
+  drawDots('clear-pin-dots', clearPinP, maxLen);
+  if (findManagerByPin(clearPinP)) setTimeout(doClearPin, 150);
+}
+function zp1b(){ clearPinP = clearPinP.slice(0,-1); drawDots('clear-pin-dots', clearPinP, 6); }
+function zp1c(){ clearPinP = ''; drawDots('clear-pin-dots', clearPinP, 6); }
+
+function openClearPinSheet(){
+  clearPinP = ''; drawDots('clear-pin-dots', clearPinP, 6);
+  document.getElementById('clear-pin-err').style.display = 'none';
+  document.getElementById('clear-pin-bg').classList.add('on');
+}
+function closeClearPinSheet(){ document.getElementById('clear-pin-bg').classList.remove('on'); clearPinP = ''; drawDots('clear-pin-dots', clearPinP, 6); }
+function doClearPin(){
+  var mgr = findManagerByPin(clearPinP);
+  if (!mgr) {
+    if (clearPinP.length < shortestManagerPinLen()) return;
+    clearPinP = ''; drawDots('clear-pin-dots', clearPinP, 6);
+    document.getElementById('clear-pin-err').style.display = 'block';
+    var s = document.getElementById('clear-pin-inner');
+    s.classList.remove('shake'); void s.offsetWidth; s.classList.add('shake');
+    return;
+  }
+  clearPinP = '';
+  closeClearPinSheet();
+  openClearSheet();
+}
+
+function getShiftsForClearScope(scope){
+  if (scope === 'all') return state.history.slice();
+  return state.history.filter(function(h){
+    var d = new Date(h.in);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    return key === scope;
+  });
+}
+
+function openClearSheet(){
+  refreshStateFromDisk();
+  var months = {};
+  state.history.forEach(function(h){
+    var d = new Date(h.in);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    months[key] = (months[key] || 0) + 1;
+  });
+  var keys = Object.keys(months).sort().reverse();
+  var html = '<option value="all">Everything (all-time)</option>';
+  keys.forEach(function(k){
+    var parts = k.split('-');
+    var label = MO[parseInt(parts[1],10)-1] + ' ' + parts[0];
+    html += '<option value="' + k + '">' + label + ' (' + months[k] + ' shift' + (months[k]!==1?'s':'') + ')</option>';
+  });
+  document.getElementById('clear-scope').innerHTML = html;
+  updateClearPreview();
+  document.getElementById('clear-sheet-bg').classList.add('on');
+}
+function closeClearSheet(){ document.getElementById('clear-sheet-bg').classList.remove('on'); }
+
+function updateClearPreview(){
+  var scope = document.getElementById('clear-scope').value;
+  var matching = getShiftsForClearScope(scope);
+  var hrs = matching.reduce(function(a,h){ return a + h.hours; }, 0);
+  document.getElementById('clear-count').textContent = matching.length + ' shift' + (matching.length!==1?'s':'');
+  document.getElementById('clear-hours').textContent = hrs.toFixed(2) + ' total hours';
+}
+
+function confirmClearShifts(){
+  refreshStateFromDisk();
+  var scope = document.getElementById('clear-scope').value;
+  var sel = document.getElementById('clear-scope');
+  var scopeLabel = scope === 'all' ? 'ALL shift history' : sel.options[sel.selectedIndex].textContent;
+  var matching = getShiftsForClearScope(scope);
+  if (!matching.length) { toast('No shifts to clear for that selection'); return; }
+  var hrs = matching.reduce(function(a,h){ return a + h.hours; }, 0);
+  var ok = confirm('Permanently delete ' + matching.length + ' shift(s) totalling ' + hrs.toFixed(2) + 'h from ' + scopeLabel + '?\n\nThis cannot be undone. Anyone currently clocked in is not affected.');
+  if (!ok) return;
+  var removeIds = {};
+  matching.forEach(function(h){ removeIds[h.id] = true; });
+  state.history = state.history.filter(function(h){ return !removeIds[h.id]; });
+  saveState();
+  closeClearSheet();
+  renderAll();
+  toast('Cleared ' + matching.length + ' shift(s)');
 }
 
 var dashIntervalStarted = false;
