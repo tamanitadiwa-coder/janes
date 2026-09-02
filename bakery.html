@@ -99,6 +99,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
 .s-progress{background:rgba(255,229,0,.1);color:var(--y);border:1px solid rgba(255,229,0,.2)}
 .slog-mod{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--pk);color:var(--pk);background:transparent;font-family:'Inter',sans-serif;transition:all .15s;flex-shrink:0}
 .slog-mod:hover{background:var(--pk);color:#fff}
+.slog-del{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid var(--r);color:var(--r);background:transparent;font-family:'Inter',sans-serif;transition:all .15s;flex-shrink:0}
+.slog-del:hover{background:var(--r);color:#fff}
 .mod-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:700;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
 .mod-modal-bg.on{display:flex}
 .mod-modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:440px;color:#111;box-shadow:0 20px 60px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto}
@@ -864,38 +866,45 @@ function openDetail(nm){
   var total = entries.reduce(function(a,e){ return a + e.hours; }, 0);
   var avg = entries.length ? (total/entries.length).toFixed(2) : '0';
 
-  var byWeek = {};
+  var byMonth = {};
   entries.forEach(function(h1){
-    var d = new Date(h1.in), di = (d.getDay()+6)%7;
-    var mon = new Date(d); mon.setDate(d.getDate()-di); mon.setHours(0,0,0,0);
-    var wk = dateStr(mon);
-    var wkEnd = new Date(mon.getTime() + 6*86400000);
-    if (!byWeek[wk]) byWeek[wk] = { hrs:0, shifts:0, lbl: mon.getDate() + ' ' + MO[mon.getMonth()] + ' - ' + wkEnd.getDate() + ' ' + MO[wkEnd.getMonth()] };
-    byWeek[wk].hrs += h1.hours; byWeek[wk].shifts++;
+    var d = new Date(h1.in);
+    var key = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    if (!byMonth[key]) byMonth[key] = { hrs: 0, shifts: 0, lbl: MO[d.getMonth()] + ' ' + d.getFullYear(), entries: [] };
+    byMonth[key].hrs += h1.hours; byMonth[key].shifts++;
+    byMonth[key].entries.push(h1);
   });
+  var monthKeys = Object.keys(byMonth).sort().reverse();
 
-  var wkKeys = Object.keys(byWeek).sort().reverse();
-  var wkHtml = '';
-  wkKeys.forEach(function(k){
-    var w = byWeek[k];
-    wkHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
-    wkHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + w.lbl + '</span>';
-    wkHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + w.shifts + ' shift' + (w.shifts!==1?'s':'') + '</span>';
-    wkHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + w.hrs.toFixed(1) + 'h</span></span></div>';
+  var moHtml = '';
+  monthKeys.forEach(function(k){
+    var m = byMonth[k];
+    moHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd2)">';
+    moHtml += '<span style="font-size:13px;color:var(--ts);font-weight:600">' + m.lbl + '</span>';
+    moHtml += '<span style="display:flex;gap:14px;align-items:center"><span style="font-size:12px;color:var(--ts)">' + m.shifts + ' shift' + (m.shifts!==1?'s':'') + '</span>';
+    moHtml += '<span style="font-size:15px;font-weight:800;color:var(--y)">' + m.hrs.toFixed(1) + 'h</span></span></div>';
   });
 
   var logHtml = '';
-  entries.forEach(function(h2){
-    var inT = fmtTime(new Date(h2.in)), outT = h2.out ? fmtTime(new Date(h2.out)) : '--:--';
-    var isLive = !h2.out;
-    var fh = Math.floor(h2.hours), fm = Math.round((h2.hours-fh)*60);
-    logHtml += '<div class="slog-row">';
-    logHtml += '<div class="slog-date">' + dateStr(new Date(h2.in)) + '</div>';
-    logHtml += '<div class="slog-time">' + inT + ' - ' + outT + (h2.manual ? ' <span class="rb-adj">Manual</span>' : '') + '</div>';
-    logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
-    logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
-    logHtml += '<button class="slog-mod" onclick="openModify(\'' + h2.id + '\')" type="button">Modify</button>';
+  monthKeys.forEach(function(k, idx){
+    var m = byMonth[k];
+    logHtml += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin:' + (idx===0 ? '0' : '20px') + ' 0 8px">';
+    logHtml += '<div style="font-family:\'Fredoka One\',cursive;font-size:16px;color:var(--pk)">' + m.lbl + '</div>';
+    logHtml += '<div style="font-size:12px;color:var(--ts);font-weight:700">' + m.shifts + ' shift' + (m.shifts!==1?'s':'') + ' - <span style="color:var(--y)">' + m.hrs.toFixed(1) + 'h</span></div>';
     logHtml += '</div>';
+    m.entries.forEach(function(h2){
+      var inT = fmtTime(new Date(h2.in)), outT = h2.out ? fmtTime(new Date(h2.out)) : '--:--';
+      var isLive = !h2.out;
+      var fh = Math.floor(h2.hours), fm = Math.round((h2.hours-fh)*60);
+      logHtml += '<div class="slog-row">';
+      logHtml += '<div class="slog-date">' + dateStr(new Date(h2.in)) + '</div>';
+      logHtml += '<div class="slog-time">' + inT + ' - ' + outT + (h2.manual ? ' <span class="rb-adj">Manual</span>' : '') + '</div>';
+      logHtml += '<div class="slog-block"><div class="slog-lbl">Hours</div><div class="slog-val">' + fh + 'h ' + String(fm).padStart(2,'0') + 'm</div></div>';
+      logHtml += '<span class="slog-status ' + (isLive?'s-progress':'s-complete') + '">' + (isLive?'In progress':'Complete') + '</span>';
+      logHtml += '<button class="slog-mod" onclick="openModify(\'' + h2.id + '\')" type="button">Modify</button>';
+      logHtml += '<button class="slog-del" onclick="deleteShift(\'' + h2.id + '\')" type="button">Delete</button>';
+      logHtml += '</div>';
+    });
   });
 
   var content = '';
@@ -907,12 +916,12 @@ function openDetail(nm){
     content += '<div style="font-size:10px;color:var(--ts);font-weight:700;text-transform:uppercase;margin-top:4px;letter-spacing:.08em">' + c[0] + '</div></div>';
   });
   content += '</div>';
-  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Weekly Hours</div>';
+  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts);margin-bottom:10px">Monthly Hours</div>';
   content += '<div style="background:var(--s2);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:20px">';
-  content += wkHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
+  content += moHtml || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px">No data</div>';
   content += '<div style="display:flex;justify-content:space-between;padding-top:12px;margin-top:6px;border-top:2px solid var(--bd)"><span style="font-size:14px;font-weight:800;color:var(--t)">Total All Time</span><span style="font-size:18px;font-weight:800;color:var(--y)">' + total.toFixed(1) + 'h</span></div></div>';
   content += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">';
-  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log</div>';
+  content += '<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ts)">Shift Log - by Month</div>';
   content += '<div style="display:flex;gap:8px;flex-wrap:wrap">';
   content += '<button class="btn ghost xs" onclick="openAddShift(\'' + nm + '\')" type="button">+ Add Shift</button>';
   content += '<button class="dl-btn" onclick="openAdminSheet(\'' + nm + '\')" type="button">Download Report</button>';
@@ -924,6 +933,21 @@ function openDetail(nm){
   document.getElementById('detail-bg').classList.add('on');
 }
 function closeDetail(){ document.getElementById('detail-bg').classList.remove('on'); }
+
+function deleteShift(id){
+  refreshStateFromDisk();
+  var h = state.history.find(function(x){ return x.id === id; });
+  if (!h) { toast('That shift was already removed'); return; }
+  var d = new Date(h.in), dow = (d.getDay()+6)%7;
+  var label = SDAYS[dow] + ' ' + d.getDate() + ' ' + MO[d.getMonth()] + ' ' + d.getFullYear() + ', ' + h.hours.toFixed(2) + 'h';
+  var ok = confirm('Delete this one shift?\n\n' + h.name + ' - ' + label + '\n\nThis cannot be undone.');
+  if (!ok) return;
+  state.history = state.history.filter(function(x){ return x.id !== id; });
+  saveState();
+  openDetail(h.name);
+  renderAll();
+  toast('Shift deleted');
+}
 
 function openModify(id){
   addMode = false;
